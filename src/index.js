@@ -12,7 +12,9 @@ import userReducer from "./store/reducers/userReducer";
 import homeReducer from "./store/reducers/homeReducer";
 import shopReducer from "./store/reducers/shopReducer";
 import categoryReducer from "./store/reducers/categoryReducer";
+import blogReducer from "./store/reducers/blogReducer";
 const rootReducer = combineReducers({
+	blogReducer,
 	categoryReducer,
 	shopReducer,
 	homeReducer,

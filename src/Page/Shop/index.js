@@ -1,14 +1,70 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Card, Nav, Button, Accordion } from "react-bootstrap";
-import { Formik } from "formik";
+import { Card, Button, Accordion, Spinner } from "react-bootstrap";
 import TextForm from "../../App/components/TextForm";
 import * as actionCreators from "../../store/actions/shop";
+import ImageForm from "../../App/components/ImageForm";
 import cogoToast from "cogo-toast";
+
+const Heading = ["Shop"];
+const SubHeading = [["Title", "Bundle Title", "Bundle Subtitle"]];
+const ImageOption = [[]];
 class Shop extends Component {
-	state = {
-		data: { shop: {} },
-		loading: true,
+	constructor(props) {
+		super(props);
+		this.state = {
+			data: { shop: {} },
+			loading: true,
+			file: "",
+			imagePreviewUrl: "",
+			imageName: "",
+		};
+		this.handleImageChange = this.handleImageChange.bind(this);
+	}
+
+	handleImageChange(e) {
+		e.preventDefault();
+
+		let reader = new FileReader();
+		let file = e.target.files[0];
+
+		reader.onloadend = () => {
+			this.setState({
+				file: file,
+				imagePreviewUrl: reader.result,
+			});
+		};
+
+		reader.readAsDataURL(file);
+	}
+	optionChange = (e) => {
+		this.setState({
+			imageName: e.target.value,
+		});
+		console.log("option change", e.target.name, e.target.value);
+	};
+	imageSubmitHandler = (e) => {
+		console.log("Image upload", this.state);
+		e.preventDefault();
+		if (this.state.imageName.length > 0) {
+			let formData = new FormData();
+			formData.append("imageName", this.state.imageName);
+			formData.append("image", this.state.file);
+			this.props
+				.uploadImage(formData)
+				.then((result) => {
+					cogoToast.success(result);
+					this.setState({
+						imageName: "",
+						file: "",
+						imagePreviewUrl: "",
+					});
+				})
+				.catch((err) => cogoToast.error(err));
+			console.log("image submit");
+		} else {
+			cogoToast.info("Please select an image");
+		}
 	};
 
 	changeHandler = (name, section, data) => {
@@ -33,6 +89,7 @@ class Shop extends Component {
 			})
 			.catch((err) => cogoToast.error(err));
 	};
+
 	componentDidMount = () => {
 		console.log("Component mounted");
 		this.props
@@ -53,10 +110,10 @@ class Shop extends Component {
 	render() {
 		let data = Object.keys(this.state.data || {}).map((elem, index) => {
 			return (
-				<Card>
+				<Card key={index}>
 					<Card.Header>
 						<Accordion.Toggle as={Button} variant="link" eventKey={index}>
-							{elem}
+							{Heading[index]}
 						</Accordion.Toggle>
 					</Card.Header>
 					<Accordion.Collapse eventKey={index}>
@@ -66,7 +123,18 @@ class Shop extends Component {
 								changeHandler={this.changeHandler}
 								sectionName={elem}
 								updateHandler={this.updateHandler}
+								subHeading={SubHeading[index]}
 							/>
+							<hr />
+							{ImageOption[index].length > 0 ? (
+								<ImageForm
+									options={ImageOption[index]}
+									handleImageChange={this.handleImageChange}
+									imageSubmitHandler={this.imageSubmitHandler}
+									imagePreviewUrl={this.state.imagePreviewUrl}
+									optionChange={this.optionChange}
+								/>
+							) : null}
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -75,7 +143,17 @@ class Shop extends Component {
 		return (
 			<div>
 				{this.state.loading ? (
-					<div>loading...</div>
+					<div>
+						<div>
+							<Spinner
+								animation="border"
+								style={{ position: "fixed", top: "20%", left: "60%" }}
+								role="status"
+							>
+								<span className="sr-only">Loading...</span>
+							</Spinner>
+						</div>
+					</div>
 				) : (
 					<Accordion defaultActiveKey="0">{data}</Accordion>
 				)}
@@ -110,6 +188,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		get: () => dispatch(actionCreators.get()),
 		update: (data, section) => dispatch(actionCreators.update(data, section)),
+		uploadImage: (data) => dispatch(actionCreators.uploadImage(data)),
 	};
 };
 

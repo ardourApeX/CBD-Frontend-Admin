@@ -1,23 +1,96 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Card, Nav, Button, Accordion } from "react-bootstrap";
+import { Card, Nav, Button, Accordion, Spinner } from "react-bootstrap";
 import { Formik } from "formik";
 import TextForm from "../../App/components/TextForm";
 import * as actionCreators from "../../store/actions/category";
 import cogoToast from "cogo-toast";
-class Category extends Component {
-	state = {
-		data: {
-			topicals: {},
-			pets: {},
-			edibles: {},
-			capsules: {},
-			oils: {},
-			bundles: {},
+import ImageForm from "../../App/components/ImageForm";
 
-			default: {},
-		},
-		loading: true,
+const imageOptions = [["Oil-Page-Image"], [], [], [], [], [], []];
+const Heading = [
+	"Default",
+	"Topicals",
+	"Pets",
+	"Edibles",
+	"Capsules",
+	"Oils",
+	"Bundles",
+];
+
+const SubHeading = [
+	["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
+	["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
+	["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
+	["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
+	["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
+	["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
+	["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
+];
+class Category extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			data: {
+				default: {},
+				topicals: {},
+				pets: {},
+				edibles: {},
+				capsules: {},
+				oils: {},
+				bundles: {},
+			},
+			loading: true,
+			file: "",
+			imagePreviewUrl: "",
+			imageName: "",
+		};
+		this.handleImageChange = this.handleImageChange.bind(this);
+	}
+
+	handleImageChange(e) {
+		e.preventDefault();
+
+		let reader = new FileReader();
+		let file = e.target.files[0];
+
+		reader.onloadend = () => {
+			this.setState({
+				file: file,
+				imagePreviewUrl: reader.result,
+			});
+		};
+
+		reader.readAsDataURL(file);
+	}
+	optionChange = (e) => {
+		this.setState({
+			imageName: e.target.value,
+		});
+		console.log("option change", e.target.name, e.target.value);
+	};
+	imageSubmitHandler = (e) => {
+		console.log("Image upload", this.state);
+		e.preventDefault();
+		if (this.state.imageName.length > 0) {
+			let formData = new FormData();
+			formData.append("imageName", this.state.imageName);
+			formData.append("image", this.state.file);
+			this.props
+				.uploadImage(formData)
+				.then((result) => {
+					cogoToast.success(result);
+					this.setState({
+						imageName: "",
+						file: "",
+						imagePreviewUrl: "",
+					});
+				})
+				.catch((err) => cogoToast.error(err));
+			console.log("image submit");
+		} else {
+			cogoToast.info("Please select an image");
+		}
 	};
 
 	changeHandler = (name, section, data) => {
@@ -59,14 +132,17 @@ class Category extends Component {
 	toggleHandler = (event) => {
 		console.log(event);
 	};
+	// clickHandler = () => {
+	// 	console.log("Click handler");
+	// };
 
 	render() {
 		let data = Object.keys(this.state.data || {}).map((elem, index) => {
 			return (
-				<Card>
+				<Card key={index} onClick={this.clickHandler}>
 					<Card.Header>
 						<Accordion.Toggle as={Button} variant="link" eventKey={index}>
-							{elem}
+							{Heading[index]}
 						</Accordion.Toggle>
 					</Card.Header>
 					<Accordion.Collapse eventKey={index}>
@@ -75,8 +151,18 @@ class Category extends Component {
 								field={this.state.data[elem]}
 								changeHandler={this.changeHandler}
 								sectionName={elem}
+								subHeading={SubHeading[index]}
 								updateHandler={this.updateHandler}
 							/>
+							{imageOptions[index].length > 0 ? (
+								<ImageForm
+									options={imageOptions[index]}
+									handleImageChange={this.handleImageChange}
+									imageSubmitHandler={this.imageSubmitHandler}
+									imagePreviewUrl={this.state.imagePreviewUrl}
+									optionChange={this.optionChange}
+								/>
+							) : null}
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -85,7 +171,15 @@ class Category extends Component {
 		return (
 			<div>
 				{this.state.loading ? (
-					<div>loading...</div>
+					<div>
+						<Spinner
+							animation="border"
+							style={{ position: "fixed", top: "20%", left: "60%" }}
+							role="status"
+						>
+							<span className="sr-only">Loading...</span>
+						</Spinner>
+					</div>
 				) : (
 					<Accordion defaultActiveKey="0">{data}</Accordion>
 				)}
@@ -201,6 +295,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		get: () => dispatch(actionCreators.get()),
 		update: (data, section) => dispatch(actionCreators.update(data, section)),
+		uploadImage: (data) => dispatch(actionCreators.uploadImage(data)),
 	};
 };
 

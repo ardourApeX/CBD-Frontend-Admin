@@ -15,7 +15,7 @@ const navLogo = (props) => {
 					<div className="b-bg">
 						<i className="feather icon-trending-up" />
 					</div>
-					<span className="b-title">Datta Able</span>
+					<span className="b-title">Bene</span>
 				</a>
 				<a
 					href={DEMO.BLANK_LINK}

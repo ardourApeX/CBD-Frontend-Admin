@@ -17,3 +17,9 @@ export const GET_SHOP = "GET_SHOP";
 
 export const UPDATE_CATEGORY = "UPDATE_CATEGORY";
 export const GET_CATEGORY = "GET_CATEGORY";
+
+export const GET_BLOG = "GET_BLOG";
+export const GET_ALL_BLOG = "GET_ALL_BLOG";
+export const GET_BLOG_BY_TAG = "GET_BLOG_BY_TAG";
+export const UPDATE_BLOG = "UPDATE_BLOG";
+export const DELETE_BLOG = "DELETE_BLOG";

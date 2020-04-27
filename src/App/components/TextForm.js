@@ -10,8 +10,8 @@ export default class TextForm extends Component {
 		const sectionName = this.props.sectionName;
 		let data = Object.keys(this.props.field).map((elem, index) => {
 			return (
-				<Container className="mt-3">
-					<h3>{elem}</h3>
+				<Container className="mt-3" key={index}>
+					<h3>{this.props.subHeading[index]}</h3>
 					<CKEditor
 						editor={ClassicEditor}
 						data={this.props.field[elem]}

@@ -1,40 +1,114 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, Spinner } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
-import { Formik } from "formik";
 import TextForm from "../../App/components/TextForm";
+import ImageForm from "../../App/components/ImageForm";
 import * as actionCreators from "../../store/actions/home";
 import cogoToast from "cogo-toast";
+const imageOptions = [
+	["Banner-Image-1", "Banner-Image-2"],
+	[],
+	["Bundle-Image"],
+	[],
+	["Consult-Image", "Wellness-Image"],
+];
+const Heading = [
+	"Banner",
+	"Category Slider",
+	"Third Section",
+	"Bundles Slider",
+	"Fifith Section",
+];
+const SubHeading = [
+	["Title", "Content", "Button Text"],
+	["Title"],
+	["Big Title", "Title", "Content", "Button Text"],
+	["Title", "Sub Title", "Button Text"],
+	["Title", "Content", "Button Text"],
+];
 class Home extends Component {
-	state = {
-		data: {
-			banner: {
-				title: "a",
-				content: "b",
-				btnText: "c",
+	constructor(props) {
+		super(props);
+		this.state = {
+			data: {
+				banner: {
+					title: "a",
+					content: "b",
+					btnText: "c",
+				},
+				categorySlider: {
+					title: "",
+				},
+				thirdSection: {
+					bigTitle: "",
+					title: "",
+					content: "",
+					btnText: "",
+				},
+				bundlesSlider: {
+					title: "",
+					subTitle: "",
+					btnText: "",
+				},
+				fifthSection: {
+					title: "",
+					content: "",
+					btnText: "",
+				},
 			},
-			categorySlider: {
-				title: "",
-			},
-			thirdSection: {
-				bigTitle: "",
-				title: "",
-				content: "",
-				btnText: "",
-			},
-			bundlesSlider: {
-				title: "",
-				subTitle: "",
-				btnText: "",
-			},
-			fifthSection: {
-				title: "",
-				content: "",
-				btnText: "",
-			},
-		},
-		loading: true,
+			loading: true,
+			file: "",
+			imagePreviewUrl: "",
+			imageName: "",
+		};
+
+		this.handleImageChange = this.handleImageChange.bind(this);
+	}
+
+	handleImageChange(e) {
+		e.preventDefault();
+
+		let reader = new FileReader();
+		let file = e.target.files[0];
+
+		reader.onloadend = () => {
+			this.setState({
+				file: file,
+				imagePreviewUrl: reader.result,
+			});
+		};
+
+		reader.readAsDataURL(file);
+	}
+	optionChange = (e) => {
+		this.setState({
+			imageName: e.target.value,
+		});
+		console.log("option change", e.target.name, e.target.value);
+	};
+	imageSubmitHandler = (e) => {
+		console.log("Image upload", this.state);
+		e.preventDefault();
+		if (this.state.imageName.length > 0) {
+			let formData = new FormData();
+			formData.append("imageName", this.state.imageName);
+			formData.append("image", this.state.file);
+			this.props
+				.uploadImage(formData)
+				.then((result) => {
+					cogoToast.success(result);
+					this.setState({
+						imageName: "",
+						file: "",
+						imagePreviewUrl: "",
+					});
+				})
+				.catch((err) => cogoToast.error(err));
+			console.log("image submit");
+		} else {
+			cogoToast.info("Please select an image");
+		}
 	};
 
 	changeHandler = (name, section, data) => {
@@ -76,10 +150,10 @@ class Home extends Component {
 	render() {
 		let data = Object.keys(this.state.data || {}).map((elem, index) => {
 			return (
-				<Card>
+				<Card key={index}>
 					<Card.Header>
 						<Accordion.Toggle as={Button} variant="link" eventKey={index}>
-							{elem}
+							{Heading[index]}
 						</Accordion.Toggle>
 					</Card.Header>
 					<Accordion.Collapse eventKey={index}>
@@ -89,7 +163,17 @@ class Home extends Component {
 								changeHandler={this.changeHandler}
 								sectionName={elem}
 								updateHandler={this.updateHandler}
+								subHeading={SubHeading[index]}
 							/>
+							{imageOptions[index].length > 0 ? (
+								<ImageForm
+									options={imageOptions[index]}
+									handleImageChange={this.handleImageChange}
+									imageSubmitHandler={this.imageSubmitHandler}
+									imagePreviewUrl={this.state.imagePreviewUrl}
+									optionChange={this.optionChange}
+								/>
+							) : null}
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -108,7 +192,17 @@ class Home extends Component {
 		return (
 			<div>
 				{this.state.loading ? (
-					<div>Loading</div>
+					<div>
+						<div>
+							<Spinner
+								animation="border"
+								style={{ position: "fixed", top: "20%", left: "60%" }}
+								role="status"
+							>
+								<span className="sr-only">Loading...</span>
+							</Spinner>
+						</div>
+					</div>
 				) : (
 					<Accordion defaultActiveKey="0">{data}</Accordion>
 				)}
@@ -188,6 +282,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		get: () => dispatch(actionCreators.get()),
 		update: (data, section) => dispatch(actionCreators.update(data, section)),
+		uploadImage: (data) => dispatch(actionCreators.uploadImage(data)),
 	};
 };
 

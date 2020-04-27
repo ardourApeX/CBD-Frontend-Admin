@@ -43,3 +43,17 @@ export const get = () => {
 			});
 	};
 };
+
+export const uploadImage = (data) => {
+	console.log("In image upload");
+	return (dispatch) => {
+		return Axios.post("/Image/add", data)
+			.then((result) => {
+				console.log(result);
+				return result.data.message;
+			})
+			.catch((err) => {
+				Promise.reject(err.response.message);
+			});
+	};
+};
