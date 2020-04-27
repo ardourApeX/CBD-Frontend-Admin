@@ -1,9 +1,9 @@
 import * as actionTypes from "./actions";
-import Axios from "axios";
+import Axios from "../../utilities/Axios/Axios";
 export const login = (email, password) => {
 	console.log("login actioncreator");
 	return (dispatch) =>
-		Axios.post("/admin/auth/signIn", { email, password })
+		Axios.post("/Auth/signIn", { email, password })
 			.then((result) => {
 				localStorage.setItem("token", result.data.token);
 				console.log("token", localStorage.getItem("token"));
@@ -24,7 +24,7 @@ export const login = (email, password) => {
 export const signUp = (email, password) => {
 	console.log("signUp actioncreator");
 	return (dispatch) =>
-		Axios.post("/admin/auth/signUp", { email, password })
+		Axios.post("/Auth/signUp", { email, password })
 			.then((result) => {
 				console.log("Data got", result.data.data);
 				return "Success";

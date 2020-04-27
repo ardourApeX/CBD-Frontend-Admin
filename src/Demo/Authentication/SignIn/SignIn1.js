@@ -93,13 +93,13 @@ class SignIn extends React.Component {
 								>
 									Login
 								</button>
-								<p className="mb-2 text-muted">
+								{/* <p className="mb-2 text-muted">
 									Forgot password?{" "}
 									<NavLink to="/auth/reset-password-1">Reset</NavLink>
-								</p>
+								</p> */}
 								<p className="mb-0 text-muted">
 									Don’t have an account?{" "}
-									<NavLink to="/auth/signup-1">Signup</NavLink>
+									<NavLink to="/auth/signup">Signup</NavLink>
 								</p>
 							</div>
 						</div>

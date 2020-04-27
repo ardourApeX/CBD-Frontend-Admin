@@ -8,6 +8,7 @@ export const NAV_COLLAPSE_LEAVE = "NAV_COLLAPSE_LEAVE";
 
 //Authentication
 export const LOGIN = "LOGIN";
+export const SIGN_UP = "SIGN_UP";
 
 export const UPDATE_HOME = "UPDATE_HOME";
 export const GET_HOME = "GET_HOME";

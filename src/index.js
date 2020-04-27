@@ -13,6 +13,7 @@ import homeReducer from "./store/reducers/homeReducer";
 import shopReducer from "./store/reducers/shopReducer";
 import categoryReducer from "./store/reducers/categoryReducer";
 import blogReducer from "./store/reducers/blogReducer";
+
 const rootReducer = combineReducers({
 	blogReducer,
 	categoryReducer,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
 	userReducer: userReducer,
 	withTheme: defaultreducer,
 });
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
 	rootReducer,
