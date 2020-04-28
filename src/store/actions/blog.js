@@ -1,6 +1,5 @@
 import Axios from "../../utilities/Axios/Axios";
 import * as actionTypes from "./actions";
-import axios from "axios";
 export const update = (index, data) => {
 	return (dispatch) => {
 		return Axios.post("/Blog/update", data)
@@ -24,8 +23,7 @@ export const update = (index, data) => {
 export const get = (id) => {
 	console.log("Blog get action creator");
 	return (dispatch) => {
-		return axios
-			.get("/Blog/get/" + id)
+		return Axios.get("/Blog/get/" + id)
 			.then((result) => {
 				console.log("Result", result);
 				dispatch({

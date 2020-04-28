@@ -1,6 +1,5 @@
 import Axios from "../../utilities/Axios/Axios";
 import * as actionTypes from "./actions";
-import axios from "axios";
 export const update = (dataValue, section) => {
 	console.log("update actioncreator", dataValue, section);
 	return (dispatch) => {
@@ -28,8 +27,7 @@ export const update = (dataValue, section) => {
 export const get = () => {
 	console.log("Home get action creator");
 	return (dispatch) => {
-		return axios
-			.get("http://localhost:4000/Home/get", { name: "aman" })
+		return Axios.get("/Home/get", { name: "aman" })
 			.then((result) => {
 				console.log("Result", result);
 				dispatch({
