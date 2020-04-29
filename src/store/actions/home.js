@@ -1,6 +1,7 @@
 import Axios from "../../utilities/Axios/Axios";
 import * as actionTypes from "./actions";
 import { ERROR_MESSAGE } from "./constant";
+
 export const update = (dataValue, section) => {
 	console.log("update actioncreator", dataValue, section);
 	return (dispatch) => {

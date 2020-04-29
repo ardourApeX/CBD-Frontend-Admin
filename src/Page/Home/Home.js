@@ -33,9 +33,9 @@ class Home extends Component {
 		this.state = {
 			data: {
 				banner: {
-					title: "a",
-					content: "b",
-					btnText: "c",
+					title: "",
+					content: "",
+					btnText: "",
 				},
 				categorySlider: {
 					title: "",
@@ -145,7 +145,7 @@ class Home extends Component {
 		console.log("updateHandler", section);
 		event.preventDefault();
 		this.props
-			.update(this.state[section], section)
+			.update(this.state.data[section], section)
 			.then((result) => {
 				cogoToast.success(result);
 			})
