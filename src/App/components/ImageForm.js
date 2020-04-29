@@ -16,7 +16,7 @@ export default function ImageForm({ sectionName, ...props }) {
 			<Col key={index}>
 				<img
 					// src="/Banner-Image-1.png"
-					src={`${IMAGE_URL}/images/${elem}`}
+					src={`${IMAGE_URL}/${elem}`}
 					style={{ width: "5rem", height: "5rem" }}
 					className="mt-5 mr-4"
 				/>
