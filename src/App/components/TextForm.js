@@ -11,7 +11,7 @@ export default class TextForm extends Component {
 		let data = Object.keys(this.props.field).map((elem, index) => {
 			return (
 				<Container className="mt-3" key={index}>
-					<h3>{this.props.subHeading[index]}</h3>
+					<h3 className="c-subHeading">{this.props.subHeading[index]}</h3>
 					<CKEditor
 						editor={ClassicEditor}
 						data={this.props.field[elem]}
@@ -50,14 +50,16 @@ export default class TextForm extends Component {
 		return (
 			<div>
 				<Form>{data}</Form>
-				<Button
-					className="mt-2 ml-3"
+				<button
+					className="c-btn c-btn--right c-btn--medium"
 					onClick={(event) => this.props.updateHandler(event, sectionName)}
 				>
 					Update
-				</Button>
+				</button>
 				<br />
 				<br />
+				<br />
+				<hr />
 			</div>
 		);
 	}

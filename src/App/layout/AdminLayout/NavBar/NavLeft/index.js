@@ -37,7 +37,7 @@ class NavLeft extends Component {
 						</a>
 					</li>
 					<li className={navItemClass.join(" ")}>
-						<Dropdown alignRight={dropdownRightAlign}>
+						{/* <Dropdown alignRight={dropdownRightAlign}>
 							<Dropdown.Toggle variant={"link"} id="dropdown-basic">
 								Dropdown
 							</Dropdown.Toggle>
@@ -60,7 +60,7 @@ class NavLeft extends Component {
 									</li>
 								</Dropdown.Menu>
 							</ul>
-						</Dropdown>
+						</Dropdown> */}
 					</li>
 					<li className="nav-item">
 						<NavSearch />

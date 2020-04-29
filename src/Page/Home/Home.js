@@ -6,12 +6,12 @@ import TextForm from "../../App/components/TextForm";
 import ImageForm from "../../App/components/ImageForm";
 import * as actionCreators from "../../store/actions/home";
 import cogoToast from "cogo-toast";
-const imageOptions = [
-	["Banner-Image-1", "Banner-Image-2"],
+const Images = [
+	["Banner-Image-1.png", "Banner-Image-2.png"],
 	[],
-	["Bundle-Image"],
+	["Bundle-Image.png"],
 	[],
-	["Consult-Image", "Wellness-Image"],
+	["Consult-Image.png", "Wellness-Image.png"],
 ];
 const Heading = [
 	"Banner",
@@ -57,6 +57,16 @@ class Home extends Component {
 					btnText: "",
 				},
 			},
+			banner: [
+				{ image: "", file: "", imageName: "Banner-Image-1" },
+				{ image: "", file: "", imageName: "Banner-Image-2" },
+			],
+			thirdSection: [{ image: "", file: "", imageName: "Bundle-Image" }],
+			fifthSection: [
+				{ image: "", file: "", imageName: "Consult-Image" },
+				{ image: "", file: "", imageName: "Wellness-Image-1" },
+			],
+
 			loading: true,
 			file: "",
 			imagePreviewUrl: "",
@@ -66,17 +76,25 @@ class Home extends Component {
 		this.handleImageChange = this.handleImageChange.bind(this);
 	}
 
-	handleImageChange(e) {
+	handleImageChange(e, section, index) {
+		console.log("imagehandle", section, index);
 		e.preventDefault();
 
 		let reader = new FileReader();
 		let file = e.target.files[0];
 
 		reader.onloadend = () => {
-			this.setState({
-				file: file,
-				imagePreviewUrl: reader.result,
-			});
+			console.log("In reader");
+			let curValue = this.state[section];
+			curValue[index].image = reader.result;
+			curValue[index].file = file;
+			this.setState(
+				{
+					[section]: curValue,
+					imagePreviewUrl: reader.result,
+				},
+				console.log(this.state)
+			);
 		};
 
 		reader.readAsDataURL(file);
@@ -87,13 +105,13 @@ class Home extends Component {
 		});
 		console.log("option change", e.target.name, e.target.value);
 	};
-	imageSubmitHandler = (e) => {
-		console.log("Image upload", this.state);
+	imageSubmitHandler = (e, section, index) => {
+		console.log("Image upload", section, index, this.state);
 		e.preventDefault();
-		if (this.state.imageName.length > 0) {
+		if (this.state[section][index].image.length > 0) {
 			let formData = new FormData();
-			formData.append("imageName", this.state.imageName);
-			formData.append("image", this.state.file);
+			formData.append("imageName", this.state[section][index].imageName);
+			formData.append("image", this.state[section][index].file);
 			this.props
 				.uploadImage(formData)
 				.then((result) => {
@@ -135,24 +153,37 @@ class Home extends Component {
 	};
 	componentDidMount = () => {
 		console.log("Component mounted");
-		this.props.get().then((result) => {
-			console.log(this.props.data);
-			this.setState(
-				{
-					data: { ...this.props.data },
-					loading: false,
-				},
-				console.log(this.state)
-			);
-		});
+		this.props
+			.get()
+			.then((result) => {
+				cogoToast.success(result);
+				console.log(this.props.data);
+				this.setState(
+					{
+						data: { ...this.props.data },
+						loading: false,
+					},
+					console.log(this.state)
+				);
+			})
+			.catch((err) => {
+				cogoToast.error(err);
+			});
 	};
-
+	cardChange = (card) => {};
 	render() {
 		let data = Object.keys(this.state.data || {}).map((elem, index) => {
 			return (
 				<Card key={index}>
 					<Card.Header>
-						<Accordion.Toggle as={Button} variant="link" eventKey={index}>
+						<Accordion.Toggle
+							as={Button}
+							variant="link"
+							eventKey={index}
+							onClick={() => this.cardChange(Heading[index])}
+							className="c-accordion"
+						>
+							<i class="fa fa-angle-down"></i>
 							{Heading[index]}
 						</Accordion.Toggle>
 					</Card.Header>
@@ -165,12 +196,13 @@ class Home extends Component {
 								updateHandler={this.updateHandler}
 								subHeading={SubHeading[index]}
 							/>
-							{imageOptions[index].length > 0 ? (
+							{Images[index].length > 0 ? (
 								<ImageForm
-									options={imageOptions[index]}
+									Images={Images[index]}
+									sectionName={elem}
 									handleImageChange={this.handleImageChange}
 									imageSubmitHandler={this.imageSubmitHandler}
-									imagePreviewUrl={this.state.imagePreviewUrl}
+									imagePreviewUrl={this.state[elem]}
 									optionChange={this.optionChange}
 								/>
 							) : null}

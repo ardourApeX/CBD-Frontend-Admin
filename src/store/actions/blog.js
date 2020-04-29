@@ -1,5 +1,6 @@
 import Axios from "../../utilities/Axios/Axios";
 import * as actionTypes from "./actions";
+import { ERROR_MESSAGE } from "./constant";
 export const update = (index, data) => {
 	return (dispatch) => {
 		return Axios.post("/Blog/update", data)
@@ -15,7 +16,7 @@ export const update = (index, data) => {
 			})
 			.catch((err) => {
 				console.log(err);
-				Promise.reject(err.response.data.message);
+				Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
@@ -33,7 +34,7 @@ export const get = (id) => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(err.response.data.message);
+				Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
@@ -51,7 +52,7 @@ export const getByType = (blogTag) => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(err.response.data.message);
+				Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
@@ -68,7 +69,7 @@ export const Delete = (id) => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(err.response.data.message);
+				Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
@@ -88,7 +89,7 @@ export const getAll = (pageNo, size) => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(err.response.data.message);
+				Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
@@ -109,7 +110,7 @@ export const add = (data) => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(err.response.data.message);
+				Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };

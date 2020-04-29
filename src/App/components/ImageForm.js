@@ -1,39 +1,57 @@
 import React from "react";
-import { Form, Button } from "react-bootstrap";
-export default function ImageForm(props) {
+import { IMAGE_URL } from "../../utilities/Axios/url";
+import { Container, Row, Col, Button } from "react-bootstrap";
+export default function ImageForm({ sectionName, ...props }) {
 	let { imagePreviewUrl } = props;
-	let $imagePreview = null;
-	if (imagePreviewUrl) {
-		$imagePreview = (
-			<img src={imagePreviewUrl} style={{ width: "10%" }} className="mt-5" />
-		);
-	}
-	const options = props.options.map((elem, index) => {
+	console.log("url", imagePreviewUrl, sectionName);
+	// let $imagePreview = null;
+	// if (imagePreviewUrl) {
+	// 	$imagePreview = (
+	// 		<img src={imagePreviewUrl} style={{ width: "10%" }} className="mt-5" />
+	// 	);
+	// }
+	console.log("ima", props.Images);
+	const images = props.Images.map((elem, index) => {
 		return (
-			<option key={index} value={elem}>
-				{elem}
-			</option>
+			<Col key={index}>
+				<img
+					// src="/Banner-Image-1.png"
+					src={`/${IMAGE_URL}/${elem}`}
+					style={{ width: "5rem", height: "5rem" }}
+					className="mt-5 mr-4"
+				/>
+				{imagePreviewUrl[index].image.length > 0 ? (
+					<img
+						src={imagePreviewUrl[index].image}
+						style={{ width: "5rem", height: "5rem" }}
+						className="mt-5"
+					/>
+				) : null}
+
+				<br />
+				<label className="c-input">
+					<input
+						type="file"
+						onChange={(e) => props.handleImageChange(e, sectionName, index)}
+						className="mt-4 c-input"
+					/>
+					{/* <i class="fa fa-cloud-upload"></i> */}
+					Select one
+				</label>
+				<button
+					onClick={(e) => props.imageSubmitHandler(e, sectionName, index)}
+					className="c-btn"
+				>
+					<i class="fa fa-cloud-upload"></i> <span> Upload</span>
+				</button>
+				<hr />
+			</Col>
 		);
 	});
 
 	return (
-		<Form.Group controlId="exampleForm.ControlSelect1">
-			<Form.Label>Select Image</Form.Label>
-			<Form.Control
-				as="select"
-				name="options"
-				defaultValue="Please select one "
-				onChange={props.optionChange}
-			>
-				<option>Please Select One</option>
-				{options}
-			</Form.Control>
-			<br />
-			{$imagePreview}
-			<br />
-			<input type="file" onChange={props.handleImageChange} className="mt-4" />
-			<hr />
-			<Button onClick={props.imageSubmitHandler}>Uplaod Image</Button>
-		</Form.Group>
+		<Container>
+			<Row>{images}</Row>
+		</Container>
 	);
 }

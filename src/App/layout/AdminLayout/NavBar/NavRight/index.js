@@ -15,10 +15,11 @@ class NavRight extends Component {
 	};
 
 	render() {
+		const email = localStorage.getItem("email");
 		return (
 			<Aux>
 				<ul className="navbar-nav ml-auto">
-					<li>
+					{/* <li>
 						<Dropdown alignRight={!this.props.rtlLayout}>
 							<Dropdown.Toggle variant={"link"} id="dropdown-basic">
 								<i className="icon feather icon-bell" />
@@ -114,7 +115,7 @@ class NavRight extends Component {
 						>
 							<i className="icon feather icon-mail" />
 						</a>
-					</li>
+					</li> */}
 					<li>
 						<Dropdown alignRight={!this.props.rtlLayout} className="drp-user">
 							<Dropdown.Toggle variant={"link"} id="dropdown-basic">
@@ -127,14 +128,14 @@ class NavRight extends Component {
 										className="img-radius"
 										alt="User Profile"
 									/>
-									<span>John Doe</span>
-									<a
+									<span>{email}</span>
+									{/* <a
 										href={DEMO.BLANK_LINK}
 										className="dud-logout"
 										title="Logout"
 									>
 										<i className="feather icon-log-out" />
-									</a>
+									</a> */}
 								</div>
 								<ul className="pro-body">
 									<li>
@@ -147,7 +148,7 @@ class NavRight extends Component {
 											<i className="feather icon-user" /> Profile
 										</a>
 									</li>
-									<li>
+									{/* <li>
 										<a href={DEMO.BLANK_LINK} className="dropdown-item">
 											<i className="feather icon-mail" /> My Messages
 										</a>
@@ -156,7 +157,7 @@ class NavRight extends Component {
 										<a href={DEMO.BLANK_LINK} className="dropdown-item">
 											<i className="feather icon-lock" /> Lock Screen
 										</a>
-									</li>
+									</li> */}
 								</ul>
 							</Dropdown.Menu>
 						</Dropdown>

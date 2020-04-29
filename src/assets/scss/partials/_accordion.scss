@@ -1,0 +1,9 @@
+.c-accordion {
+	color: $dark-color !important;
+	font-weight: 600;
+	font-size: large;
+	&:hover {
+		color: $purple-color !important;
+		text-decoration: none !important;
+	}
+}

@@ -112,7 +112,13 @@ class Shop extends Component {
 			return (
 				<Card key={index}>
 					<Card.Header>
-						<Accordion.Toggle as={Button} variant="link" eventKey={index}>
+						<Accordion.Toggle
+							as={Button}
+							variant="link"
+							eventKey={index}
+							className="c-accordion"
+						>
+							<i class="fa fa-angle-down"></i>
 							{Heading[index]}
 						</Accordion.Toggle>
 					</Card.Header>

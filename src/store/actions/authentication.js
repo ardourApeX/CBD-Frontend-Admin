@@ -6,6 +6,7 @@ export const login = (email, password) => {
 		Axios.post("/Auth/signIn", { email, password })
 			.then((result) => {
 				localStorage.setItem("token", result.data.token);
+				localStorage.setItem("email", email);
 				console.log("token", localStorage.getItem("token"));
 				console.log("Data got", result.data.data);
 				dispatch({

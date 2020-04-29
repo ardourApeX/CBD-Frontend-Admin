@@ -7,15 +7,15 @@ import * as actionCreators from "../../store/actions/category";
 import cogoToast from "cogo-toast";
 import ImageForm from "../../App/components/ImageForm";
 
-const imageOptions = [["Oil-Page-Image"], [], [], [], [], [], []];
+const Images = [[], [], [], [], [], [], ["Oil-Page-Image"]];
 const Heading = [
-	"Default",
 	"Topicals",
 	"Pets",
 	"Edibles",
 	"Capsules",
 	"Oils",
 	"Bundles",
+	"Default",
 ];
 
 const SubHeading = [
@@ -32,14 +32,22 @@ class Category extends Component {
 		super(props);
 		this.state = {
 			data: {
-				default: {},
 				topicals: {},
 				pets: {},
 				edibles: {},
 				capsules: {},
 				oils: {},
 				bundles: {},
+				default: {},
 			},
+			default: [
+				{
+					image: "",
+					imageName: "",
+					file: "",
+				},
+			],
+
 			loading: true,
 			file: "",
 			imagePreviewUrl: "",
@@ -48,34 +56,43 @@ class Category extends Component {
 		this.handleImageChange = this.handleImageChange.bind(this);
 	}
 
-	handleImageChange(e) {
+	handleImageChange(e, section, index) {
+		console.log("imagehandle", section, index);
 		e.preventDefault();
 
 		let reader = new FileReader();
 		let file = e.target.files[0];
 
 		reader.onloadend = () => {
-			this.setState({
-				file: file,
-				imagePreviewUrl: reader.result,
-			});
+			console.log("In reader");
+			let curValue = this.state[section];
+			curValue[index].image = reader.result;
+			curValue[index].file = file;
+			this.setState(
+				{
+					[section]: curValue,
+					imagePreviewUrl: reader.result,
+				},
+				console.log(this.state)
+			);
 		};
 
 		reader.readAsDataURL(file);
 	}
+
 	optionChange = (e) => {
 		this.setState({
 			imageName: e.target.value,
 		});
 		console.log("option change", e.target.name, e.target.value);
 	};
-	imageSubmitHandler = (e) => {
-		console.log("Image upload", this.state);
+	imageSubmitHandler = (e, section, index) => {
+		console.log("Image upload", section, index, this.state);
 		e.preventDefault();
-		if (this.state.imageName.length > 0) {
+		if (this.state[section][index].image.length > 0) {
 			let formData = new FormData();
-			formData.append("imageName", this.state.imageName);
-			formData.append("image", this.state.file);
+			formData.append("imageName", this.state[section][index].imageName);
+			formData.append("image", this.state[section][index].file);
 			this.props
 				.uploadImage(formData)
 				.then((result) => {
@@ -137,11 +154,17 @@ class Category extends Component {
 	// };
 
 	render() {
-		let data = Object.keys(this.state.data || {}).map((elem, index) => {
+		let data = Object.keys(this.state.data).map((elem, index) => {
 			return (
 				<Card key={index} onClick={this.clickHandler}>
 					<Card.Header>
-						<Accordion.Toggle as={Button} variant="link" eventKey={index}>
+						<Accordion.Toggle
+							as={Button}
+							variant="link"
+							eventKey={index}
+							className="c-accordion"
+						>
+							<i class="fa fa-angle-down"></i>
 							{Heading[index]}
 						</Accordion.Toggle>
 					</Card.Header>
@@ -154,12 +177,13 @@ class Category extends Component {
 								subHeading={SubHeading[index]}
 								updateHandler={this.updateHandler}
 							/>
-							{imageOptions[index].length > 0 ? (
+							{Images[index].length > 0 ? (
 								<ImageForm
-									options={imageOptions[index]}
+									Images={Images[index]}
+									sectionName={elem}
 									handleImageChange={this.handleImageChange}
 									imageSubmitHandler={this.imageSubmitHandler}
-									imagePreviewUrl={this.state.imagePreviewUrl}
+									imagePreviewUrl={this.state[elem]}
 									optionChange={this.optionChange}
 								/>
 							) : null}

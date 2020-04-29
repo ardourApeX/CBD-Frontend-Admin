@@ -1,5 +1,6 @@
 import Axios from "../../utilities/Axios/Axios";
 import * as actionTypes from "./actions";
+import { ERROR_MESSAGE } from "./constant";
 export const update = (dataValue, section) => {
 	console.log("update actioncreator", dataValue, section);
 	return (dispatch) => {
@@ -19,7 +20,7 @@ export const update = (dataValue, section) => {
 			})
 			.catch((err) => {
 				console.log(err);
-				Promise.reject(err.response.data.message);
+				Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
@@ -38,7 +39,7 @@ export const get = () => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(err.response.data.message);
+				Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
@@ -52,7 +53,7 @@ export const uploadImage = (data) => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(err.response.message);
+				Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };

@@ -1,9 +1,8 @@
 import axios from "axios";
-
-const Base_URL = "http://localhost:5000/";
+import { BASE_URL } from "./url";
 
 let instance = axios.create({
-	baseURL: Base_URL,
+	baseURL: BASE_URL,
 });
 
 instance.defaults.headers.common[

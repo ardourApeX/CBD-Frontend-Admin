@@ -37,10 +37,10 @@ class NavBar extends Component {
 							<span />
 						</a>
 						<a href={DEMO.BLANK_LINK} className="b-brand">
-							<div className="b-bg">
-								<i className="feather icon-trending-up" />
-							</div>
-							<span className="b-title">Datta Able</span>
+							<a href="/dashboard" className="b-brand">
+								<img src="/logo-new.png" alt="logo" style={{ width: "10%" }} />
+								<span className="b-title">Bene</span>
+							</a>
 						</a>
 					</div>
 					<a className="mobile-menu" id="mobile-header" href={DEMO.BLANK_LINK}>
