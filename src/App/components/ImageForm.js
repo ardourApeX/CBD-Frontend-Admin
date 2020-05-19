@@ -3,14 +3,14 @@ import { IMAGE_URL } from "../../utilities/Axios/url";
 import { Container, Row, Col, Button } from "react-bootstrap";
 export default function ImageForm({ sectionName, ...props }) {
 	let { imagePreviewUrl } = props;
-	console.log("url", imagePreviewUrl, sectionName);
+	// console.log("url", imagePreviewUrl, sectionName);
 	// let $imagePreview = null;
 	// if (imagePreviewUrl) {
 	// 	$imagePreview = (
 	// 		<img src={imagePreviewUrl} style={{ width: "10%" }} className="mt-5" />
 	// 	);
 	// }
-	console.log("ima", props.Images);
+	// console.log("ima", props.Images);
 	const images = props.Images.map((elem, index) => {
 		return (
 			<Col key={index}>

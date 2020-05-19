@@ -6,7 +6,7 @@ import Formik from "formik";
 
 export default class TextForm extends Component {
 	render() {
-		console.log(this.props.field.title);
+		// console.log(this.props.field.title);
 		const sectionName = this.props.sectionName;
 		let data = Object.keys(this.props.field).map((elem, index) => {
 			return (

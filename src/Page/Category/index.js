@@ -7,7 +7,7 @@ import * as actionCreators from "../../store/actions/category";
 import cogoToast from "cogo-toast";
 import ImageForm from "../../App/components/ImageForm";
 
-const Images = [[], [], [], [], [], [], ["Oil-Page-Image"]];
+const Images = [[], [], [], [], [], [], ["Oil-Page-Image.png"]];
 const Heading = [
 	"Topicals",
 	"Pets",
@@ -43,7 +43,7 @@ class Category extends Component {
 			default: [
 				{
 					image: "",
-					imageName: "",
+					imageName: "Oil-Page-Image",
 					file: "",
 				},
 			],
@@ -86,6 +86,7 @@ class Category extends Component {
 		});
 		console.log("option change", e.target.name, e.target.value);
 	};
+
 	imageSubmitHandler = (e, section, index) => {
 		console.log("Image upload", section, index, this.state);
 		e.preventDefault();

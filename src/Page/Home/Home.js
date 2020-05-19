@@ -142,7 +142,7 @@ class Home extends Component {
 		// console.log("change", event.target, section);
 	};
 	updateHandler = (event, section) => {
-		console.log("updateHandler", section);
+		// console.log("updateHandler", section);
 		event.preventDefault();
 		this.props
 			.update(this.state.data[section], section)
@@ -152,18 +152,18 @@ class Home extends Component {
 			.catch((err) => cogoToast.error(err));
 	};
 	componentDidMount = () => {
-		console.log("Component mounted");
+		// console.log("Component mounted");
 		this.props
 			.get()
 			.then((result) => {
 				cogoToast.success(result);
-				console.log(this.props.data);
+				// console.log(this.props.data);
 				this.setState(
 					{
 						data: { ...this.props.data },
 						loading: false,
-					},
-					console.log(this.state)
+					}
+					// console.log(this.state)
 				);
 			})
 			.catch((err) => {
