@@ -2,6 +2,7 @@ import React from "react";
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Button, FormControl, InputGroup, Card } from "react-bootstrap";
+// import ImageForm from
 
 export default function BlogForm(props) {
 	console.log("props", props);

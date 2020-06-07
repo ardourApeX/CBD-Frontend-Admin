@@ -7,7 +7,7 @@ import ImageForm from "../../App/components/ImageForm";
 import * as actionCreators from "../../store/actions/home";
 import cogoToast from "cogo-toast";
 const Images = [
-	["Banner-Image-1.png", "Banner-Image-2.png"],
+	["Banner-Image-1.png", "Banner-Image-2.png", "Logo.png"],
 	[],
 	["Bundle-Image.png"],
 	[],
@@ -60,6 +60,7 @@ class Home extends Component {
 			banner: [
 				{ image: "", file: "", imageName: "Banner-Image-1" },
 				{ image: "", file: "", imageName: "Banner-Image-2" },
+				{ image: "", file: "", imageName: "Logo" },
 			],
 			thirdSection: [{ image: "", file: "", imageName: "Bundle-Image" }],
 			fifthSection: [

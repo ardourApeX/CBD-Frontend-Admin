@@ -16,7 +16,7 @@ export const update = (index, data) => {
 			})
 			.catch((err) => {
 				console.log(err);
-				Promise.reject(ERROR_MESSAGE);
+				return Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
@@ -34,7 +34,7 @@ export const get = (id) => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(ERROR_MESSAGE);
+				return Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
@@ -52,7 +52,7 @@ export const getByType = (blogTag) => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(ERROR_MESSAGE);
+				return Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
@@ -69,7 +69,7 @@ export const Delete = (id) => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(ERROR_MESSAGE);
+				return Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
@@ -89,14 +89,14 @@ export const getAll = (pageNo, size) => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(ERROR_MESSAGE);
+				return Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
 
 export const add = (data) => {
 	console.log("Add Blog:", data);
-	console.log("Blog getAll action creator");
+	console.log("Blog action creator");
 	return (dispatch) => {
 		return Axios.post("/Blog/add", data)
 			.then((result) => {
@@ -110,7 +110,7 @@ export const add = (data) => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(ERROR_MESSAGE);
+				return Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };

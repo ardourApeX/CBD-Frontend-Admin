@@ -20,7 +20,7 @@ export const update = (dataValue, section) => {
 			})
 			.catch((err) => {
 				console.log(err);
-				Promise.reject(ERROR_MESSAGE);
+				return Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
@@ -38,7 +38,7 @@ export const get = () => {
 				return result.data.message;
 			})
 			.catch((err) => {
-				Promise.reject(ERROR_MESSAGE);
+				return Promise.reject(ERROR_MESSAGE);
 			});
 	};
 };
