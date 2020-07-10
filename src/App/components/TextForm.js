@@ -3,16 +3,20 @@ import { Form, Button, Container } from "react-bootstrap";
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Formik from "formik";
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
 
 export default class TextForm extends Component {
 	render() {
-		// console.log(this.props.field.title);
+		console.log(this.props.field);
 		const sectionName = this.props.sectionName;
 		let data = Object.keys(this.props.field).map((elem, index) => {
 			return (
 				<Container className="mt-3" key={index}>
 					<h3 className="c-subHeading">{this.props.subHeading[index]}</h3>
-					<CKEditor
+					{/* <CKEditor
 						editor={ClassicEditor}
 						data={this.props.field[elem]}
 						onInit={(editor) => {
@@ -34,6 +38,20 @@ export default class TextForm extends Component {
 						// onFocus={(event, editor) => {
 						// 	console.log("Focus.", editor);
 						// }}
+
+						
+					/> */}
+
+					<Editor
+						value={this.props.field[elem]}
+						onValueChange={(code) =>
+							this.props.changeHandler(elem, sectionName, code)}
+						highlight={code => highlight(code, languages.js)}
+						padding={10}
+						style={{
+							fontFamily: '"Fira code", "Fira Mono", monospace',
+							fontSize: 12,
+						}}
 					/>
 				</Container>
 				// <Form.Group controlId="exampleForm.ControlInput1">

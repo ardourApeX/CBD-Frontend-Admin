@@ -11,7 +11,7 @@ const Images = [
 	[],
 	["Bundle-Image.png"],
 	[],
-	["Consult-Image.png", "Wellness-Image.png"],
+	["Consult-Image.png", "Wellness-Image-1.png"],
 ];
 const Heading = [
 	"Banner",
