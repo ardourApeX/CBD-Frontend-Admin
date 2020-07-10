@@ -64,7 +64,7 @@ export default class TextForm extends Component {
 				// 	/>
 				// </Form.Group>
 			);
-		});
+		}); 
 		return (
 			<div>
 				<Form>{data}</Form>
