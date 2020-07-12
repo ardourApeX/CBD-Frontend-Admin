@@ -180,15 +180,15 @@ class Home extends Component {
 						<Accordion.Toggle
 							as={Button}
 							variant="link"
-							eventKey={index}
+							eventKey={`${index}`}
 							onClick={() => this.cardChange(Heading[index])}
 							className="c-accordion"
 						>
-							<i class="fa fa-angle-down"></i>
+							<i className="fa fa-angle-down"></i>
 							{Heading[index]}
 						</Accordion.Toggle>
 					</Card.Header>
-					<Accordion.Collapse eventKey={index}>
+					<Accordion.Collapse eventKey={`${index}`}>
 						<Card.Body>
 							<TextForm
 								field={this.state.data[elem]}
@@ -223,6 +223,7 @@ class Home extends Component {
 			// 	</Accordion.Collapse>
 			// </Card>
 		});
+		console.log("check data",data);
 		return (
 			<div>
 				{this.state.loading ? (

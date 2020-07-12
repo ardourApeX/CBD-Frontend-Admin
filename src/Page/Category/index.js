@@ -40,14 +40,7 @@ class Category extends Component {
 				bundles: {},
 				default: {},
 			},
-			default: [
-				{
-					image: "",
-					imageName: "Oil-Page-Image",
-					file: "",
-				},
-			],
-
+			default:[{image: "",imageName: "Oil-Page-Image",file: ""}],
 			loading: true,
 			file: "",
 			imagePreviewUrl: "",
@@ -137,12 +130,13 @@ class Category extends Component {
 		console.log("Component mounted");
 		this.props.get().then((result) => {
 			cogoToast.success(result);
+			
 			this.setState(
 				{
 					data: { ...this.props.data },
 					loading: false,
 				},
-				console.log(this.state)
+				
 			);
 		});
 	};
@@ -162,14 +156,14 @@ class Category extends Component {
 						<Accordion.Toggle
 							as={Button}
 							variant="link"
-							eventKey={index}
+							eventKey={`${index}`}
 							className="c-accordion"
 						>
-							<i class="fa fa-angle-down"></i>
+							<i className="fa fa-angle-down"></i>
 							{Heading[index]}
 						</Accordion.Toggle>
 					</Card.Header>
-					<Accordion.Collapse eventKey={index}>
+					<Accordion.Collapse eventKey={`${index}`}>
 						<Card.Body>
 							<TextForm
 								field={this.state.data[elem]}
@@ -186,6 +180,7 @@ class Category extends Component {
 									imageSubmitHandler={this.imageSubmitHandler}
 									imagePreviewUrl={this.state[elem]}
 									optionChange={this.optionChange}
+									img={this.state.imagePreviewUrl}
 								/>
 							) : null}
 						</Card.Body>
@@ -193,6 +188,7 @@ class Category extends Component {
 				</Card>
 			);
 		});
+		
 		return (
 			<div>
 				{this.state.loading ? (

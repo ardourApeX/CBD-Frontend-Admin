@@ -6,7 +6,7 @@ import NavRight from "./NavRight";
 import Aux from "../../../../hoc/_Aux";
 import DEMO from "../../../../store/actions/constant";
 import * as actionTypes from "../../../../store/actions/actions";
-
+import { Link } from 'react-router-dom';
 class NavBar extends Component {
 	render() {
 		let headerClass = [
@@ -28,24 +28,24 @@ class NavBar extends Component {
 			<Aux>
 				<header className={headerClass.join(" ")}>
 					<div className="m-header">
-						<a
+						<Link
 							className={toggleClass.join(" ")}
 							id="mobile-collapse1"
-							href={DEMO.BLANK_LINK}
+							to={DEMO.BLANK_LINK}
 							onClick={this.props.onToggleNavigation}
 						>
 							<span />
-						</a>
-						<a href={DEMO.BLANK_LINK} className="b-brand">
-							<a href="/dashboard" className="b-brand">
+						</Link>
+						<Link to={DEMO.BLANK_LINK} className="b-brand">
+							<Link to="/dashboard" className="b-brand">
 								<img src="/logo-new.png" alt="logo" style={{ width: "10%" }} />
 								<span className="b-title">Bene</span>
-							</a>
-						</a>
+							</Link>
+						</Link>
 					</div>
-					<a className="mobile-menu" id="mobile-header" href={DEMO.BLANK_LINK}>
+					<Link className="mobile-menu" id="mobile-header" to={DEMO.BLANK_LINK}>
 						<i className="feather icon-more-horizontal" />
-					</a>
+					</Link>
 					<div className="collapse navbar-collapse">
 						<NavLeft />
 						<NavRight rtlLayout={this.props.rtlLayout} />

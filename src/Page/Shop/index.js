@@ -115,14 +115,14 @@ class Shop extends Component {
 						<Accordion.Toggle
 							as={Button}
 							variant="link"
-							eventKey={index}
+							eventKey={`${index}`}
 							className="c-accordion"
 						>
-							<i class="fa fa-angle-down"></i>
+							<i className="fa fa-angle-down"></i>
 							{Heading[index]}
 						</Accordion.Toggle>
 					</Card.Header>
-					<Accordion.Collapse eventKey={index}>
+					<Accordion.Collapse eventKey={`${index}`}>
 						<Card.Body>
 							<TextForm
 								field={this.state.data[elem]}
