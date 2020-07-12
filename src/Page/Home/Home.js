@@ -18,12 +18,12 @@ const Heading = [
 	"Category Slider",
 	"Third Section",
 	"Bundles Slider",
-	"Fifith Section",
+	"Fifth Section",
 ];
 const SubHeading = [
 	["Title", "Content", "Button Text"],
 	["Title"],
-	["Big Title", "Title", "Content", "Button Text"],
+	["Title", "Sub Title", "Content", "Button Text"],
 	["Title", "Sub Title", "Button Text"],
 	["Title", "Content", "Button Text"],
 ];
