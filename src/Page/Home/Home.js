@@ -205,6 +205,7 @@ class Home extends Component {
 									imageSubmitHandler={this.imageSubmitHandler}
 									imagePreviewUrl={this.state[elem]}
 									optionChange={this.optionChange}
+									img={this.state.imagePreviewUrl}
 								/>
 							) : null}
 						</Card.Body>
