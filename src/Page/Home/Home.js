@@ -7,20 +7,23 @@ import ImageForm from "../../App/components/ImageForm";
 import * as actionCreators from "../../store/actions/home";
 import cogoToast from "cogo-toast";
 const Images = [
-	["Banner-Image-1.png", "Banner-Image-2.png", "Logo.png"],
+	["Logo-nav.png", "Logo-chat.png", "Logo.png"],
+	["Banner-Image-1.png", "Banner-Image-2.png"],
 	[],
 	["Bundle-Image.png"],
 	[],
 	["Consult-Image.png", "Wellness-Image-1.png"],
 ];
 const Heading = [
+	"Logo",
 	"Banner",
 	"Category Slider",
 	"Third Section",
 	"Bundles Slider",
 	"Fifth Section",
 ];
-const SubHeading = [
+const SubHeading = [,
+	[]
 	["Title", "Content", "Button Text"],
 	["Title"],
 	["Title", "Sub Title", "Content", "Button Text"],
@@ -32,6 +35,7 @@ class Home extends Component {
 		super(props);
 		this.state = {
 			data: {
+				logo:"",
 				banner: {
 					title: "",
 					content: "",
@@ -60,6 +64,10 @@ class Home extends Component {
 			banner: [
 				{ image: "", file: "", imageName: "Banner-Image-1" },
 				{ image: "", file: "", imageName: "Banner-Image-2" },
+			],
+			logo:[
+				{ image: "", file: "", imageName: "Logo-nav" },
+				{ image: "", file: "", imageName: "Logo-chat" },
 				{ image: "", file: "", imageName: "Logo" },
 			],
 			thirdSection: [{ image: "", file: "", imageName: "Bundle-Image" }],
@@ -174,6 +182,7 @@ class Home extends Component {
 	cardChange = (card) => {};
 	render() {
 		let data = Object.keys(this.state.data || {}).map((elem, index) => {
+			
 			return (
 				<Card key={index}>
 					<Card.Header>
@@ -190,14 +199,16 @@ class Home extends Component {
 					</Card.Header>
 					<Accordion.Collapse eventKey={`${index}`}>
 						<Card.Body>
-							<TextForm
-								field={this.state.data[elem]}
+						
+						{SubHeading[index]!==undefined ? (
+						<TextForm 
+							field={this.state.data[elem]}
 								changeHandler={this.changeHandler}
 								sectionName={elem}
 								updateHandler={this.updateHandler}
 								subHeading={SubHeading[index]}
-							/>
-							{Images[index].length > 0 ? (
+							/>):null}
+							{(Images[index].length > 0) ? (
 								<ImageForm
 									Images={Images[index]}
 									sectionName={elem}
