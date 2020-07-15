@@ -5,6 +5,7 @@ import NavLeft from "./NavLeft";
 import NavRight from "./NavRight";
 import Aux from "../../../../hoc/_Aux";
 import DEMO from "../../../../store/actions/constant";
+import {IMAGE_URL} from "../../../../utilities/Axios/url"
 import * as actionTypes from "../../../../store/actions/actions";
 import { Link } from 'react-router-dom';
 class NavBar extends Component {
@@ -38,7 +39,7 @@ class NavBar extends Component {
 						</Link>
 						<Link to={DEMO.BLANK_LINK} className="b-brand">
 							<Link to="/dashboard" className="b-brand">
-								<img src="/logo-new.png" alt="logo" style={{ width: "10%" }} />
+								<img src={`${IMAGE_URL}/bene-leaf.png`} alt="logo" style={{ width: "10%" }} />
 								<span className="b-title">Bene</span>
 							</Link>
 						</Link>
