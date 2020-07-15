@@ -23,7 +23,6 @@ const Heading = [
 	"Fifth Section",
 ];
 const SubHeading = [,
-	[]
 	["Title", "Content", "Button Text"],
 	["Title"],
 	["Title", "Sub Title", "Content", "Button Text"],

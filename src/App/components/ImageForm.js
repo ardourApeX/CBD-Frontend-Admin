@@ -36,10 +36,7 @@ const ImageForm = ( {sectionName,imagePreviewUrl,img,...props} ) => {
 					<label>
 					<input 
 						type="file" 
-						
-						onChange={async(e) =>{props.handleImageChange(e, sectionName, index);
-						console.log("onchange",props);
-						}}
+						onChange={async(e) =>props.handleImageChange(e, sectionName, index)}
 						accept="image/*" />
 						
 					</label>)}
