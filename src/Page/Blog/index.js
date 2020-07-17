@@ -103,7 +103,7 @@ class Blog extends Component {
 			});
 		}
 	};
-
+ 
 	submitHandler = () => {
 		console.log("SubmitHandler");
 		const formData = new FormData();
