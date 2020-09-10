@@ -30,10 +30,11 @@ export const get = () => {
 	return (dispatch) => {
 		return Axios.get("/Category/get")
 			.then((result) => {
-				console.log("Result", result);
+				console.log("Result", result.data.categories);
 				dispatch({
 					type: actionTypes.GET_CATEGORY,
 					data: result.data.data,
+					categories:result.data.categories
 				});
 				return result.data.message;
 			})

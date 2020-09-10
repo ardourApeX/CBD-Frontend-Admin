@@ -13,7 +13,8 @@ const initialState = {
 const get = (action) => {
 	console.log("In get reducer", action);
 	return {
-		...action.data,
+		data:action.data,
+		categories:action.categories,
 	};
 };
 const update = (state, action) => {

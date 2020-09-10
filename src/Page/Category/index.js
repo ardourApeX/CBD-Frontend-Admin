@@ -31,15 +31,8 @@ class Category extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			data: {
-				topicals: {},
-				pets: {},
-				edibles: {},
-				capsules: {},
-				oils: {},
-				bundles: {},
-				default: {},
-			},
+			data: {},
+			categories:{},
 			default:[{image: "",imageName: "Oil-Page-Image",file: ""}],
 			loading: true,
 			file: "",
@@ -119,7 +112,7 @@ class Category extends Component {
 		console.log("updateHandler", section);
 		event.preventDefault();
 		this.props
-			.update(this.state.data[section], section)
+			.update(this.state.id, section)
 			.then((result) => {
 				cogoToast.success(result);
 				console.log(result);
@@ -127,13 +120,16 @@ class Category extends Component {
 			.catch((err) => cogoToast.error(err));
 	};
 	componentDidMount = () => {
+		console.log(this.props.data);
 		console.log("Component mounted");
 		this.props.get().then((result) => {
+			console.log(result);
 			cogoToast.success(result);
 			
 			this.setState(
 				{
 					data: { ...this.props.data },
+					categories: { ...this.props.categories },
 					loading: false,
 				},
 				
@@ -149,7 +145,11 @@ class Category extends Component {
 	// };
 
 	render() {
+		console.log(this.state);
 		let data = Object.keys(this.state.data).map((elem, index) => {
+			console.log(this.state.data[elem]);
+			
+		
 			return (
 				<Card key={index} onClick={this.clickHandler}>
 					<Card.Header>
@@ -160,7 +160,7 @@ class Category extends Component {
 							className="c-accordion"
 						>
 							<i className="fa fa-angle-down"></i>
-							{Heading[index]}
+							{this.state.categories[index].category}
 						</Accordion.Toggle>
 					</Card.Header>
 					<Accordion.Collapse eventKey={`${index}`}>
@@ -308,7 +308,8 @@ class Category extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		data: state.categoryReducer,
+		data: state.categoryReducer.data,
+		categories: state.categoryReducer.categories,
 	};
 };
 
