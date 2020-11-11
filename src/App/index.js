@@ -9,39 +9,41 @@ import Aux from "../hoc/_Aux";
 import ScrollToTop from "./layout/ScrollToTop";
 import routes from "../route";
 import { PrivateRoute } from "./PrivateRoute";
+import { connect } from "react-redux";
+import * as actionCreators from "../store/actions/category";
 
 const AdminLayout = Loadable({
-	loader: () => import("./layout/AdminLayout"),
-	loading: Loader,
+  loader: () => import("./layout/AdminLayout"),
+  loading: Loader,
 });
 
 class App extends Component {
-	render() {
-		const menu = routes.map((route, index) => {
-			return route.component ? (
-				<Route
-					key={index}
-					path={route.path}
-					exact={route.exact}
-					name={route.name}
-					render={(props) => <route.component {...props} />}
-				/>
-			) : null;
-		});
+  render() {
+    const menu = routes.map((route, index) => {
+      return route.component ? (
+        <Route
+          key={index}
+          path={route.path}
+          exact={route.exact}
+          name={route.name}
+          render={(props) => <route.component {...props} />}
+        />
+      ) : null;
+    });
 
-		return (
-			<Aux>
-				<ScrollToTop>
-					<Suspense fallback={<Loader />}>
-						<Switch>
-							{menu}
-							<PrivateRoute path="/" component={AdminLayout} />
-						</Switch>
-					</Suspense>
-				</ScrollToTop>
-			</Aux>
-		);
-	}
+    return (
+      <Aux>
+        <ScrollToTop>
+          <Suspense fallback={<Loader />}>
+            <Switch>
+              {menu}
+              <PrivateRoute path="/" component={AdminLayout} />
+            </Switch>
+          </Suspense>
+        </ScrollToTop>
+      </Aux>
+    );
+  }
 }
 
 export default App;

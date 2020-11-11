@@ -18,6 +18,8 @@ export const GET_SHOP = "GET_SHOP";
 
 export const UPDATE_CATEGORY = "UPDATE_CATEGORY";
 export const GET_CATEGORY = "GET_CATEGORY";
+export const ADD_CATEGORY = "ADD_CATEGORY";
+export const DELETE_CATEGORY = "DELETE_CATEGORY";
 
 export const GET_BLOG = "GET_BLOG";
 export const GET_ALL_BLOG = "GET_ALL_BLOG";
