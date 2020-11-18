@@ -10,9 +10,9 @@ const Images = [
   ["Logo-nav.png", "Logo-chat.png", "Logo.png"],
   ["Banner-Image-1.png", "Banner-Image-2.png"],
   [],
+  [],
   ["Bundle-Image.png"],
   [],
-  ["Consult-Image.png", "Wellness-Image-1.png"],
 ];
 const Heading = [
   "Logo",
@@ -74,11 +74,15 @@ class Home extends Component {
         { image: "", file: "", imageName: "Logo-chat" },
         { image: "", file: "", imageName: "Logo" },
       ],
+      categorySlider: [],
+      secondSection: [],
       thirdSection: [{ image: "", file: "", imageName: "Bundle-Image" }],
-      fifthSection: [
-        { image: "", file: "", imageName: "Consult-Image" },
-        { image: "", file: "", imageName: "Wellness-Image-1" },
-      ],
+      fourthSection: [],
+      // thirdSection: [{ image: "", file: "", imageName: "Bundle-Image" }],
+      // fifthSection: [
+      //   { image: "", file: "", imageName: "Consult-Image" },
+      //   { image: "", file: "", imageName: "Wellness-Image-1" },
+      // ],
 
       loading: true,
       file: "",
@@ -237,7 +241,7 @@ class Home extends Component {
                   subHeading={SubHeading[index]}
                 />
               ) : null}
-              {/* {Images[index] !== undefined && Images[index].length > 0 ? (
+              {Images[index] !== undefined && Images[index].length > 0 ? (
                 <ImageForm
                   Images={Images[index]}
                   sectionName={elem}
@@ -247,7 +251,7 @@ class Home extends Component {
                   optionChange={this.optionChange}
                   img={this.state.imagePreviewUrl}
                 />
-              ) : null} */}
+              ) : null}
             </Card.Body>
           </Accordion.Collapse>
         </Card>

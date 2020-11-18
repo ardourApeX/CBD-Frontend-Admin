@@ -8,23 +8,23 @@ global.jQuery = $;
 const DashboardDefault = React.lazy(() => import("./Demo/Dashboard/Default"));
 
 const UIBasicButton = React.lazy(() =>
-	import("./Demo/UIElements/Basic/Button")
+  import("./Demo/UIElements/Basic/Button")
 );
 const UIBasicBadges = React.lazy(() =>
-	import("./Demo/UIElements/Basic/Badges")
+  import("./Demo/UIElements/Basic/Badges")
 );
 const UIBasicBreadcrumbPagination = React.lazy(() =>
-	import("./Demo/UIElements/Basic/BreadcrumbPagination")
+  import("./Demo/UIElements/Basic/BreadcrumbPagination")
 );
 
 const UIBasicCollapse = React.lazy(() =>
-	import("./Demo/UIElements/Basic/Collapse")
+  import("./Demo/UIElements/Basic/Collapse")
 );
 const UIBasicTabsPills = React.lazy(() =>
-	import("./Demo/UIElements/Basic/TabsPills")
+  import("./Demo/UIElements/Basic/TabsPills")
 );
 const UIBasicBasicTypography = React.lazy(() =>
-	import("./Demo/UIElements/Basic/Typography")
+  import("./Demo/UIElements/Basic/Typography")
 );
 
 const FormsElements = React.lazy(() => import("./Demo/Forms/FormsElements"));
@@ -46,105 +46,112 @@ const Shop = React.lazy(() => import("./Page/Shop/index.js"));
 const Category = React.lazy(() => import("./Page/Category"));
 
 const Blog = React.lazy(() => import("./Page/Blog"));
+const Banner = React.lazy(() => import("./Page/Banner"));
 const routes = [
-	{
-		path: "/dashboard/default",
-		exact: true,
-		name: "Default",
-		component: DashboardDefault,
-	},
-	{
-		path: "/basic/button",
-		exact: true,
-		name: "Basic Button",
-		component: UIBasicButton,
-	},
-	{
-		path: "/basic/badges",
-		exact: true,
-		name: "Basic Badges",
-		component: UIBasicBadges,
-	},
-	{
-		path: "/basic/breadcrumb-paging",
-		exact: true,
-		name: "Basic Breadcrumb Pagination",
-		component: UIBasicBreadcrumbPagination,
-	},
-	{
-		path: "/basic/collapse",
-		exact: true,
-		name: "Basic Collapse",
-		component: UIBasicCollapse,
-	},
-	{
-		path: "/basic/tabs-pills",
-		exact: true,
-		name: "Basic Tabs & Pills",
-		component: UIBasicTabsPills,
-	},
-	{
-		path: "/basic/typography",
-		exact: true,
-		name: "Basic Typography",
-		component: UIBasicBasicTypography,
-	},
-	{
-		path: "/forms/form-basic",
-		exact: true,
-		name: "Forms Elements",
-		component: FormsElements,
-	},
-	{
-		path: "/tables/bootstrap",
-		exact: true,
-		name: "Bootstrap Table",
-		component: BootstrapTable,
-	},
-	{
-		path: "/charts/nvd3",
-		exact: true,
-		name: "Nvd3 Chart",
-		component: Nvd3Chart,
-	},
-	{
-		path: "/maps/google-map",
-		exact: true,
-		name: "Google Map",
-		component: GoogleMap,
-	},
-	{
-		path: "/sample-page",
-		exact: true,
-		name: "Sample Page",
-		component: OtherSamplePage,
-	},
-	{
-		path: "/Home",
-		exact: true,
-		name: "Home",
-		component: Home,
-	},
-	{
-		path: "/Shop",
-		exact: true,
-		name: "Shop",
-		component: Shop,
-	},
-	{
-		path: "/Category",
-		exact: true,
-		name: "Category",
-		component: Category,
-	},
-	{
-		path: "/Blog",
-		exact: true,
-		name: "Blog",
-		component: Blog,
-	},
+  {
+    path: "/dashboard/default",
+    exact: true,
+    name: "Default",
+    component: DashboardDefault,
+  },
+  {
+    path: "/basic/button",
+    exact: true,
+    name: "Basic Button",
+    component: UIBasicButton,
+  },
+  {
+    path: "/basic/badges",
+    exact: true,
+    name: "Basic Badges",
+    component: UIBasicBadges,
+  },
+  {
+    path: "/basic/breadcrumb-paging",
+    exact: true,
+    name: "Basic Breadcrumb Pagination",
+    component: UIBasicBreadcrumbPagination,
+  },
+  {
+    path: "/basic/collapse",
+    exact: true,
+    name: "Basic Collapse",
+    component: UIBasicCollapse,
+  },
+  {
+    path: "/basic/tabs-pills",
+    exact: true,
+    name: "Basic Tabs & Pills",
+    component: UIBasicTabsPills,
+  },
+  {
+    path: "/basic/typography",
+    exact: true,
+    name: "Basic Typography",
+    component: UIBasicBasicTypography,
+  },
+  {
+    path: "/forms/form-basic",
+    exact: true,
+    name: "Forms Elements",
+    component: FormsElements,
+  },
+  {
+    path: "/tables/bootstrap",
+    exact: true,
+    name: "Bootstrap Table",
+    component: BootstrapTable,
+  },
+  {
+    path: "/charts/nvd3",
+    exact: true,
+    name: "Nvd3 Chart",
+    component: Nvd3Chart,
+  },
+  {
+    path: "/maps/google-map",
+    exact: true,
+    name: "Google Map",
+    component: GoogleMap,
+  },
+  {
+    path: "/sample-page",
+    exact: true,
+    name: "Sample Page",
+    component: OtherSamplePage,
+  },
+  {
+    path: "/Home",
+    exact: true,
+    name: "Home",
+    component: Home,
+  },
+  {
+    path: "/Shop",
+    exact: true,
+    name: "Shop",
+    component: Shop,
+  },
+  {
+    path: "/Category",
+    exact: true,
+    name: "Category",
+    component: Category,
+  },
+  {
+    path: "/Blog",
+    exact: true,
+    name: "Blog",
+    component: Blog,
+  },
+  {
+    path: "/Banner",
+    exact: true,
+    name: "Banner",
+    component: Banner,
+  },
 
-	{ path: "/docs", exact: true, name: "Documentation", component: OtherDocs },
+  { path: "/docs", exact: true, name: "Documentation", component: OtherDocs },
 ];
 
 export default routes;

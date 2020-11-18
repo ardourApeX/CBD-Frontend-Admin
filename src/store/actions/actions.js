@@ -28,3 +28,8 @@ export const UPDATE_BLOG = "UPDATE_BLOG";
 export const DELETE_BLOG = "DELETE_BLOG";
 
 export const GET_KEYWORD = "GET_KEYWORD";
+
+export const GET_BANNER = "GET_BANNER";
+export const ADD_BANNER = "ADD_BANNER";
+export const UPDATE_BANNER = "UPDATE_BANNER";
+export const DELETE_BANNER = "DELETE_BANNER";

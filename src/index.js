@@ -14,30 +14,32 @@ import shopReducer from "./store/reducers/shopReducer";
 import categoryReducer from "./store/reducers/categoryReducer";
 import blogReducer from "./store/reducers/blogReducer";
 import keywordReducer from "./store/reducers/keywordReducer";
+import bannerReducer from "./store/reducers/bannerReducer";
 
 const rootReducer = combineReducers({
-	keywordReducer,
-	blogReducer,
-	categoryReducer,
-	shopReducer,
-	homeReducer,
-	userReducer: userReducer,
-	withTheme: defaultreducer,
+  keywordReducer,
+  blogReducer,
+  categoryReducer,
+  shopReducer,
+  homeReducer,
+  bannerReducer,
+  userReducer: userReducer,
+  withTheme: defaultreducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
-	rootReducer,
-	composeEnhancers(applyMiddleware(thunk))
+  rootReducer,
+  composeEnhancers(applyMiddleware(thunk))
 );
 
 const app = (
-	<Provider store={store}>
-		<BrowserRouter>
-			{/* basename="/datta-able" */}
-			<App />
-		</BrowserRouter>
-	</Provider>
+  <Provider store={store}>
+    <BrowserRouter>
+      {/* basename="/datta-able" */}
+      <App />
+    </BrowserRouter>
+  </Provider>
 );
 
 ReactDOM.render(app, document.getElementById("root"));
