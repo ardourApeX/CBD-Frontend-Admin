@@ -4,9 +4,10 @@
 	"private": true,
 	"homepage": "http://lite.codedthemes.com/datta-able/react/default/",
 	"dependencies": {
+		"@ant-design/icons": "^4.3.0",
 		"@ckeditor/ckeditor5-build-classic": "^18.0.0",
 		"@ckeditor/ckeditor5-react": "^2.1.0",
-		"antd": "^4.1.4",
+		"antd": "^4.8.4",
 		"axios": "^0.19.2",
 		"bootstrap": "^4.3.1",
 		"brace": "^0.11.1",

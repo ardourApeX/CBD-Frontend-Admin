@@ -33,3 +33,14 @@ export const GET_BANNER = "GET_BANNER";
 export const ADD_BANNER = "ADD_BANNER";
 export const UPDATE_BANNER = "UPDATE_BANNER";
 export const DELETE_BANNER = "DELETE_BANNER";
+
+export const ADD_LEARN = "ADD_LEARN";
+export const EDIT_LEARN = "EDIT_LEARN";
+export const DELETE_LEARN = "DELETE_LEARN";
+export const GET_LEARN = "GET_LEARN";
+export const ADD_SUB_LEARN = "ADD_SUB_LEARN";
+export const EDIT_SUB_LEARN = "EDIT_SUB_LEARN";
+export const DELETE_SUB_LEARN = "DELETE_SUB_LEARN";
+export const ADD_QUESTIONNAIRE = "ADD_QUESTIONNAIRE";
+export const EDIT_QUESTIONNAIRE = "EDIT_QUESTIONNAIRE";
+export const DELETE_QUESTIONNAIRE = "DELETE_QUESTIONNAIRE";
