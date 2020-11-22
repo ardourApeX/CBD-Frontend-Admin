@@ -15,6 +15,7 @@ import categoryReducer from "./store/reducers/categoryReducer";
 import blogReducer from "./store/reducers/blogReducer";
 import keywordReducer from "./store/reducers/keywordReducer";
 import bannerReducer from "./store/reducers/bannerReducer";
+import learnReducer from "./store/reducers/learnReducer";
 
 const rootReducer = combineReducers({
   keywordReducer,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   shopReducer,
   homeReducer,
   bannerReducer,
+  learnReducer,
   userReducer: userReducer,
   withTheme: defaultreducer,
 });

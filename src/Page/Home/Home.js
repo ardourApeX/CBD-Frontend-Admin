@@ -35,22 +35,49 @@ class Home extends Component {
     super(props);
     this.state = {
       data: {
-        logo: "",
+        logo: {
+          images: [
+            {
+              src: "",
+              name: "",
+            },
+            {
+              src: "",
+              name: "",
+            },
+            {
+              src: "",
+              name: "",
+            },
+          ],
+        },
         banner: {
           title: "",
           content: "",
           btnText: "",
           hide: false,
+          images: [
+            {
+              src: "",
+              name: "",
+            },
+            {
+              src: "",
+              name: "",
+            },
+          ],
         },
         categorySlider: {
           title: "",
           btnText: "",
           hide: false,
+          images: [],
         },
         secondSection: {
           title: "",
           bigTitle: "",
           hide: false,
+          images: [],
         },
         thirdSection: {
           bigTitle: "",
@@ -58,11 +85,18 @@ class Home extends Component {
           content: "",
           btnText: "",
           hide: false,
+          images: [
+            {
+              src: "",
+              name: "",
+            },
+          ],
         },
         fourthSection: {
           title: "",
           content: "",
           hide: false,
+          images: [],
         },
       },
       banner: [
@@ -93,29 +127,26 @@ class Home extends Component {
     this.handleImageChange = this.handleImageChange.bind(this);
   }
 
-  handleImageChange(e, section, index) {
-    console.log("imagehandle", section, index);
-    e.preventDefault();
-
-    let reader = new FileReader();
-    let file = e.target.files[0];
-
-    reader.onloadend = () => {
-      console.log("In reader");
-      let curValue = this.state[section];
-      curValue[index].image = reader.result;
-      curValue[index].file = file;
-      this.setState(
-        {
-          [section]: curValue,
-          imagePreviewUrl: reader.result,
-        },
-        console.log(this.state)
-      );
+  handleImageChange(name, base64, index, mainIndex, section) {
+    console.log(index);
+    console.log(section);
+    const currentData = { ...this.state.data[section] };
+    currentData.images[index] = {
+      name,
+      src: base64,
     };
-
-    reader.readAsDataURL(file);
+    // this.setState({ data: currentData });
+    this.setState({ loading: true });
+    this.props
+      .update(currentData, section)
+      .then((result) => {
+        cogoToast.success(result.message);
+        this.setState({ loading: false });
+        console.log(result);
+      })
+      .catch((err) => cogoToast.error(err));
   }
+
   optionChange = (e) => {
     this.setState({
       imageName: e.target.value,
@@ -184,13 +215,10 @@ class Home extends Component {
       .then((result) => {
         cogoToast.success(result);
         console.log(this.props.data);
-        this.setState(
-          {
-            data: { logo: "", ...this.props.data },
-            loading: false,
-          }
-          // console.log(this.state)
-        );
+        this.setState({
+          data: { ...this.props.data },
+          loading: false,
+        });
       })
       .catch((err) => {
         cogoToast.error(err);
@@ -199,12 +227,12 @@ class Home extends Component {
   cardChange = (card) => {};
   render() {
     console.log(this.state.data);
-    let data = Object.keys(this.state.data || {}).map((elem, index) => {
+    let data = Object.keys(this.props.data || {}).map((elem, index) => {
       let element = { ...this.state.data[elem] };
       delete element.hide;
+      delete element.images;
       return (
         <Card key={index}>
-          {/* <h1>Nimit</h1> */}
           <Card.Header>
             <Accordion.Toggle
               as={Button}
@@ -216,18 +244,20 @@ class Home extends Component {
               <i className="fa fa-angle-down"></i>
               {Heading[index]}
             </Accordion.Toggle>
-            <Form.Check
-              checked={this.state.data[elem].hide}
-              type="checkbox"
-              label="Hide"
-              onChange={(e) =>
-                this.changeHandler("hide", elem, e.target.checked)
-              }
-              style={{
-                display: "inline-block",
-                marginLeft: "auto",
-              }}
-            />
+            {index !== 0 && (
+              <Form.Check
+                checked={this.state.data[elem].hide}
+                type="checkbox"
+                label="Hide"
+                onChange={(e) =>
+                  this.changeHandler("hide", elem, e.target.checked)
+                }
+                style={{
+                  display: "inline-block",
+                  marginLeft: "auto",
+                }}
+              />
+            )}
           </Card.Header>
           <Accordion.Collapse eventKey={`${index}`}>
             {/* <h1>Nimit</h1> */}
@@ -241,33 +271,24 @@ class Home extends Component {
                   subHeading={SubHeading[index]}
                 />
               ) : null}
-              {Images[index] !== undefined && Images[index].length > 0 ? (
+              {this.state.data[elem].images !== undefined ? (
                 <ImageForm
-                  Images={Images[index]}
+                  Images={this.state.data[elem].images}
                   sectionName={elem}
                   handleImageChange={this.handleImageChange}
                   imageSubmitHandler={this.imageSubmitHandler}
                   imagePreviewUrl={this.state[elem]}
                   optionChange={this.optionChange}
                   img={this.state.imagePreviewUrl}
+                  isCategory={true}
                 />
               ) : null}
             </Card.Body>
           </Accordion.Collapse>
         </Card>
       );
-      // <Card>
-      // 	<Card.Header>
-      // 		<Accordion.Toggle as={Button} variant="link" eventKey="1">
-      // 			Click me!
-      // 		</Accordion.Toggle>
-      // 	</Card.Header>
-      // 	<Accordion.Collapse eventKey="1">
-      // 		<Card.Body>Hello! I'm another body</Card.Body>
-      // 	</Accordion.Collapse>
-      // </Card>
     });
-    console.log("check data", data);
+    // console.log("check data", data);
     return (
       <div>
         {this.state.loading ? (
@@ -283,6 +304,7 @@ class Home extends Component {
             </div>
           </div>
         ) : (
+          // <h2>Nimit</h2>
           <Accordion defaultActiveKey="0">{data}</Accordion>
         )}
 

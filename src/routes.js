@@ -47,6 +47,7 @@ const Category = React.lazy(() => import("./Page/Category"));
 
 const Blog = React.lazy(() => import("./Page/Blog"));
 const Banner = React.lazy(() => import("./Page/Banner"));
+const Learn = React.lazy(() => import("./Page/Learn"));
 const routes = [
   {
     path: "/dashboard/default",
@@ -149,6 +150,12 @@ const routes = [
     exact: true,
     name: "Banner",
     component: Banner,
+  },
+  {
+    path: "/Learn",
+    exact: true,
+    name: "Learn",
+    component: Learn,
   },
 
   { path: "/docs", exact: true, name: "Documentation", component: OtherDocs },

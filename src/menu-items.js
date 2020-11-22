@@ -100,6 +100,14 @@ export default {
               classes: "nav-item",
               icon: "feather icon-sidebar",
             },
+            {
+              id: "Learn",
+              title: "Learn",
+              type: "item",
+              url: "/Learn",
+              classes: "nav-item",
+              icon: "feather icon-sidebar",
+            },
           ],
         },
 

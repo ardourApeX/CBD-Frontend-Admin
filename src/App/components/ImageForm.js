@@ -73,7 +73,13 @@ const ImageForm = ({
                     type="file"
                     multiple={false}
                     onDone={({ name, base64 }) => {
-                      props.handleImageChange(name, base64, index, mainIndex);
+                      props.handleImageChange(
+                        name,
+                        base64,
+                        index,
+                        mainIndex,
+                        sectionName
+                      );
                     }}
                   />
                 </label>
