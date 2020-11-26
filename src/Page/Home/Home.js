@@ -269,11 +269,33 @@ class Home extends Component {
       let element = { ...this.state.data[elem] };
       element[0] ? console.log("Element is Array") : delete element.hide;
       delete element.images;
-      // console.log(element);
+      console.log(elem);
       let newSubheadings = Object.keys(element).map(
         (elem) => elem[0].toUpperCase() + elem.substring(1)
       );
-      console.log(newSubheadings);
+      let mainTitle = "";
+      switch (elem) {
+        case "banner":
+          mainTitle = "Banner";
+          break;
+        case "logo":
+          mainTitle = "Logo";
+          break;
+        case "categorySlider":
+          mainTitle = "Category Slider";
+          break;
+        case "secondSection":
+          mainTitle = "Second Section";
+          break;
+        case "thirdSection":
+          mainTitle = "Third Section";
+          break;
+        case "fourthSection":
+          mainTitle = "Fourth Section";
+          break;
+        default:
+          mainTitle = "";
+      }
       return (
         <Card key={index}>
           <Card.Header>
@@ -285,7 +307,7 @@ class Home extends Component {
               className="c-accordion"
             >
               <i className="fa fa-angle-down"></i>
-              {Heading[index]}
+              {mainTitle}
             </Accordion.Toggle>
             {index !== 0 && (
               <Form.Check
