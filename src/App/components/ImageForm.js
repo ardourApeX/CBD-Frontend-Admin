@@ -29,7 +29,8 @@ const ImageForm = ({
 
         {elem && (
           <div className="box">
-            {imagePreviewUrl[index] &&
+            {!isCategory &&
+            imagePreviewUrl[index] &&
             imagePreviewUrl[index].image.length > 0 ? (
               <div
                 className="js--image-preview"
