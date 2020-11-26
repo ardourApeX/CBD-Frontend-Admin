@@ -65,12 +65,17 @@ import * as actionTypes from "../actions/actions";
 //   },
 // };
 
-const initialState = {};
+const initialState = {
+  homeData: {},
+  homeFirstLoad: true,
+};
 
-const get = (action) => {
+const get = (state, action) => {
   console.log("In get reducer", action);
   return {
-    ...action.data,
+    ...state,
+    homeData: action.data,
+    homeFirstLoad: false,
   };
 };
 const update = (state, action) => {
@@ -78,13 +83,16 @@ const update = (state, action) => {
   // curValue=action.data;
   return {
     ...state,
-    [action.section]: action.data,
+    homeData: {
+      ...state.homeData,
+      [action.section]: action.data,
+    },
   };
 };
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_HOME:
-      return get(action);
+      return get(state, action);
     case actionTypes.UPDATE_HOME:
       return update(state, action);
     default:

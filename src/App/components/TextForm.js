@@ -18,7 +18,12 @@ export default class TextForm extends Component {
             value={this.props.field[elem]}
             onChange={(code) => {
               console.log(code);
-              this.props.changeHandler(elem, sectionName, code);
+              this.props.changeHandler(
+                elem,
+                sectionName,
+                code,
+                this.props.index
+              );
             }}
             mode="javascript"
             theme="chrome"
@@ -46,12 +51,15 @@ export default class TextForm extends Component {
         <div className="d-flex justify-content-center mt-5">
           <button
             className="btn btn-primary btn-lg"
-            onClick={(event) => this.props.updateHandler(event, sectionName)}
+            onClick={(event) =>
+              this.props.updateHandler(event, sectionName, this.props.index)
+            }
             style={{ width: "50%" }}
           >
             Update
           </button>
-          {typeof this.props.sectionName === "number" && (
+          {(typeof this.props.sectionName === "number" ||
+            this.props.hasDelete) && (
             <button
               className="btn btn-danger btn-lg"
               onClick={(event) => this.props.deleteHandler(event, sectionName)}

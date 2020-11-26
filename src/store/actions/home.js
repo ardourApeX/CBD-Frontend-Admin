@@ -31,7 +31,7 @@ export const get = () => {
   return (dispatch) => {
     return Axios.get("/Home/get", { name: "aman" })
       .then((result) => {
-        // console.log("Result", result);
+        console.log("Result", result);
         dispatch({
           type: actionTypes.GET_HOME,
 

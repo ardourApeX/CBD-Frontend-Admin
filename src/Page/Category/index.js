@@ -336,48 +336,6 @@ class Category extends Component {
                     }}
                   />
 
-                  {/* <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Banner Title</Form.Label>
-                    <Form.Control
-                      as="input"
-                      type="text"
-                      placeholder="Enter Banner Title"
-                      onChange={(e) => {
-                        const currentData = { ...this.state.formData };
-                        currentData.bannerTitle = e.target.value;
-                        this.setState({ formData: currentData });
-                      }}
-                    />
-                  </Form.Group>
-
-                  <Form.Group controlId="formBasicPassword1">
-                    <Form.Label>Sub Title</Form.Label>
-                    <Form.Control
-                      as="input"
-                      type="text"
-                      placeholder="Enter Banner Sub Title"
-                      onChange={(e) => {
-                        const currentData = { ...this.state.formData };
-                        currentData.subTitle = e.target.value;
-                        this.setState({ formData: currentData });
-                      }}
-                    />
-                  </Form.Group>
-
-                  <Form.Group controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Content</Form.Label>
-                    <Form.Control
-                      placeholder="Enter Content"
-                      as="textarea"
-                      rows={3}
-                      onChange={(e) => {
-                        const currentData = { ...this.state.formData };
-                        currentData.content = e.target.value;
-                        this.setState({ formData: currentData });
-                      }}
-                    />
-                  </Form.Group> */}
-
                   <Form.Group>
                     <Form.Label style={{ display: "block" }}>
                       Banner Image
