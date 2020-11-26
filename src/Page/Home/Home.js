@@ -116,13 +116,15 @@ class Home extends Component {
   handleImageChange(name, base64, index, mainIndex, section) {
     console.log(index);
     console.log(section);
-    const currentData = { ...this.state.data[section] };
+    let currentData;
     if (mainIndex || mainIndex === 0) {
+      currentData = [...this.state.data[section]];
       currentData[mainIndex].images[index] = {
         name,
         src: base64,
       };
     } else {
+      currentData = { ...this.state.data[section] };
       currentData.images[index] = {
         name,
         src: base64,
