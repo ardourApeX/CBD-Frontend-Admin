@@ -265,10 +265,15 @@ class Home extends Component {
   render() {
     // console.log(this.state.data);
     let data = Object.keys(this.props.data || {}).map((elem, index) => {
-      console.log(this.state.data[elem]);
+      // console.log(this.state.data[elem]);
       let element = { ...this.state.data[elem] };
       element[0] ? console.log("Element is Array") : delete element.hide;
       delete element.images;
+      // console.log(element);
+      let newSubheadings = Object.keys(element).map(
+        (elem) => elem[0].toUpperCase() + elem.substring(1)
+      );
+      console.log(newSubheadings);
       return (
         <Card key={index}>
           <Card.Header>
@@ -314,7 +319,7 @@ class Home extends Component {
                     changeHandler={this.changeHandler}
                     sectionName={elem}
                     updateHandler={this.updateHandler}
-                    subHeading={SubHeading[index]}
+                    subHeading={newSubheadings}
                   />
                 ) : null}
                 {this.state.data[elem].images !== undefined ? (
@@ -349,7 +354,7 @@ class Home extends Component {
                           changeHandler={this.changeHandler}
                           sectionName={elem}
                           updateHandler={this.updateHandler}
-                          subHeading={SubHeading[index]}
+                          subHeading={["Title", "Content", "Button Text"]}
                           index={index1}
                           hasDelete={true}
                           deleteHandler={this.deleteBanner}
