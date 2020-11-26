@@ -1,30 +1,27 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Card, Button, Spinner, Form } from "react-bootstrap";
+import { Card, Button, Spinner, Form, Modal } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
 import TextForm from "../../App/components/TextForm";
 import ImageForm from "../../App/components/ImageForm";
 import * as actionCreators from "../../store/actions/home";
 import cogoToast from "cogo-toast";
-const Images = [
-  ["Logo-nav.png", "Logo-chat.png", "Logo.png"],
-  ["Banner-Image-1.png", "Banner-Image-2.png"],
-  [],
-  [],
-  ["Bundle-Image.png"],
-  [],
-];
+import AceEditor from "react-ace";
+import FileBase from "react-file-base64";
+import "antd/dist/antd.css";
+import { Collapse } from "antd";
+const { Panel } = Collapse;
 const Heading = [
-  "Logo",
   "Banner",
+  "Logo",
   "Category Slider",
   "Second Section",
   "Third Section",
   "Fourth Section",
 ];
 const SubHeading = [
-  ,
   ["Title", "Content", "Button Text"],
+  ,
   ["Title", "Button Text"],
   ["Title", "Sub Title"],
   ["Title", "Sub Title", "Content", "Button Text"],
@@ -51,22 +48,24 @@ class Home extends Component {
             },
           ],
         },
-        banner: {
-          title: "",
-          content: "",
-          btnText: "",
-          hide: false,
-          images: [
-            {
-              src: "",
-              name: "",
-            },
-            {
-              src: "",
-              name: "",
-            },
-          ],
-        },
+        banner: [
+          {
+            title: "",
+            content: "",
+            btnText: "",
+            hide: false,
+            images: [
+              {
+                src: "",
+                name: "",
+              },
+              {
+                src: "",
+                name: "",
+              },
+            ],
+          },
+        ],
         categorySlider: {
           title: "",
           btnText: "",
@@ -99,29 +98,16 @@ class Home extends Component {
           images: [],
         },
       },
-      banner: [
-        { image: "", file: "", imageName: "Banner-Image-1" },
-        { image: "", file: "", imageName: "Banner-Image-2" },
-      ],
-      logo: [
-        { image: "", file: "", imageName: "Logo-nav" },
-        { image: "", file: "", imageName: "Logo-chat" },
-        { image: "", file: "", imageName: "Logo" },
-      ],
-      categorySlider: [],
-      secondSection: [],
-      thirdSection: [{ image: "", file: "", imageName: "Bundle-Image" }],
-      fourthSection: [],
-      // thirdSection: [{ image: "", file: "", imageName: "Bundle-Image" }],
-      // fifthSection: [
-      //   { image: "", file: "", imageName: "Consult-Image" },
-      //   { image: "", file: "", imageName: "Wellness-Image-1" },
-      // ],
-
+      isOpen: false,
       loading: true,
-      file: "",
       imagePreviewUrl: "",
-      imageName: "",
+      formData: {
+        title: "",
+        content: "",
+        images: [],
+        btnText: "",
+        hide: false,
+      },
     };
 
     this.handleImageChange = this.handleImageChange.bind(this);
@@ -131,16 +117,23 @@ class Home extends Component {
     console.log(index);
     console.log(section);
     const currentData = { ...this.state.data[section] };
-    currentData.images[index] = {
-      name,
-      src: base64,
-    };
+    if (mainIndex || mainIndex === 0) {
+      currentData[mainIndex].images[index] = {
+        name,
+        src: base64,
+      };
+    } else {
+      currentData.images[index] = {
+        name,
+        src: base64,
+      };
+    }
     // this.setState({ data: currentData });
     this.setState({ loading: true });
     this.props
       .update(currentData, section)
       .then((result) => {
-        cogoToast.success(result.message);
+        cogoToast.success(result);
         this.setState({ loading: false });
         console.log(result);
       })
@@ -153,41 +146,20 @@ class Home extends Component {
     });
     console.log("option change", e.target.name, e.target.value);
   };
-  imageSubmitHandler = (e, section, index) => {
-    console.log("Image upload", section, index, this.state);
-    e.preventDefault();
-    if (this.state[section][index].image.length > 0) {
-      let formData = new FormData();
-      formData.append("imageName", this.state[section][index].imageName);
-      formData.append("image", this.state[section][index].file);
-      this.props
-        .uploadImage(formData)
-        .then((result) => {
-          cogoToast.success(result);
-          this.setState({
-            imageName: "",
-            file: "",
-            imagePreviewUrl: "",
-          });
-        })
-        .catch((err) => cogoToast.error(err));
-      console.log("image submit");
-    } else {
-      cogoToast.info("Please select an image");
-    }
-  };
 
-  changeHandler = (name, section, data) => {
+  changeHandler = (name, section, data, index) => {
     console.log(name, section, data);
     let curValue = this.state.data[section];
-    console.log(curValue);
-    curValue[name] = data;
-    this.setState(
-      {
-        section: curValue,
-      }
-      // console.log(this.state)
-    );
+    if (index || index === 0) {
+      console.log("reached here");
+      curValue[index][name] = data;
+    } else {
+      console.log("reached here 1");
+      curValue[name] = data;
+    }
+    this.setState({
+      section: curValue,
+    });
     if (name === "hide") {
       this.props
         .update(curValue, section)
@@ -200,36 +172,102 @@ class Home extends Component {
   };
   updateHandler = (event, section) => {
     // console.log("updateHandler", section);
+    this.setState({ loading: true });
     event.preventDefault();
     this.props
       .update(this.state.data[section], section)
       .then((result) => {
+        this.setState({ loading: false });
         cogoToast.success(result);
       })
       .catch((err) => cogoToast.error(err));
   };
   componentDidMount = () => {
-    // console.log("Component mounted");
-    this.props
-      .get()
-      .then((result) => {
-        cogoToast.success(result);
-        console.log(this.props.data);
-        this.setState({
-          data: { ...this.props.data },
-          loading: false,
+    if (this.props.firstLoad) {
+      this.props
+        .get()
+        .then((result) => {
+          // cogoToast.success(result);
+          // console.log(this.props.data);
+          // this.setState({
+          //   data: { ...this.props.data },
+          //   loading: false,
+          // });
+          this.setState({
+            loading: false,
+            data: {
+              logo: {
+                ...this.props.data.logo,
+              },
+              banner: [...this.props.data.banner],
+              categorySlider: {
+                ...this.props.data.categorySlider,
+              },
+              secondSection: {
+                ...this.props.data.secondSection,
+              },
+              thirdSection: {
+                ...this.props.data.thirdSection,
+              },
+              fourthSection: {
+                ...this.props.data.fourthSection,
+              },
+            },
+          });
+        })
+        .catch((err) => {
+          cogoToast.error(err);
         });
-      })
-      .catch((err) => {
-        cogoToast.error(err);
-      });
+    }
   };
   cardChange = (card) => {};
+  closeModal = () => {
+    this.setState({
+      isOpen: false,
+      formData: {
+        title: "",
+        content: "",
+        btntext: "",
+        hide: "false",
+        images: [],
+      },
+    });
+  };
+
+  submitModal = (e) => {
+    e.preventDefault();
+    let currentData = [...this.state.data.banner];
+    currentData.push(this.state.formData);
+    this.props
+      .update(currentData, "banner")
+      .then((result) => {
+        this.setState({ loading: false });
+        cogoToast.success(result);
+      })
+      .catch((err) => cogoToast.error(err));
+  };
+
+  callback = (key) => console.log(key);
+
+  deleteBanner = (e, section, index) => {
+    e.preventDefault();
+    let currentData = [...this.state.data[section]];
+    currentData.splice(index, 1);
+    this.props
+      .update(currentData, "banner")
+      .then((result) => {
+        this.setState({ loading: false });
+        cogoToast.success(result);
+      })
+      .catch((err) => cogoToast.error(err));
+  };
+
   render() {
-    console.log(this.state.data);
+    // console.log(this.state.data);
     let data = Object.keys(this.props.data || {}).map((elem, index) => {
+      console.log(this.state.data[elem]);
       let element = { ...this.state.data[elem] };
-      delete element.hide;
+      element[0] ? console.log("Element is Array") : delete element.hide;
       delete element.images;
       return (
         <Card key={index}>
@@ -258,33 +296,83 @@ class Home extends Component {
                 }}
               />
             )}
+            {index === 0 && (
+              <Button
+                onClick={() => this.setState({ isOpen: true })}
+                style={{ marginLeft: "auto", display: "inline" }}
+              >
+                <i className="fa fa-plus"></i>Add Banner
+              </Button>
+            )}
           </Card.Header>
-          <Accordion.Collapse eventKey={`${index}`}>
-            {/* <h1>Nimit</h1> */}
-            <Card.Body>
-              {SubHeading[index] !== undefined ? (
-                <TextForm
-                  field={element}
-                  changeHandler={this.changeHandler}
-                  sectionName={elem}
-                  updateHandler={this.updateHandler}
-                  subHeading={SubHeading[index]}
-                />
-              ) : null}
-              {this.state.data[elem].images !== undefined ? (
-                <ImageForm
-                  Images={this.state.data[elem].images}
-                  sectionName={elem}
-                  handleImageChange={this.handleImageChange}
-                  imageSubmitHandler={this.imageSubmitHandler}
-                  imagePreviewUrl={this.state[elem]}
-                  optionChange={this.optionChange}
-                  img={this.state.imagePreviewUrl}
-                  isCategory={true}
-                />
-              ) : null}
-            </Card.Body>
-          </Accordion.Collapse>
+          {!element[0] ? (
+            <Accordion.Collapse eventKey={`${index}`}>
+              <Card.Body>
+                {SubHeading[index] !== undefined ? (
+                  <TextForm
+                    field={element[0] ? element[0] : element}
+                    changeHandler={this.changeHandler}
+                    sectionName={elem}
+                    updateHandler={this.updateHandler}
+                    subHeading={SubHeading[index]}
+                  />
+                ) : null}
+                {this.state.data[elem].images !== undefined ? (
+                  <ImageForm
+                    Images={this.state.data[elem].images}
+                    sectionName={elem}
+                    handleImageChange={this.handleImageChange}
+                    imagePreviewUrl={this.state.data[elem]}
+                    optionChange={this.optionChange}
+                    img={this.state.imagePreviewUrl}
+                    isCategory={true}
+                  />
+                ) : null}
+              </Card.Body>
+            </Accordion.Collapse>
+          ) : (
+            <Accordion.Collapse eventKey={`${index}`}>
+              <Card.Body>
+                <Collapse onChange={this.callback}>
+                  {this.state.data[elem].map((elem1, index1) => {
+                    let element1 = { ...elem1 };
+                    delete element1.hide;
+                    delete element1.images;
+                    return (
+                      // <>
+                      <Panel
+                        header={`Banner ${index1 + 1}`}
+                        key={`${index}_${index1}`}
+                      >
+                        <TextForm
+                          field={element1}
+                          changeHandler={this.changeHandler}
+                          sectionName={elem}
+                          updateHandler={this.updateHandler}
+                          subHeading={SubHeading[index]}
+                          index={index1}
+                          hasDelete={true}
+                          deleteHandler={this.deleteBanner}
+                        />
+                        <ImageForm
+                          Images={this.state.data[elem][index1].images}
+                          sectionName={elem}
+                          handleImageChange={this.handleImageChange}
+                          imagePreviewUrl={this.state.data[elem]}
+                          optionChange={this.optionChange}
+                          img={this.state.imagePreviewUrl}
+                          isCategory={true}
+                          mainIndex={index1}
+                        />
+                      </Panel>
+
+                      // </>
+                    );
+                  })}
+                </Collapse>
+              </Card.Body>
+            </Accordion.Collapse>
+          )}
         </Card>
       );
     });
@@ -304,8 +392,123 @@ class Home extends Component {
             </div>
           </div>
         ) : (
-          // <h2>Nimit</h2>
-          <Accordion defaultActiveKey="0">{data}</Accordion>
+          <>
+            <Modal show={this.state.isOpen}>
+              <Modal.Header closeButton onClick={this.closeModal}>
+                <Modal.Title>Add Banner</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form onSubmit={this.submitModal}>
+                  <Form.Label>Title</Form.Label>
+                  <AceEditor
+                    value={this.state.formData.title}
+                    onChange={(code) => {
+                      const currentData = { ...this.state.formData };
+                      currentData.title = code;
+                      this.setState({ formData: currentData });
+                    }}
+                    mode="javascript"
+                    theme="chrome"
+                    placeholder="Enter Banner Title"
+                    style={{
+                      width: "100%",
+                      height: "100px",
+                      marginBottom: "10px",
+                    }}
+                    setOptions={{
+                      fontSize: 20,
+                    }}
+                  />
+
+                  <Form.Label>Content</Form.Label>
+                  <AceEditor
+                    value={this.state.formData.content}
+                    onChange={(code) => {
+                      const currentData = { ...this.state.formData };
+                      currentData.content = code;
+                      this.setState({ formData: currentData });
+                    }}
+                    mode="javascript"
+                    theme="chrome"
+                    placeholder="Enter Banner Content"
+                    style={{
+                      width: "100%",
+                      height: "100px",
+                      marginBottom: "10px",
+                    }}
+                    setOptions={{
+                      fontSize: 20,
+                    }}
+                  />
+
+                  <Form.Label>Button text</Form.Label>
+                  <AceEditor
+                    value={this.state.formData.btnText}
+                    onChange={(code) => {
+                      const currentData = { ...this.state.formData };
+                      currentData.btnText = code;
+                      this.setState({ formData: currentData });
+                    }}
+                    mode="javascript"
+                    theme="chrome"
+                    placeholder="Enter Button Text"
+                    style={{
+                      width: "100%",
+                      height: "100px",
+                      marginBottom: "10px",
+                    }}
+                    setOptions={{
+                      fontSize: 20,
+                    }}
+                  />
+
+                  <Form.Check
+                    checked={this.state.formData.hide}
+                    type="checkbox"
+                    label="Hide"
+                    onChange={(e) => {
+                      const currentData = { ...this.state.formData };
+                      currentData.hide = e.target.checked;
+                      this.setState({ formData: currentData });
+                    }}
+                    style={{
+                      display: "inline-block",
+                      marginLeft: "auto",
+                    }}
+                  />
+
+                  <Form.Group>
+                    <Form.Label style={{ display: "block" }}>
+                      Banner Image
+                    </Form.Label>
+                    <FileBase
+                      type="file"
+                      multiple={false}
+                      onDone={({ base64, name }) => {
+                        const currentData = { ...this.state.formData };
+                        currentData.images.push({
+                          name,
+                          src: base64,
+                        });
+                        this.setState({ formData: currentData });
+                      }}
+                    />
+                  </Form.Group>
+
+                  <Button variant="primary" type="submit">
+                    Submit
+                  </Button>
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={this.closeModal}>
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+
+            <Accordion defaultActiveKey="0">{data}</Accordion>
+          </>
         )}
 
         {/* <Card title="Home" isOption>
@@ -375,7 +578,8 @@ class Home extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    data: state.homeReducer,
+    data: state.homeReducer.homeData,
+    firstLoad: state.homeReducer.homeFirstLoad,
   };
 };
 
