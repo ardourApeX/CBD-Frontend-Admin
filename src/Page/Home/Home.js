@@ -309,7 +309,7 @@ class Home extends Component {
               <i className="fa fa-angle-down"></i>
               {mainTitle}
             </Accordion.Toggle>
-            {index !== 0 && (
+            {mainTitle !== "Logo" && (
               <Form.Check
                 checked={this.state.data[elem].hide}
                 type="checkbox"
@@ -323,16 +323,16 @@ class Home extends Component {
                 }}
               />
             )}
-            {index === 0 && (
+            {mainTitle === "Banner" && (
               <Button
                 onClick={() => this.setState({ isOpen: true })}
-                style={{ marginLeft: "auto", display: "inline" }}
+                style={{ marginLeft: "20px", display: "inline" }}
               >
                 <i className="fa fa-plus"></i>Add Banner
               </Button>
             )}
           </Card.Header>
-          {!element[0] ? (
+          {mainTitle !== "Banner" ? (
             <Accordion.Collapse eventKey={`${index}`}>
               <Card.Body>
                 {SubHeading[index] !== undefined ? (
