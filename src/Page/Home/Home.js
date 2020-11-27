@@ -98,7 +98,7 @@ class Home extends Component {
       formData: {
         title: "",
         content: "",
-        images: [],
+        images: {},
         btnText: "",
         hide: false,
       },
@@ -110,6 +110,7 @@ class Home extends Component {
   handleImageChange(name, base64, index, mainIndex, section) {
     console.log(index);
     console.log(section);
+    console.log(mainIndex);
     let currentData;
     if (section === "banner") {
       currentData = [...this.state.data[section]];
@@ -124,6 +125,7 @@ class Home extends Component {
         src: base64,
       };
     }
+    console.log(currentData);
     // this.setState({ data: currentData });
     this.setState({ loading: true });
     this.props
@@ -234,6 +236,17 @@ class Home extends Component {
     e.preventDefault();
     let currentData = [...this.state.data.banner];
     currentData.push(this.state.formData);
+    this.setState({
+      loading: true,
+      isOpen: false,
+      formData: {
+        title: "",
+        content: "",
+        btntext: "",
+        hide: "false",
+        images: [],
+      },
+    });
     this.props
       .update(currentData, "banner")
       .then((result) => {
@@ -509,10 +522,10 @@ class Home extends Component {
                       multiple={false}
                       onDone={({ base64, name }) => {
                         const currentData = { ...this.state.formData };
-                        currentData.images.push({
+                        currentData.images = {
                           name,
                           src: base64,
-                        });
+                        };
                         this.setState({ formData: currentData });
                       }}
                     />
