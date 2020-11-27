@@ -127,15 +127,15 @@ class Home extends Component {
     }
     console.log(currentData);
     // this.setState({ data: currentData });
-    // this.setState({ loading: true });
-    // this.props
-    //   .update(currentData, section)
-    //   .then((result) => {
-    //     cogoToast.success(result);
-    //     this.setState({ loading: false });
-    //     console.log(result);
-    //   })
-    //   .catch((err) => cogoToast.error(err));
+    this.setState({ loading: true });
+    this.props
+      .update(currentData, section)
+      .then((result) => {
+        cogoToast.success(result);
+        this.setState({ loading: false });
+        console.log(result);
+      })
+      .catch((err) => cogoToast.error(err));
   }
 
   optionChange = (e) => {
