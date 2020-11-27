@@ -54,16 +54,10 @@ class Home extends Component {
             content: "",
             btnText: "",
             hide: false,
-            images: [
-              {
-                src: "",
-                name: "",
-              },
-              {
-                src: "",
-                name: "",
-              },
-            ],
+            images: {
+              name: "",
+              src: "",
+            },
           },
         ],
         categorySlider: {
@@ -117,9 +111,9 @@ class Home extends Component {
     console.log(index);
     console.log(section);
     let currentData;
-    if (mainIndex || mainIndex === 0) {
+    if (section === "banner") {
       currentData = [...this.state.data[section]];
-      currentData[mainIndex].images[index] = {
+      currentData[mainIndex].images = {
         name,
         src: base64,
       };
@@ -384,7 +378,7 @@ class Home extends Component {
                           deleteHandler={this.deleteBanner}
                         />
                         <ImageForm
-                          Images={this.state.data[elem][index1].images}
+                          Images={[{ ...this.state.data[elem][index1].images }]}
                           sectionName={elem}
                           handleImageChange={this.handleImageChange}
                           imagePreviewUrl={this.state.data[elem]}
