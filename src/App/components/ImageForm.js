@@ -21,6 +21,7 @@ const ImageForm = ({
   let Img = [];
 
   console.log("ima", props);
+  console.log(props.Images);
   const images = props.Images.map((elem, index) => {
     // console.log(imagePreviewUrl[index]);
     return (
