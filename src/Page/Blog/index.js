@@ -6,6 +6,7 @@ import DataTable from "../../App/components/DataTable";
 import BlogForm from "../../App/components/BlogForm";
 import Loader from "../../App/layout/Loader";
 import { Button } from "react-bootstrap";
+import { Input } from "antd";
 
 // const sections = ["Blog Table", "Add Blog", "Update Blog"];
 class Blog extends Component {
@@ -23,6 +24,8 @@ class Blog extends Component {
       },
       file: "",
       imagePreviewUrl: "",
+      search: "",
+      blogs: [],
     };
     this.toggleHandler = this.toggleHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
@@ -30,18 +33,32 @@ class Blog extends Component {
     this.updateHandler = this.updateHandler.bind(this);
     this.editHandler = this.editHandler.bind(this);
     this.handleImageChange = this.handleImageChange.bind(this);
+    this.imageRemoveHandler = this.imageRemoveHandler.bind(this);
   }
-  handleImageChange(e) {
+  handleImageChange(e, id) {
     e.preventDefault();
-
     let reader = new FileReader();
     let file = e.target.files[0];
 
+    console.log(reader);
+    console.log(file);
+
     reader.onloadend = () => {
-      this.setState({
-        file: file,
-        imagePreviewUrl: reader.result,
-      });
+      if (id) {
+        const data = { ...this.state.currentBlog };
+        data.image = file;
+        this.setState({
+          file: file,
+          imagePreviewUrl: reader.result,
+          currentBlog: data,
+        });
+      } else {
+        this.setState({
+          file: file,
+          imagePreviewUrl: reader.result,
+          // imagePreviewUrl: file.name,
+        });
+      }
     };
 
     reader.readAsDataURL(file);
@@ -62,12 +79,12 @@ class Blog extends Component {
   };
   editHandler = (index) => {
     const formData = new FormData();
-
-    formData.append("image", this.state.file);
+    console.log(this.state.currentBlog);
+    // formData.append("image", this.state.file);
     Object.keys(this.state.currentBlog).forEach((key) =>
       formData.append(key, this.state.currentBlog[key])
     );
-    formData.append("image", this.state.file);
+    // formData.append("image", this.state.file);
     console.log(this.props.blogs[index]);
     this.props
       .update(index, formData)
@@ -80,7 +97,8 @@ class Blog extends Component {
     this.setState({
       section: 2,
       btnText: "All Blogs",
-      currentBlog: this.props.blogs[index],
+      currentBlog: this.state.blogs[index],
+      imagePreviewUrl: this.state.blogs[index].image,
     });
   };
 
@@ -112,12 +130,7 @@ class Blog extends Component {
       formData.append(key, this.state.currentBlog[key])
     );
     formData.append("image", this.state.file);
-
-    // formData.append("data", "abcdef");
-    // let all = {
-    // 	image: formData,
-    // 	data: this.state.currentBlog,
-    // };
+    console.log(formData);
     this.props
       .add(formData)
       .then((result) => {
@@ -127,20 +140,38 @@ class Blog extends Component {
       .catch((err) => cogoToast.error(err));
   };
 
-  pageHandler = (pageNo) => {
+  imageRemoveHandler = () => {
+    const data = { ...this.state.currentBlog };
+    data.image = "";
+    this.setState({
+      file: "",
+      imagePreviewUrl: "",
+      currentBlog: data,
+    });
+  };
+
+  pageHandler = async (pageNo) => {
     console.log("pageHandler", pageNo);
-    this.props.getAll(pageNo, this.props.size);
+    // this.props.getAll(pageNo, this.props.size);
+    this.props
+      .getAll(pageNo, this.props.size)
+      .then((result) => {
+        this.setState({ blogs: result.data });
+        // cogoToast.success(result.message);
+      })
+      .catch((err) => cogoToast.error(err));
   };
   componentDidMount = () => {
     this.props
       .getAll(this.props.pageNo, this.props.size)
       .then((result) => {
-        cogoToast.success(result);
+        this.setState({ blogs: result.data });
+        cogoToast.success(result.message);
       })
       .catch((err) => cogoToast.error(err));
   };
   render() {
-    const data = this.props.blogs.map((elem, index) => {
+    const data = this.state.blogs.map((elem, index) => {
       return (
         <tr>
           <td>{this.props.size * this.props.pageNo + index + 1}</td>
@@ -162,6 +193,39 @@ class Blog extends Component {
     return (
       <div>
         <Button onClick={this.toggleHandler}>{this.state.btnText}</Button>
+        <input
+          type="search"
+          style={{ padding: "5px" }}
+          placeholder="Search By Title or Tags"
+          value={this.state.search}
+          onChange={(e) => {
+            this.setState({ search: e.target.value });
+            if (e.target.value !== "") {
+              let blogs = this.props.blogs.map((a) => {
+                return { ...a };
+              });
+              let blogsByTags = blogs.map((item) => {
+                let tags = item.tags.filter((tag) =>
+                  tag.toLowerCase().includes(e.target.value.toLowerCase())
+                );
+                console.log(tags);
+                if (tags.length) {
+                  return true;
+                }
+                return false;
+              });
+              console.log(blogsByTags);
+              blogs = blogs.filter(
+                (item, index) =>
+                  item.heading
+                    .toLowerCase()
+                    .includes(e.target.value.toLowerCase()) ||
+                  blogsByTags[index]
+              );
+              this.setState({ blogs });
+            }
+          }}
+        />
         {this.state.section === 0 ? (
           <DataTable
             header={["#", "Title", "actions"]}
@@ -184,6 +248,7 @@ class Blog extends Component {
             submitHandler={this.editHandler}
             changeHandler={this.changeHandler}
             handleImageChange={this.handleImageChange}
+            imageRemoveHandler={this.imageRemoveHandler}
           />
         )}
       </div>

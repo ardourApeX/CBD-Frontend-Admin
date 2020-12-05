@@ -2,6 +2,7 @@ import Axios from "../../utilities/Axios/Axios";
 import * as actionTypes from "./actions";
 import { ERROR_MESSAGE } from "./constant";
 export const update = (index, data) => {
+  console.log(data);
   return (dispatch) => {
     return Axios.post("/Blog/update", data)
       .then((result) => {
@@ -87,7 +88,7 @@ export const getAll = (pageNo, size) => {
           pageNo,
           size,
         });
-        return result.data.message;
+        return result.data;
       })
       .catch((err) => {
         return Promise.reject(ERROR_MESSAGE);
