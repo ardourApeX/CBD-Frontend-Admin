@@ -10,7 +10,9 @@ export default function BlogForm(props) {
   console.log("props", props);
   let { imagePreviewUrl } = props;
   let $imagePreview = null;
-  if (imagePreviewUrl) {
+  if (imagePreviewUrl.length) {
+    console.log("reached here");
+    console.log(imagePreviewUrl);
     $imagePreview = (
       <img src={imagePreviewUrl} style={{ width: "5%" }} className="mt-5" />
     );
@@ -65,10 +67,12 @@ export default function BlogForm(props) {
           {$imagePreview}
           <br />
           <p style={{ marginBottom: 0 }}>
-            {imagePreviewUrl ? (
+            {imagePreviewUrl.length > 0 ? (
               <>
                 {imagePreviewUrl && imagePreviewUrl.length < 100 && (
-                  <span style={{ marginRight: "20px" }}>{imagePreviewUrl}</span>
+                  <span style={{ marginRight: "20px" }}>
+                    {props.data.image}
+                  </span>
                 )}
                 <DeleteFilled
                   style={{ fontSize: "20px", color: "red" }}

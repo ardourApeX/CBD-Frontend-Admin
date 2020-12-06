@@ -7,6 +7,9 @@ import BlogForm from "../../App/components/BlogForm";
 import Loader from "../../App/layout/Loader";
 import { Button } from "react-bootstrap";
 import { Input } from "antd";
+import windowSize from "react-window-size";
+import DEMO from "../../store/actions/constant";
+import { IMAGE_URL } from "../../utilities/Axios/url";
 
 // const sections = ["Blog Table", "Add Blog", "Update Blog"];
 class Blog extends Component {
@@ -26,6 +29,9 @@ class Blog extends Component {
       imagePreviewUrl: "",
       search: "",
       blogs: [],
+      searchWidth: this.props.windowWidth < 992 ? 90 : 0,
+      searchString: this.props.windowWidth < 992 ? "90px" : "",
+      isOpen: this.props.windowWidth < 992,
     };
     this.toggleHandler = this.toggleHandler.bind(this);
     this.submitHandler = this.submitHandler.bind(this);
@@ -98,7 +104,9 @@ class Blog extends Component {
       section: 2,
       btnText: "All Blogs",
       currentBlog: this.state.blogs[index],
-      imagePreviewUrl: this.state.blogs[index].image,
+      imagePreviewUrl: this.state.blogs[index].image.length
+        ? `${IMAGE_URL}/${this.state.blogs[index].image}`
+        : "",
     });
   };
 
@@ -170,7 +178,44 @@ class Blog extends Component {
       })
       .catch((err) => cogoToast.error(err));
   };
+
+  searchOnHandler = () => {
+    this.setState({ isOpen: true });
+    const searchInterval = setInterval(() => {
+      if (this.state.searchWidth >= 91) {
+        clearInterval(searchInterval);
+        return false;
+      }
+      this.setState((prevSate) => {
+        return {
+          searchWidth: prevSate.searchWidth + 15,
+          searchString: prevSate.searchWidth + "px",
+        };
+      });
+    }, 35);
+  };
+
+  searchOffHandler = () => {
+    const searchInterval = setInterval(() => {
+      if (this.state.searchWidth < 0) {
+        this.setState({ isOpen: false });
+        clearInterval(searchInterval);
+        return false;
+      }
+      this.setState((prevSate) => {
+        return {
+          searchWidth: prevSate.searchWidth - 15,
+          searchString: prevSate.searchWidth + "px",
+        };
+      });
+    }, 35);
+  };
+
   render() {
+    let searchClass = ["main-search"];
+    if (this.state.isOpen) {
+      searchClass = [...searchClass, "open"];
+    }
     const data = this.state.blogs.map((elem, index) => {
       return (
         <tr>
@@ -193,8 +238,62 @@ class Blog extends Component {
     return (
       <div>
         <Button onClick={this.toggleHandler}>{this.state.btnText}</Button>
-        <input
+        <div id="main-search" className={searchClass.join(" ")}>
+          <div className="input-group">
+            <input
+              type="text"
+              id="m-search"
+              className="form-control"
+              placeholder="Search By Title or Tags"
+              style={{ width: this.state.searchString }}
+              value={this.state.search}
+              onChange={(e) => {
+                this.setState({ search: e.target.value });
+                if (e.target.value.length) {
+                  let blogs = this.props.blogs.map((a) => {
+                    return { ...a };
+                  });
+                  let blogsByTags = blogs.map((item) => {
+                    let tags = item.tags.filter((tag) =>
+                      tag.toLowerCase().includes(e.target.value.toLowerCase())
+                    );
+                    console.log(tags);
+                    if (tags.length) {
+                      return true;
+                    }
+                    return false;
+                  });
+                  console.log(blogsByTags);
+                  blogs = blogs.filter(
+                    (item, index) =>
+                      item.heading
+                        .toLowerCase()
+                        .includes(e.target.value.toLowerCase()) ||
+                      blogsByTags[index]
+                  );
+                  this.setState({ blogs });
+                }
+              }}
+            />
+            <a
+              href={DEMO.BLANK_LINK}
+              className="input-group-append search-close"
+              onClick={this.searchOffHandler}
+            >
+              <i className="feather icon-x input-group-text" />
+            </a>
+            <span
+              className="input-group-append search-btn btn btn-primary"
+              onClick={this.searchOnHandler}
+            >
+              <i className="feather icon-search input-group-text" />
+            </span>
+          </div>
+        </div>
+        {/* <input
           type="search"
+          id="m-search"
+          className="form-control"
           style={{ padding: "5px" }}
           placeholder="Search By Title or Tags"
           value={this.state.search}
@@ -225,7 +324,7 @@ class Blog extends Component {
               this.setState({ blogs });
             }
           }}
-        />
+        /> */}
         {this.state.section === 0 ? (
           <DataTable
             header={["#", "Title", "actions"]}
@@ -273,4 +372,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Blog);
+export default connect(mapStateToProps, mapDispatchToProps)(windowSize(Blog));
