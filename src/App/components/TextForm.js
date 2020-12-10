@@ -6,8 +6,8 @@ import "brace/theme/chrome";
 
 export default class TextForm extends Component {
   render() {
-    console.log(this.props.field);
-    console.log(this.props.sectionName);
+    // console.log(this.props.field);
+    // console.log(this.props.sectionName);
     const sectionName = this.props.sectionName;
     let data = Object.keys(this.props.field).map((elem, index) => {
       return (
@@ -17,7 +17,7 @@ export default class TextForm extends Component {
           <AceEditor
             value={this.props.field[elem]}
             onChange={(code) => {
-              console.log(code);
+              // console.log(code);
               this.props.changeHandler(
                 elem,
                 sectionName,

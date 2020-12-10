@@ -57,37 +57,95 @@ class Category extends Component {
         bannerTitle: "",
         subTitle: "",
         content: "",
-        image: {},
-        logo: {},
       },
       data: [],
+      category: [],
+      imageFile: "",
+      logoFile: "",
     };
     this.handleImageChange = this.handleImageChange.bind(this);
   }
 
-  handleImageChange(name, base64, index, mainIndex) {
-    const currentData = this.props.data[mainIndex];
-    if (index === 0) {
-      currentData.image = {
-        name,
-        src: base64,
-      };
-    } else {
-      currentData.logo = {
-        name,
-        src: base64,
-      };
-    }
-    this.setState({ loading: true });
-    this.props
-      .update(currentData, mainIndex)
-      .then((result) => {
-        cogoToast.success(result.message);
-        this.setState({ loading: false });
-        console.log(result);
-      })
-      .catch((err) => cogoToast.error(err));
+  handleImageChange(e, index, mainIndex, section) {
+    console.log(this.state.category);
+    console.log(index);
+    console.log(mainIndex);
+    let reader = new FileReader();
+    let file = e.target.files[0];
+    let currentData, imageData;
+    reader.onloadend = () => {
+      imageData = this.state.category.map((a) => {
+        return a.map((b) => {
+          return { ...b };
+        });
+      });
+      console.log(imageData);
+      currentData = [...this.state.data];
+      if (index === 0) {
+        currentData[mainIndex].image = {
+          name: file.name,
+          src: reader.result,
+        };
+      } else {
+        currentData[mainIndex].logo = {
+          name: file.name,
+          src: reader.result,
+        };
+      }
+      imageData[mainIndex][index].file = file;
+      imageData[mainIndex][index].image = reader.result;
+      // console.log(imageData);
+      this.setState({
+        data: currentData,
+        category: imageData,
+        file,
+      });
+    };
+
+    reader.readAsDataURL(file);
   }
+
+  imageSubmitHandler = (e, section, index, mainIndex) => {
+    console.log(index);
+    console.log(mainIndex);
+    e.preventDefault();
+    if (this.state.data[mainIndex].image.src.length > 0) {
+      let formData = new FormData();
+      formData.append("imageName", this.state.data[mainIndex].image.name);
+      formData.append("image", this.state.file);
+      formData.append("index", index);
+      formData.append("mainIndex", mainIndex);
+      formData.append("id", section._id);
+      this.props
+        .uploadImage(formData)
+        .then((result) => {
+          console.log(result);
+          cogoToast.success(result.data.message);
+          let imageData = this.state.category.map((a) => {
+            return a.map((b) => {
+              return { ...b };
+            });
+          });
+          imageData[mainIndex][index].file = "";
+          imageData[mainIndex][index].image = "";
+          let data = [...this.state.data];
+          data[mainIndex] = result.data.data;
+          this.setState({
+            imageName: "",
+            file: "",
+            imagePreviewUrl: "",
+            category: imageData,
+            data,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          cogoToast.error(err);
+        });
+    } else {
+      cogoToast.info("Please select an image");
+    }
+  };
 
   optionChange = (e) => {
     this.setState({
@@ -96,35 +154,11 @@ class Category extends Component {
     console.log("option change", e.target.name, e.target.value);
   };
 
-  imageSubmitHandler = (e, section, index) => {
-    console.log("Image upload", section, index, this.state);
-    e.preventDefault();
-    if (this.state[section][index].image.length > 0) {
-      let formData = new FormData();
-      formData.append("imageName", this.state[section][index].imageName);
-      formData.append("image", this.state[section][index].file);
-      this.props
-        .uploadImage(formData)
-        .then((result) => {
-          cogoToast.success(result);
-          this.setState({
-            imageName: "",
-            file: "",
-            imagePreviewUrl: "",
-          });
-        })
-        .catch((err) => cogoToast.error(err));
-      console.log("image submit");
-    } else {
-      cogoToast.info("Please select an image");
-    }
-  };
-
   changeHandler = (name, section, data) => {
     // console.log(name);
     // console.log(section);
     // console.log(data);
-    let curValue = this.props.data;
+    let curValue = [...this.state.data];
     curValue[section][name] = data;
     this.setState(
       {
@@ -139,10 +173,10 @@ class Category extends Component {
     event.preventDefault();
     this.setState({ loading: true });
     this.props
-      .update(this.props.data[section], section)
+      .update(this.state.data[section], section)
       .then((result) => {
         cogoToast.success(result.message);
-        this.setState({ loading: false });
+        this.setState({ loading: false, data: this.props.data });
         console.log(result);
       })
       .catch((err) => cogoToast.error(err));
@@ -150,11 +184,22 @@ class Category extends Component {
   deleteHandler = (event, section) => {
     event.preventDefault();
     this.setState({ loading: true });
+    console.log(section);
     this.props
       .deletee(this.props.data[section]._id, section)
       .then((result) => {
+        let imageData = this.state.category.map((a) => {
+          return a.map((b) => {
+            return { ...b };
+          });
+        });
+        imageData.splice(section, 1);
         cogoToast.success(result.message);
-        this.setState({ loading: false });
+        this.setState({
+          loading: false,
+          data: this.props.data,
+          category: imageData,
+        });
       })
       .catch((err) => cogoToast.error(err));
   };
@@ -163,8 +208,20 @@ class Category extends Component {
     console.log("Component mounted");
     if (this.props.firstLoad) {
       this.props.get().then((result) => {
-        // console.log(result);
-        this.setState({ loading: false });
+        console.log(result);
+        let newArray = new Array(this.props.data.length).fill(
+          new Array(2).fill({
+            image: "",
+            file: "",
+            imageName: "",
+          })
+        );
+        console.log(newArray);
+        this.setState({
+          loading: false,
+          category: newArray,
+          data: result,
+        });
       });
     }
   };
@@ -185,15 +242,54 @@ class Category extends Component {
     this.setState({ isOpen: false, loading: true });
     e.preventDefault();
     // console.log(this.state.formData);
-    this.props.add(this.state.formData).then((result) => {
-      cogoToast.success(result);
-      this.setState({ loading: false });
+    const formData = new FormData();
+    Object.keys(this.state.formData).forEach((key) => {
+      if (key === "category") {
+        formData.append(key, this.state.formData[key].toLowerCase());
+      } else {
+        formData.append(key, this.state.formData[key]);
+      }
     });
+    if (this.state.imageFile !== "") {
+      formData.append("imageFile", this.state.imageFile);
+    }
+    if (this.state.logoFile !== "") {
+      formData.append("logoFile", this.state.logoFile);
+    }
+    this.props
+      .add(formData)
+      .then((result) => {
+        let imageData = this.state.category.map((a) => {
+          return a.map((b) => {
+            return { ...b };
+          });
+        });
+        imageData.push(
+          new Array(2).fill({
+            image: "",
+            file: "",
+            imageName: "",
+          })
+        );
+        this.setState({
+          loading: false,
+          formData: {
+            bannerTitle: "",
+            content: "",
+            subTitle: "",
+            category: "",
+          },
+          data: this.props.data,
+          category: imageData,
+        });
+        cogoToast.success(result);
+      })
+      .catch((err) => cogoToast.error(err));
   };
 
   render() {
-    console.log(this.props.data);
-    let data = this.props.data.map((elem, index) => {
+    console.log(this.state.category);
+    let data = this.state.data.map((elem, index) => {
       console.log(elem);
       return (
         <Card key={index} onClick={this.clickHandler}>
@@ -228,7 +324,7 @@ class Category extends Component {
                   sectionName={elem}
                   handleImageChange={this.handleImageChange}
                   imageSubmitHandler={this.imageSubmitHandler}
-                  imagePreviewUrl={[]}
+                  imagePreviewUrl={this.state.category[index]}
                   optionChange={this.optionChange}
                   img={this.state.imagePreviewUrl}
                   isCategory={true}
@@ -340,16 +436,16 @@ class Category extends Component {
                     <Form.Label style={{ display: "block" }}>
                       Banner Image
                     </Form.Label>
-                    <FileBase
+                    <input
                       type="file"
-                      multiple={false}
-                      onDone={({ base64, name }) => {
-                        const currentData = { ...this.state.formData };
-                        currentData.image = {
-                          name,
-                          src: base64,
+                      accept="image/*"
+                      onChange={(e) => {
+                        let reader = new FileReader();
+                        let imageFile = e.target.files[0];
+                        reader.onloadend = () => {
+                          this.setState({ imageFile });
                         };
-                        this.setState({ formData: currentData });
+                        reader.readAsDataURL(imageFile);
                       }}
                     />
                   </Form.Group>
@@ -358,16 +454,16 @@ class Category extends Component {
                     <Form.Label style={{ display: "block" }}>
                       Banner Logo
                     </Form.Label>
-                    <FileBase
+                    <input
                       type="file"
-                      multiple={false}
-                      onDone={({ base64, name }) => {
-                        const currentData = { ...this.state.formData };
-                        currentData.logo = {
-                          name,
-                          src: base64,
+                      accept="image/*"
+                      onChange={(e) => {
+                        let reader = new FileReader();
+                        let logoFile = e.target.files[0];
+                        reader.onloadend = () => {
+                          this.setState({ logoFile });
                         };
-                        this.setState({ formData: currentData });
+                        reader.readAsDataURL(logoFile);
                       }}
                     />
                   </Form.Group>
@@ -386,103 +482,6 @@ class Category extends Component {
             <Accordion defaultActiveKey="0">{data}</Accordion>
           </>
         )}
-        {/* <Card title="Category">
-					<Card.Header>
-						<Nav variant="pills" defaultActiveKey="#image">
-							<Nav.Item>
-								<Nav.Link href="#text" onClick={this.toggleHandler}>
-									Text
-								</Nav.Link>
-							</Nav.Item>
-							<Nav.Item>
-								<Nav.Link href="#image" onClick={this.toggleHandler}>
-									Images
-								</Nav.Link>
-							</Nav.Item>
-						</Nav>
-					</Card.Header>
-					<Card.Body id="text">
-						<Card>
-							<Card.Title className="text-center">Pets</Card.Title>
-							<Card.Body>
-								<TextForm
-									field={this.state.pets}
-									changeHandler={this.changeHandler}
-									sectionName="pets"
-									updateHandler={this.updateHandler}
-								/>
-							</Card.Body>
-						</Card>
-						<Card>
-							<Card.Title className="text-center">Edibles</Card.Title>
-							<Card.Body>
-								<TextForm
-									field={this.state.edibles}
-									changeHandler={this.changeHandler}
-									sectionName="edibles"
-									updateHandler={this.updateHandler}
-								/>
-							</Card.Body>
-						</Card>
-						<Card>
-							<Card.Title className="text-center">Capsules</Card.Title>
-							<Card.Body>
-								<TextForm
-									field={this.state.capsules}
-									changeHandler={this.changeHandler}
-									sectionName="capsules"
-									updateHandler={this.updateHandler}
-								/>
-							</Card.Body>
-						</Card>
-						<Card>
-							<Card.Title className="text-center">Oils</Card.Title>
-							<Card.Body>
-								<TextForm
-									field={this.state.oils}
-									changeHandler={this.changeHandler}
-									sectionName="oils"
-									updateHandler={this.updateHandler}
-								/>
-							</Card.Body>
-						</Card>
-						<Card>
-							<Card.Title className="text-center">Bundles</Card.Title>
-							<Card.Body>
-								<TextForm
-									field={this.state.bundles}
-									changeHandler={this.changeHandler}
-									sectionName="bundles"
-									updateHandler={this.updateHandler}
-								/>
-							</Card.Body>
-						</Card>
-						<Card>
-							<Card.Title className="text-center">Default</Card.Title>
-							<Card.Body>
-								<TextForm
-									field={this.state.default}
-									changeHandler={this.changeHandler}
-									sectionName="default"
-									updateHandler={this.updateHandler}
-								/>
-							</Card.Body>
-						</Card>
-					</Card.Body>
-					<Card.Body id="image">
-						<Card>
-							<Card.Title className="text-center">Pets</Card.Title>
-							<Card.Body>
-								<TextForm
-									field={this.state.pets}
-									changeHandler={this.changeHandler}
-									sectionName="pets"
-									updateHandler={this.updateHandler}
-								/>
-							</Card.Body>
-						</Card>
-					</Card.Body>
-				</Card> */}
       </div>
     );
   }

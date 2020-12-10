@@ -2,20 +2,15 @@ import Axios from "../../utilities/Axios/Axios";
 import * as actionTypes from "./actions";
 import { ERROR_MESSAGE } from "./constant";
 
-export const update = (dataValue, section) => {
-  // console.log("update actioncreator", dataValue, section);
+export const updloadImage = (formData, section) => {
   return (dispatch) => {
-    return Axios.post("/Home/update", {
-      data: {
-        [section]: dataValue,
-      },
-    })
+    return Axios.post("/Home/update", formData)
       .then((result) => {
-        // console.log("result update", result);
+        console.log("result update", result.data.data);
         dispatch({
           type: actionTypes.UPDATE_HOME,
-          section,
-          data: dataValue,
+          section: section,
+          data: result.data.data,
         });
         return result.data.message;
       })
@@ -31,13 +26,13 @@ export const get = () => {
   return (dispatch) => {
     return Axios.get("/Home/get", { name: "aman" })
       .then((result) => {
-        console.log("Result", result);
+        // console.log("Result", result);
         dispatch({
           type: actionTypes.GET_HOME,
 
           data: result.data.data,
         });
-        console.log(result.data.data);
+        // console.log(result.data.data);
         return result.data.message;
       })
       .catch((err) => {
@@ -46,16 +41,25 @@ export const get = () => {
   };
 };
 
-export const uploadImage = (data) => {
-  // console.log("In image upload");
+export const update = (data, section) => {
+  console.log(data);
+  console.log(section);
   return (dispatch) => {
-    return Axios.post("/Image/add", data)
+    return Axios.post("/Home/update", {
+      data,
+      section,
+    })
       .then((result) => {
-        // console.log(result);
+        console.log("result update", result.data.data);
+        dispatch({
+          type: actionTypes.UPDATE_HOME,
+          section: section,
+          data: result.data.data,
+        });
         return result.data.message;
       })
       .catch((err) => {
-        console.log("error while upload un==mage", err);
+        console.log(err);
         return Promise.reject(ERROR_MESSAGE);
       });
   };

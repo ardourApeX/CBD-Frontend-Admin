@@ -22,35 +22,54 @@ class Banner extends Component {
         bannerTitle: "",
         subTitle: "",
         content: "",
-        image: {},
-        logo: {},
       },
+      data: [],
+      banner: [],
+      imageFile: "",
+      logoFile: "",
     };
     this.handleImageChange = this.handleImageChange.bind(this);
   }
 
-  handleImageChange(name, base64, index, mainIndex) {
-    const currentData = this.props.banners[mainIndex];
-    if (index === 0) {
-      currentData.image = {
-        name,
-        src: base64,
-      };
-    } else {
-      currentData.logo = {
-        name,
-        src: base64,
-      };
-    }
-    this.setState({ loading: true });
-    this.props
-      .update(currentData, mainIndex)
-      .then((result) => {
-        cogoToast.success(result.message);
-        this.setState({ loading: false });
-        console.log(result);
-      })
-      .catch((err) => cogoToast.error(err));
+  handleImageChange(e, index, mainIndex, section) {
+    console.log(this.state.category);
+    console.log(index);
+    console.log(mainIndex);
+    let reader = new FileReader();
+    let file = e.target.files[0];
+    let currentData, imageData;
+    reader.onloadend = () => {
+      imageData = this.state.banner.map((a) => {
+        return a.map((b) => {
+          return { ...b };
+        });
+      });
+      console.log(imageData);
+      currentData = this.state.data.map((a) => {
+        return { ...a };
+      });
+      if (index === 0) {
+        currentData[mainIndex].image = {
+          name: file.name,
+          src: reader.result,
+        };
+      } else {
+        currentData[mainIndex].logo = {
+          name: file.name,
+          src: reader.result,
+        };
+      }
+      imageData[mainIndex][index].file = file;
+      imageData[mainIndex][index].image = reader.result;
+      // console.log(imageData);
+      this.setState({
+        data: currentData,
+        banner: imageData,
+        file,
+      });
+    };
+
+    reader.readAsDataURL(file);
   }
 
   optionChange = (e) => {
@@ -60,25 +79,43 @@ class Banner extends Component {
     console.log("option change", e.target.name, e.target.value);
   };
 
-  imageSubmitHandler = (e, section, index) => {
-    console.log("Image upload", section, index, this.state);
+  imageSubmitHandler = (e, section, index, mainIndex) => {
+    console.log(index);
+    console.log(mainIndex);
     e.preventDefault();
-    if (this.state[section][index].image.length > 0) {
+    if (this.state.data[mainIndex].image.src.length > 0) {
       let formData = new FormData();
-      formData.append("imageName", this.state[section][index].imageName);
-      formData.append("image", this.state[section][index].file);
+      formData.append("imageName", this.state.data[mainIndex].image.name);
+      formData.append("image", this.state.file);
+      formData.append("index", index);
+      formData.append("mainIndex", mainIndex);
+      formData.append("id", section._id);
       this.props
         .uploadImage(formData)
         .then((result) => {
-          cogoToast.success(result);
+          console.log(result);
+          cogoToast.success(result.data.message);
+          let imageData = this.state.banner.map((a) => {
+            return a.map((b) => {
+              return { ...b };
+            });
+          });
+          imageData[mainIndex][index].file = "";
+          imageData[mainIndex][index].image = "";
+          let data = [...this.state.data];
+          data[mainIndex] = result.data.data;
           this.setState({
             imageName: "",
             file: "",
             imagePreviewUrl: "",
+            banner: imageData,
+            data,
           });
         })
-        .catch((err) => cogoToast.error(err));
-      console.log("image submit");
+        .catch((err) => {
+          console.log(err);
+          cogoToast.error(err);
+        });
     } else {
       cogoToast.info("Please select an image");
     }
@@ -103,10 +140,10 @@ class Banner extends Component {
     event.preventDefault();
     this.setState({ loading: true });
     this.props
-      .update(this.props.banners[section], section)
+      .update(this.state.data[section], section)
       .then((result) => {
         cogoToast.success(result.message);
-        this.setState({ loading: false });
+        this.setState({ loading: false, data: this.props.banners });
         console.log(result);
       })
       .catch((err) => cogoToast.error(err));
@@ -115,23 +152,44 @@ class Banner extends Component {
     event.preventDefault();
     this.setState({ loading: true });
     this.props
-      .deletee(this.props.banners[section]._id, section)
+      .deletee(this.state.data[section]._id, section)
       .then((result) => {
+        let imageData = this.state.banner.map((a) => {
+          return a.map((b) => {
+            return { ...b };
+          });
+        });
+        imageData.splice(section, 1);
+        console.log(imageData);
+        console.log(this.props.banners);
         cogoToast.success(result.message);
-        this.setState({ loading: false });
+        this.setState({
+          loading: false,
+          data: this.props.banners,
+          banner: imageData,
+        });
       })
       .catch((err) => cogoToast.error(err));
   };
   componentDidMount = () => {
     // console.log(this.props.data);
     console.log("Component mounted");
-    if (this.props.firstLoad) {
-      this.props.get().then((result) => {
-        // console.log(result);
-        cogoToast.success(result);
-        this.setState({ loading: false });
+    this.props.get().then((result) => {
+      let newArray = new Array(this.props.banners.length).fill(
+        new Array(2).fill({
+          image: "",
+          file: "",
+          imageName: "",
+        })
+      );
+      // console.log(result);
+      cogoToast.success(result);
+      this.setState({
+        loading: false,
+        banner: newArray,
+        data: this.props.banners,
       });
-    }
+    });
   };
 
   toggleHandler = (event) => {
@@ -146,19 +204,58 @@ class Banner extends Component {
     this.setState({ isOpen: false });
   };
 
-  addCategory = async (e) => {
+  addBanner = async (e) => {
     this.setState({ isOpen: false, loading: true });
     e.preventDefault();
     // console.log(this.state.formData);
-    this.props.add(this.state.formData).then((result) => {
-      cogoToast.success(result);
-      this.setState({ loading: false });
+    const formData = new FormData();
+    Object.keys(this.state.formData).forEach((key) => {
+      if (key === "bannerName") {
+        formData.append(key, this.state.formData[key].toLowerCase());
+      } else {
+        formData.append(key, this.state.formData[key]);
+      }
     });
+    if (this.state.imageFile !== "") {
+      formData.append("imageFile", this.state.imageFile);
+    }
+    if (this.state.logoFile !== "") {
+      formData.append("logoFile", this.state.logoFile);
+    }
+    this.props
+      .add(formData)
+      .then((result) => {
+        console.log(this.props.banners);
+        let imageData = this.state.banner.map((a) => {
+          return a.map((b) => {
+            return { ...b };
+          });
+        });
+        imageData.push(
+          new Array(2).fill({
+            image: "",
+            file: "",
+            imageName: "",
+          })
+        );
+        this.setState({
+          loading: false,
+          formData: {
+            bannerTitle: "",
+            content: "",
+            subTitle: "",
+            bannerName: "",
+          },
+          data: this.props.banners,
+          banner: imageData,
+        });
+        cogoToast.success(result);
+      })
+      .catch((err) => cogoToast.error(err));
   };
 
   render() {
-    // console.log(this.props.data);
-    let data = this.props.banners.map((elem, index) => {
+    let data = this.state.data.map((elem, index) => {
       console.log(elem);
       return (
         <Card key={index} onClick={this.clickHandler}>
@@ -193,7 +290,7 @@ class Banner extends Component {
                   sectionName={elem}
                   handleImageChange={this.handleImageChange}
                   imageSubmitHandler={this.imageSubmitHandler}
-                  imagePreviewUrl={[]}
+                  imagePreviewUrl={this.state.banner[index]}
                   optionChange={this.optionChange}
                   img=""
                   isCategory={true}
@@ -234,13 +331,13 @@ class Banner extends Component {
                 <Modal.Title>Add Banner</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <Form onSubmit={this.addCategory}>
+                <Form onSubmit={this.addBanner}>
                   <Form.Group controlId="formBasicEmail">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
                       as="input"
                       type="text"
-                      placeholder="Enter Category Name"
+                      placeholder="Enter Banner Name"
                       value={this.state.title}
                       onChange={(e) => {
                         const currentData = { ...this.state.formData };
@@ -305,16 +402,16 @@ class Banner extends Component {
                     <Form.Label style={{ display: "block" }}>
                       Banner Image
                     </Form.Label>
-                    <FileBase
+                    <input
                       type="file"
-                      multiple={false}
-                      onDone={({ base64, name }) => {
-                        const currentData = { ...this.state.formData };
-                        currentData.image = {
-                          name,
-                          src: base64,
+                      accept="image/*"
+                      onChange={(e) => {
+                        let reader = new FileReader();
+                        let imageFile = e.target.files[0];
+                        reader.onloadend = () => {
+                          this.setState({ imageFile });
                         };
-                        this.setState({ formData: currentData });
+                        reader.readAsDataURL(imageFile);
                       }}
                     />
                   </Form.Group>
@@ -323,16 +420,16 @@ class Banner extends Component {
                     <Form.Label style={{ display: "block" }}>
                       Banner Logo
                     </Form.Label>
-                    <FileBase
+                    <input
                       type="file"
-                      multiple={false}
-                      onDone={({ base64, name }) => {
-                        const currentData = { ...this.state.formData };
-                        currentData.logo = {
-                          name,
-                          src: base64,
+                      accept="image/*"
+                      onChange={(e) => {
+                        let reader = new FileReader();
+                        let logoFile = e.target.files[0];
+                        reader.onloadend = () => {
+                          this.setState({ logoFile });
                         };
-                        this.setState({ formData: currentData });
+                        reader.readAsDataURL(logoFile);
                       }}
                     />
                   </Form.Group>
@@ -369,7 +466,7 @@ const mapDispatchToProps = (dispatch) => {
     update: (data, section) => dispatch(actionCreators.update(data, section)),
     deletee: (data, section) => dispatch(actionCreators.deletee(data, section)),
     add: (data) => dispatch(actionCreators.add(data)),
-    // uploadImage: (data) => dispatch(actionCreators.uploadImage(data)),
+    uploadImage: (data) => dispatch(actionCreators.uploadImage(data)),
   };
 };
 
