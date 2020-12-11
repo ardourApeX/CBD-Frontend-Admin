@@ -94,49 +94,115 @@ class Home extends Component {
       },
       isOpen: false,
       loading: true,
+      file: "",
+      imageName: "",
       imagePreviewUrl: "",
       formData: {
         title: "",
         content: "",
-        images: {},
         btnText: "",
         hide: false,
       },
+      logo: [
+        { image: "", file: "", imageName: "" },
+        { image: "", file: "", imageName: "" },
+        { image: "", file: "", imageName: "" },
+      ],
+      banner: [],
+      thirdSection: [{ image: "", file: "", imageName: "" }],
     };
 
     this.handleImageChange = this.handleImageChange.bind(this);
   }
 
-  handleImageChange(name, base64, index, mainIndex, section) {
-    console.log(index);
-    console.log(section);
-    console.log(mainIndex);
-    let currentData;
-    if (section === "banner") {
-      currentData = [...this.state.data[section]];
-      currentData[mainIndex].images = {
-        name,
-        src: base64,
-      };
-    } else {
-      currentData = { ...this.state.data[section] };
-      currentData.images[index] = {
-        name,
-        src: base64,
-      };
-    }
-    console.log(currentData);
-    // this.setState({ data: currentData });
-    this.setState({ loading: true });
-    this.props
-      .update(currentData, section)
-      .then((result) => {
-        cogoToast.success(result);
-        this.setState({ loading: false });
-        console.log(result);
-      })
-      .catch((err) => cogoToast.error(err));
+  handleImageChange(e, index, mainIndex, section) {
+    let reader = new FileReader();
+    let file = e.target.files[0];
+    let currentData, imageData;
+    reader.onloadend = () => {
+      imageData = [...this.state[section]];
+      if (section === "banner") {
+        currentData = [...this.state.data[section]];
+        currentData[mainIndex].images = {
+          name: file.name,
+          src: reader.result,
+        };
+        imageData[mainIndex].file = file;
+        imageData[mainIndex].image = reader.result;
+      } else {
+        currentData = { ...this.state.data[section] };
+        currentData.images[index] = {
+          name: file.name,
+          src: reader.result,
+        };
+        imageData[index].file = file;
+        imageData[index].image = reader.result;
+      }
+      this.setState({
+        data: {
+          ...this.state.data,
+          [section]: currentData,
+        },
+        [section]: imageData,
+        file,
+      });
+    };
+
+    reader.readAsDataURL(file);
   }
+
+  imageSubmitHandler = (e, section, index, mainIndex) => {
+    console.log("Image upload", section, index, this.state.file);
+    e.preventDefault();
+    if (
+      (section !== "banner" &&
+        this.state.data[section].images[index].src.length > 0) ||
+      this.state.data[section][mainIndex].images.src.length > 0
+    ) {
+      let formData = new FormData();
+      if (section === "banner") {
+        formData.append(
+          "imageName",
+          this.state.data[section][mainIndex].images.name
+        );
+      } else {
+        formData.append(
+          "imageName",
+          this.state.data[section].images[index].name
+        );
+      }
+      formData.append("image", this.state.file);
+      formData.append("section", section);
+      formData.append("index", index);
+      formData.append("mainIndex", mainIndex);
+      this.props
+        .uploadImage(formData, section)
+        .then((result) => {
+          console.log(result);
+          cogoToast.success(result);
+          let imageData = [...this.state[section]];
+          if (section === "banner") {
+            imageData[mainIndex].file = "";
+            imageData[mainIndex].image = "";
+          } else {
+            imageData[index].file = "";
+            imageData[index].image = "";
+          }
+          this.setState({
+            imageName: "",
+            file: "",
+            imagePreviewUrl: "",
+            [section]: imageData,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          cogoToast.error(err);
+        });
+    } else {
+      cogoToast.info("Please select an image");
+    }
+  };
 
   optionChange = (e) => {
     this.setState({
@@ -149,10 +215,10 @@ class Home extends Component {
     console.log(name, section, data);
     let curValue = this.state.data[section];
     if (index || index === 0) {
-      console.log("reached here");
+      // console.log("reached here");
       curValue[index][name] = data;
     } else {
-      console.log("reached here 1");
+      // console.log("reached here 1");
       curValue[name] = data;
     }
     this.setState({
@@ -181,42 +247,44 @@ class Home extends Component {
       .catch((err) => cogoToast.error(err));
   };
   componentDidMount = () => {
-    if (this.props.firstLoad) {
-      this.props
-        .get()
-        .then((result) => {
-          // cogoToast.success(result);
-          // console.log(this.props.data);
-          // this.setState({
-          //   data: { ...this.props.data },
-          //   loading: false,
-          // });
-          this.setState({
-            loading: false,
-            data: {
-              logo: {
-                ...this.props.data.logo,
-              },
-              banner: [...this.props.data.banner],
-              categorySlider: {
-                ...this.props.data.categorySlider,
-              },
-              secondSection: {
-                ...this.props.data.secondSection,
-              },
-              thirdSection: {
-                ...this.props.data.thirdSection,
-              },
-              fourthSection: {
-                ...this.props.data.fourthSection,
-              },
-            },
-          });
-        })
-        .catch((err) => {
-          cogoToast.error(err);
+    // if (this.props.firstLoad) {
+    console.log("Component mounted");
+    this.props
+      .get()
+      .then((result) => {
+        console.log(result);
+        let newArray = new Array(this.props.data.banner.length).fill({
+          image: "",
+          file: "",
+          imageName: "",
         });
-    }
+        this.setState({
+          loading: false,
+          data: {
+            logo: {
+              ...this.props.data.logo,
+            },
+            banner: [...this.props.data.banner],
+            categorySlider: {
+              ...this.props.data.categorySlider,
+            },
+            secondSection: {
+              ...this.props.data.secondSection,
+            },
+            thirdSection: {
+              ...this.props.data.thirdSection,
+            },
+            fourthSection: {
+              ...this.props.data.fourthSection,
+            },
+          },
+          banner: newArray,
+        });
+      })
+      .catch((err) => {
+        cogoToast.error(err);
+      });
+    // }
   };
   cardChange = (card) => {};
   closeModal = () => {
@@ -226,7 +294,7 @@ class Home extends Component {
         title: "",
         content: "",
         btntext: "",
-        hide: "false",
+        hide: false,
         images: [],
       },
     });
@@ -234,8 +302,12 @@ class Home extends Component {
 
   submitModal = (e) => {
     e.preventDefault();
-    let currentData = [...this.state.data.banner];
-    currentData.push(this.state.formData);
+    const formData = new FormData();
+    Object.keys(this.state.formData).forEach((key) =>
+      formData.append(key, this.state.formData[key])
+    );
+    formData.append("image", this.state.file);
+    formData.append("addBanner", true);
     this.setState({
       loading: true,
       isOpen: false,
@@ -243,12 +315,11 @@ class Home extends Component {
         title: "",
         content: "",
         btntext: "",
-        hide: "false",
-        images: [],
+        hide: false,
       },
     });
     this.props
-      .update(currentData, "banner")
+      .uploadImage(formData, "banner")
       .then((result) => {
         this.setState({ loading: false });
         cogoToast.success(result);
@@ -260,25 +331,25 @@ class Home extends Component {
 
   deleteBanner = (e, section, index) => {
     e.preventDefault();
-    let currentData = [...this.state.data[section]];
+    let currentData = [...this.props.data["banner"]];
+    console.log(currentData.length);
     currentData.splice(index, 1);
-    this.props
-      .update(currentData, "banner")
-      .then((result) => {
-        this.setState({ loading: false });
-        cogoToast.success(result);
-      })
-      .catch((err) => cogoToast.error(err));
+    console.log(currentData);
+    // this.props
+    //   .update(currentData, "banner")
+    //   .then((result) => {
+    //     this.setState({ loading: false });
+    //     cogoToast.success(result);
+    //   })
+    //   .catch((err) => cogoToast.error(err));
   };
 
   render() {
-    // console.log(this.state.data);
+    console.log(this.props.data);
     let data = Object.keys(this.props.data || {}).map((elem, index) => {
-      // console.log(this.state.data[elem]);
       let element = { ...this.state.data[elem] };
-      element[0] ? console.log("Element is Array") : delete element.hide;
+      element[0] ? console.log("") : delete element.hide;
       delete element.images;
-      console.log(elem);
       let newSubheadings = Object.keys(element).map(
         (elem) => elem[0].toUpperCase() + elem.substring(1)
       );
@@ -355,13 +426,15 @@ class Home extends Component {
                 ) : null}
                 {this.state.data[elem].images !== undefined ? (
                   <ImageForm
-                    Images={this.state.data[elem].images}
+                    Images={this.props.data[elem].images}
                     sectionName={elem}
                     handleImageChange={this.handleImageChange}
-                    imagePreviewUrl={this.state.data[elem]}
+                    imagePreviewUrl={this.state[elem]}
                     optionChange={this.optionChange}
                     img={this.state.imagePreviewUrl}
-                    isCategory={true}
+                    // isCategory={true}
+                    currentIndex={this.state[elem]}
+                    imageSubmitHandler={this.imageSubmitHandler}
                   />
                 ) : null}
               </Card.Body>
@@ -391,14 +464,15 @@ class Home extends Component {
                           deleteHandler={this.deleteBanner}
                         />
                         <ImageForm
-                          Images={[{ ...this.state.data[elem][index1].images }]}
+                          Images={[{ ...this.props.data[elem][index1].images }]}
                           sectionName={elem}
                           handleImageChange={this.handleImageChange}
-                          imagePreviewUrl={this.state.data[elem]}
+                          imagePreviewUrl={[{ ...this.state[elem][index1] }]}
                           optionChange={this.optionChange}
                           img={this.state.imagePreviewUrl}
-                          isCategory={true}
+                          // isCategory={true}
                           mainIndex={index1}
+                          imageSubmitHandler={this.imageSubmitHandler}
                         />
                       </Panel>
 
@@ -517,16 +591,16 @@ class Home extends Component {
                     <Form.Label style={{ display: "block" }}>
                       Banner Image
                     </Form.Label>
-                    <FileBase
+                    <input
                       type="file"
-                      multiple={false}
-                      onDone={({ base64, name }) => {
-                        const currentData = { ...this.state.formData };
-                        currentData.images = {
-                          name,
-                          src: base64,
+                      accept="image/*"
+                      onChange={(e) => {
+                        let reader = new FileReader();
+                        let file = e.target.files[0];
+                        reader.onloadend = () => {
+                          this.setState({ file });
                         };
-                        this.setState({ formData: currentData });
+                        reader.readAsDataURL(file);
                       }}
                     />
                   </Form.Group>
@@ -546,67 +620,6 @@ class Home extends Component {
             <Accordion defaultActiveKey="0">{data}</Accordion>
           </>
         )}
-
-        {/* <Card title="Home" isOption>
-					<Card.Header>Home</Card.Header>
-					<Card.Body>
-						<Card>
-							<Card.Title className="text-center">Banner</Card.Title>
-							<Card.Body>
-								<TextForm
-									field={this.state.banner}
-									changeHandler={this.changeHandler}
-									sectionName="banner"
-									updateHandler={this.updateHandler}
-								/>
-							</Card.Body>
-						</Card>
-						<Card>
-							<Card.Title className="text-center">CategorySlider</Card.Title>
-							<Card.Body>
-								<TextForm
-									field={this.state.categorySlider}
-									sectionName="categorySlider"
-									changeHandler={this.changeHandler}
-									updateHandler={this.updateHandler}
-								/>
-							</Card.Body>
-						</Card>
-						<Card>
-							<Card.Title className="text-center">ThirdSection</Card.Title>
-							<Card.Body>
-								<TextForm
-									field={this.state.thirdSection}
-									changeHandler={this.changeHandler}
-									sectionName="thirdSection"
-									updateHandler={this.updateHandler}
-								/>
-							</Card.Body>
-						</Card>
-						<Card>
-							<Card.Title className="text-center">BundlesSlider</Card.Title>
-							<Card.Body>
-								<TextForm
-									field={this.state.bundlesSlider}
-									changeHandler={this.changeHandler}
-									sectionName="bundlesSlider"
-									updateHandler={this.updateHandler}
-								/>
-							</Card.Body>
-						</Card>
-						<Card>
-							<Card.Title className="text-center">FifthSection</Card.Title>
-							<Card.Body>
-								<TextForm
-									field={this.state.fifthSection}
-									changeHandler={this.changeHandler}
-									sectionName="fifthSection"
-									updateHandler={this.updateHandler}
-								/>
-							</Card.Body>
-						</Card>
-					</Card.Body>
-				</Card> */}
       </div>
     );
   }
@@ -623,7 +636,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     get: () => dispatch(actionCreators.get()),
     update: (data, section) => dispatch(actionCreators.update(data, section)),
-    uploadImage: (data) => dispatch(actionCreators.uploadImage(data)),
+    uploadImage: (formData, section) =>
+      dispatch(actionCreators.updloadImage(formData, section)),
   };
 };
 

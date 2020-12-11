@@ -20,18 +20,18 @@ const ImageForm = ({
   // }
   let Img = [];
 
-  console.log("ima", props);
-  console.log(props.Images);
+  // console.log("ima", props);
+  // console.log(props.Images);
   const images = props.Images.map((elem, index) => {
     // console.log(imagePreviewUrl[index]);
+    // console.log(elem);
     return (
       <Col key={index}>
-        {isCategory ? elem && <p>{elem.name}</p> : <p>{elem}</p>}
-
+        {/* {isCategory ? elem && <p>{elem.name}</p> : <p>{elem.name}</p>} */}
+        <p>{elem.name}</p>
         {elem && (
           <div className="box">
-            {!isCategory &&
-            imagePreviewUrl[index] &&
+            {imagePreviewUrl[index] &&
             imagePreviewUrl[index].image.length > 0 ? (
               <div
                 className="js--image-preview"
@@ -39,15 +39,15 @@ const ImageForm = ({
                   backgroundImage: `url(${imagePreviewUrl[index].image})`,
                 }}
               ></div>
-            ) : isCategory ? (
-              <div
-                className="js--image-preview"
-                style={{ backgroundImage: `url(${elem.src})` }}
-              ></div>
             ) : (
               <div
                 className="js--image-preview"
-                style={{ backgroundImage: `url(${IMAGE_URL}/${elem}` }}
+                style={{
+                  backgroundImage: `url(${IMAGE_URL}/${elem.src}`.replace(
+                    "public",
+                    ""
+                  ),
+                }}
               ></div>
             )}
 
@@ -55,8 +55,8 @@ const ImageForm = ({
               {imagePreviewUrl[index] && imagePreviewUrl[index].file ? (
                 <lable
                   onClick={(e) => {
-                    props.imageSubmitHandler(e, sectionName, index);
-                    imagePreviewUrl[index].file = "";
+                    props.imageSubmitHandler(e, sectionName, index, mainIndex);
+                    // imagePreviewUrl[index].file = "";
                   }}
                 >
                   <p
@@ -69,30 +69,14 @@ const ImageForm = ({
                     Update
                   </p>
                 </lable>
-              ) : isCategory ? (
-                <label>
-                  <FileBase
-                    type="file"
-                    multiple={false}
-                    onDone={({ name, base64 }) => {
-                      props.handleImageChange(
-                        name,
-                        base64,
-                        index,
-                        mainIndex,
-                        sectionName
-                      );
-                    }}
-                  />
-                </label>
               ) : (
                 <label>
                   <input
                     type="file"
-                    onChange={async (e) =>
-                      props.handleImageChange(e, sectionName, index)
-                    }
                     accept="image/*"
+                    onChange={(e) =>
+                      props.handleImageChange(e, index, mainIndex, sectionName)
+                    }
                   />
                 </label>
               )}

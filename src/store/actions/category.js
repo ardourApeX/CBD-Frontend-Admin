@@ -4,7 +4,10 @@ import { ERROR_MESSAGE } from "./constant";
 export const update = (data, section) => {
   //   console.log("update actioncreator", dataValue, section);
   return (dispatch) => {
-    return Axios.post("/Category/update", data)
+    return Axios.post("/Category/update", {
+      data,
+      id: data._id,
+    })
       .then((result) => {
         console.log("result update", result);
         dispatch({
@@ -61,12 +64,8 @@ export const get = () => {
 export const add = (data) => {
   console.log("Shop get action creator");
   return async (dispatch) => {
-    const category = { ...data };
-    console.log(category);
-    console.log(data.category);
-    category.category = data.category.toLowerCase();
-    console.log(category);
-    return Axios.post("/Category/add", category)
+    console.log("In Category Action");
+    return Axios.post("/Category/add", data)
       .then(async (result) => {
         await dispatch({
           type: actionTypes.ADD_CATEGORY,
@@ -83,10 +82,10 @@ export const add = (data) => {
 export const uploadImage = (data) => {
   console.log("In image upload");
   return (dispatch) => {
-    return Axios.post("/Image/add", data)
+    return Axios.post("/Category/update", data)
       .then((result) => {
         console.log(result);
-        return result.data.message;
+        return result;
       })
       .catch((err) => {
         Promise.reject(err.response.message);

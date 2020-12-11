@@ -14,7 +14,7 @@ const get = (state, action) => {
 const update = (state, action) => {
   // let curValue=state[action.section];
   // curValue=action.data;
-  let currentData = state.banners;
+  let currentData = [...state.banners];
   currentData[action.section] = action.data;
   return {
     ...state,
@@ -23,11 +23,12 @@ const update = (state, action) => {
 };
 
 const deletee = (state, action) => {
-  let currentData = state.banners;
+  console.log(action.section);
+  let currentData = [...state.banners];
   currentData.splice(action.section, 1);
   return {
     ...state,
-    data: currentData,
+    banners: currentData,
   };
 };
 
@@ -47,7 +48,7 @@ const reducer = (state = initialState, action) => {
       return update(state, action);
     case actionTypes.ADD_BANNER:
       return add(state, action);
-    case actionTypes.DELETE_CATEGORY:
+    case actionTypes.DELETE_BANNER:
       return deletee(state, action);
     default:
       return state;

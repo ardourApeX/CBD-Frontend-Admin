@@ -13,7 +13,7 @@ const get = (state, action) => {
 const update = (state, action) => {
   // let curValue=state[action.section];
   // curValue=action.data;
-  let currentData = state.data;
+  let currentData = [...state.data];
   currentData[action.section] = action.data;
   return {
     ...state,

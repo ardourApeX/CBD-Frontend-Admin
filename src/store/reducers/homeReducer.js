@@ -71,7 +71,6 @@ const initialState = {
 };
 
 const get = (state, action) => {
-  console.log("In get reducer", action);
   return {
     ...state,
     homeData: action.data,
@@ -79,13 +78,11 @@ const get = (state, action) => {
   };
 };
 const update = (state, action) => {
-  // let curValue=state[action.section];
-  // curValue=action.data;
   return {
     ...state,
     homeData: {
       ...state.homeData,
-      [action.section]: action.data,
+      [action.section]: action.data[action.section],
     },
   };
 };

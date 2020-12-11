@@ -2,9 +2,12 @@ import Axios from "../../utilities/Axios/Axios";
 import * as actionTypes from "./actions";
 import { ERROR_MESSAGE } from "./constant";
 export const update = (data, section) => {
-  //   console.log("update actioncreator", dataValue, section);
+  console.log("update actioncreator", data, section);
   return (dispatch) => {
-    return Axios.post("/Banner/update", data)
+    return Axios.post("/Banner/update", {
+      data,
+      id: data._id,
+    })
       .then((result) => {
         console.log("result update", result);
         dispatch({
@@ -12,7 +15,7 @@ export const update = (data, section) => {
           section,
           data: data,
         });
-        return result.data.message;
+        return result.data;
       })
       .catch((err) => {
         console.log(err);
@@ -22,7 +25,7 @@ export const update = (data, section) => {
 };
 
 export const deletee = (id, section) => {
-  //   console.log("update actioncreator", dataValue, section);
+  console.log("update actioncreator", id, section);
   return (dispatch) => {
     return Axios.post("/Banner/delete", { _id: id })
       .then((result) => {
@@ -61,9 +64,7 @@ export const get = () => {
 export const add = (data) => {
   console.log("Shop get action creator");
   return async (dispatch) => {
-    const banner = { ...data };
-    banner.bannerName = data.bannerName.toLowerCase();
-    return Axios.post("/Banner/add", banner)
+    return Axios.post("/Banner/add", data)
       .then(async (result) => {
         await dispatch({
           type: actionTypes.ADD_BANNER,
@@ -73,6 +74,20 @@ export const add = (data) => {
       })
       .catch((err) => {
         return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
+export const uploadImage = (data) => {
+  console.log("In image upload");
+  return (dispatch) => {
+    return Axios.post("/Banner/update", data)
+      .then((result) => {
+        console.log(result);
+        return result;
+      })
+      .catch((err) => {
+        Promise.reject(err.response.message);
       });
   };
 };
