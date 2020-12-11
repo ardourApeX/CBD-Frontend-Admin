@@ -28,7 +28,7 @@ const ImageForm = ({
     return (
       <Col key={index}>
         {/* {isCategory ? elem && <p>{elem.name}</p> : <p>{elem.name}</p>} */}
-        <p>{elem.name}</p>
+       {elem && <p>{elem.name}</p>}
         {elem && (
           <div className="box">
             {imagePreviewUrl[index] &&
