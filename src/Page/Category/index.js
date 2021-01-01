@@ -106,6 +106,7 @@ class Category extends Component {
   }
 
   imageSubmitHandler = (e, section, index, mainIndex) => {
+    this.setState({ loading: true });
     console.log(index);
     console.log(mainIndex);
     e.preventDefault();
@@ -119,6 +120,7 @@ class Category extends Component {
       this.props
         .uploadImage(formData)
         .then((result) => {
+          this.setState({ loading: false });
           console.log(result);
           cogoToast.success(result.data.message);
           let imageData = this.state.category.map((a) => {
@@ -140,6 +142,7 @@ class Category extends Component {
         })
         .catch((err) => {
           console.log(err);
+          this.setState({ loading: false });
           cogoToast.error(err);
         });
     } else {
@@ -179,7 +182,10 @@ class Category extends Component {
         this.setState({ loading: false, data: this.props.data });
         console.log(result);
       })
-      .catch((err) => cogoToast.error(err));
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
+      });
   };
   deleteHandler = (event, section) => {
     event.preventDefault();
@@ -201,13 +207,16 @@ class Category extends Component {
           category: imageData,
         });
       })
-      .catch((err) => cogoToast.error(err));
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
+      });
   };
   componentDidMount = () => {
-    // console.log(this.props.data);
     console.log("Component mounted");
-    if (this.props.firstLoad) {
-      this.props.get().then((result) => {
+    this.props
+      .get()
+      .then((result) => {
         console.log(result);
         let newArray = new Array(this.props.data.length).fill(
           new Array(2).fill({
@@ -222,8 +231,11 @@ class Category extends Component {
           category: newArray,
           data: result,
         });
+      })
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
       });
-    }
   };
 
   toggleHandler = (event) => {
@@ -284,13 +296,16 @@ class Category extends Component {
         });
         cogoToast.success(result);
       })
-      .catch((err) => cogoToast.error(err));
+      .catch((err) => {
+        this.setState({ laoding: false });
+        cogoToast.error(err);
+      });
   };
 
   render() {
-    console.log(this.state.category);
+    console.log(this.state.data);
     let data = this.state.data.map((elem, index) => {
-      console.log(elem);
+      // console.log(elem);
       return (
         <Card key={index} onClick={this.clickHandler}>
           <Card.Header>

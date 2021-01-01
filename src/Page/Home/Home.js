@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, PureComponent } from "react";
 import { connect } from "react-redux";
 import { Card, Button, Spinner, Form, Modal } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
@@ -27,7 +27,7 @@ const SubHeading = [
   ["Title", "Sub Title", "Content", "Button Text"],
   ["Title", "Content"],
 ];
-class Home extends Component {
+class Home extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -130,11 +130,16 @@ class Home extends Component {
         imageData[mainIndex].file = file;
         imageData[mainIndex].image = reader.result;
       } else {
+        console.log(file);
         currentData = { ...this.state.data[section] };
-        currentData.images[index] = {
-          name: file.name,
-          src: reader.result,
-        };
+        if (section === "logo") {
+          currentData.images[index].src = reader.result;
+        } else {
+          currentData.images[index] = {
+            name: file.name,
+            src: reader.result,
+          };
+        }
         imageData[index].file = file;
         imageData[index].image = reader.result;
       }
@@ -153,13 +158,14 @@ class Home extends Component {
 
   imageSubmitHandler = (e, section, index, mainIndex) => {
     console.log("Image upload", section, index, this.state.file);
+
+    let formData = new FormData();
     e.preventDefault();
     if (
       (section !== "banner" &&
         this.state.data[section].images[index].src.length > 0) ||
       this.state.data[section][mainIndex].images.src.length > 0
     ) {
-      let formData = new FormData();
       if (section === "banner") {
         formData.append(
           "imageName",
@@ -171,14 +177,15 @@ class Home extends Component {
           this.state.data[section].images[index].name
         );
       }
-      formData.append("image", this.state.file);
+
       formData.append("section", section);
       formData.append("index", index);
       formData.append("mainIndex", mainIndex);
+      formData.append("image", this.state.file);
+      this.setState({ loading: true });
       this.props
         .uploadImage(formData, section)
         .then((result) => {
-          console.log(result);
           cogoToast.success(result);
           let imageData = [...this.state[section]];
           if (section === "banner") {
@@ -193,9 +200,12 @@ class Home extends Component {
             file: "",
             imagePreviewUrl: "",
             [section]: imageData,
+            loading: false,
           });
+          window.location.reload();
         })
         .catch((err) => {
+          this.setState({ loading: false });
           console.log(err);
           cogoToast.error(err);
         });
@@ -244,47 +254,69 @@ class Home extends Component {
         this.setState({ loading: false });
         cogoToast.success(result);
       })
-      .catch((err) => cogoToast.error(err));
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
+      });
   };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (
+      prevProps.data.banner &&
+      prevProps.data.banner.length !== this.props.data.banner.length
+    ) {
+      console.log("Updated");
+      let answer = this.createData();
+      this.setState({
+        data: answer.data,
+        banner: answer.newArray,
+      });
+    }
+  };
+
+  createData = () => {
+    return {
+      newArray: new Array(this.props.data.banner.length).fill({
+        image: "",
+        file: "",
+        imageName: "",
+      }),
+      data: {
+        logo: {
+          ...this.props.data.logo,
+        },
+        banner: [...this.props.data.banner],
+        categorySlider: {
+          ...this.props.data.categorySlider,
+        },
+        secondSection: {
+          ...this.props.data.secondSection,
+        },
+        thirdSection: {
+          ...this.props.data.thirdSection,
+        },
+        fourthSection: {
+          ...this.props.data.fourthSection,
+        },
+      },
+    };
+  };
+
   componentDidMount = () => {
-    // if (this.props.firstLoad) {
-    console.log("Component mounted");
     this.props
       .get()
       .then((result) => {
-        console.log(result);
-        let newArray = new Array(this.props.data.banner.length).fill({
-          image: "",
-          file: "",
-          imageName: "",
-        });
+        let answer = this.createData();
         this.setState({
           loading: false,
-          data: {
-            logo: {
-              ...this.props.data.logo,
-            },
-            banner: [...this.props.data.banner],
-            categorySlider: {
-              ...this.props.data.categorySlider,
-            },
-            secondSection: {
-              ...this.props.data.secondSection,
-            },
-            thirdSection: {
-              ...this.props.data.thirdSection,
-            },
-            fourthSection: {
-              ...this.props.data.fourthSection,
-            },
-          },
-          banner: newArray,
+          data: answer.data,
+          banner: answer.newArray,
         });
+        cogoToast.success(result);
       })
       .catch((err) => {
         cogoToast.error(err);
       });
-    // }
   };
   cardChange = (card) => {};
   closeModal = () => {
@@ -324,24 +356,29 @@ class Home extends Component {
         this.setState({ loading: false });
         cogoToast.success(result);
       })
-      .catch((err) => cogoToast.error(err));
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
+      });
   };
 
   callback = (key) => console.log(key);
 
   deleteBanner = (e, section, index) => {
     e.preventDefault();
-    let currentData = [...this.props.data["banner"]];
-    console.log(currentData.length);
+    let currentData = [...this.state.data.banner];
     currentData.splice(index, 1);
-    console.log(currentData);
-    // this.props
-    //   .update(currentData, "banner")
-    //   .then((result) => {
-    //     this.setState({ loading: false });
-    //     cogoToast.success(result);
-    //   })
-    //   .catch((err) => cogoToast.error(err));
+    this.setState({ loading: true });
+    this.props
+      .update(currentData, "banner")
+      .then((result) => {
+        this.setState({ loading: false });
+        cogoToast.success(result);
+      })
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
+      });
   };
 
   render() {
@@ -464,7 +501,7 @@ class Home extends Component {
                           deleteHandler={this.deleteBanner}
                         />
                         <ImageForm
-                          Images={[{ ...this.props.data[elem][index1].images }]}
+                          Images={[{ ...this.state.data[elem][index1].images }]}
                           sectionName={elem}
                           handleImageChange={this.handleImageChange}
                           imagePreviewUrl={[{ ...this.state[elem][index1] }]}

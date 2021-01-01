@@ -11,24 +11,14 @@ const ImageForm = ({
   mainIndex,
   ...props
 }) => {
-  // console.log("url", imagePreviewUrl, sectionName);
-  // let $imagePreview = null;
-  // if (imagePreviewUrl) {
-  // 	$imagePreview = (
-  // 		<img src={imagePreviewUrl} style={{ width: "10%" }} className="mt-5" />
-  // 	);
-  // }
   let Img = [];
-
-  // console.log("ima", props);
-  // console.log(props.Images);
   const images = props.Images.map((elem, index) => {
-    // console.log(imagePreviewUrl[index]);
-    // console.log(elem);
+    console.log(elem);
     return (
       <Col key={index}>
-        {/* {isCategory ? elem && <p>{elem.name}</p> : <p>{elem.name}</p>} */}
-       {elem && <p>{elem.name}</p>}
+
+        {elem && <p>{elem.name}</p>}
+
         {elem && (
           <div className="box">
             {imagePreviewUrl[index] &&
@@ -43,10 +33,9 @@ const ImageForm = ({
               <div
                 className="js--image-preview"
                 style={{
-                  backgroundImage: `url(${IMAGE_URL}/${elem.src}`.replace(
-                    "public",
-                    ""
-                  ),
+                  backgroundImage: `url(${IMAGE_URL}/${elem.src}`
+                    .replace("public", "")
+                    .replace("\\", ""),
                 }}
               ></div>
             )}

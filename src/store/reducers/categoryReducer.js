@@ -1,7 +1,6 @@
 import * as actionTypes from "../actions/actions";
 const initialState = {
   data: [],
-  firstLoad: true,
 };
 
 const get = (state, action) => {
@@ -35,7 +34,6 @@ const add = (state, action) => {
   return {
     ...state,
     data: [...state.data, action.data],
-    firstLoad: false,
   };
 };
 
