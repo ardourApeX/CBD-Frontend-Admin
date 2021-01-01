@@ -81,7 +81,10 @@ class Learn extends Component {
         this.setState({ loading: false });
         console.log(result);
       })
-      .catch((err) => cogoToast.error(err));
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
+      });
   };
   deleteHandler = (event, section) => {
     event.preventDefault();
@@ -92,18 +95,24 @@ class Learn extends Component {
         cogoToast.success(result.message);
         this.setState({ loading: false });
       })
-      .catch((err) => cogoToast.error(err));
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
+      });
   };
   componentDidMount = () => {
-    // console.log(this.props.data);
-    console.log("Component mounted");
-    if (this.props.firstLoad) {
-      console.log("here");
-      this.props.get().then((result) => {
+    console.log("here");
+    this.props
+      .get()
+      .then((result) => {
+        cogoToast.success(result.message);
         console.log(result);
         this.setState({ loading: false, data: result.data });
+      })
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
       });
-    }
   };
 
   toggleHandler = (event) => {
@@ -128,10 +137,16 @@ class Learn extends Component {
     this.setState({ isOpen: false, loading: true });
     e.preventDefault();
     // console.log(this.state.formData);
-    this.props.add(this.state.formData).then((result) => {
-      cogoToast.success(result);
-      this.setState({ loading: false });
-    });
+    this.props
+      .add(this.state.formData)
+      .then((result) => {
+        cogoToast.success(result);
+        this.setState({ loading: false });
+      })
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
+      });
   };
 
   titleExtra = (title, type, mainId, subId, id, index, index1, index2) => (
@@ -207,7 +222,10 @@ class Learn extends Component {
                   this.setState({ loading: false });
                   cogoToast.success(result);
                 })
-                .catch((err) => cogoToast.error(err));
+                .catch((err) => {
+                  this.setState({ loading: false });
+                  cogoToast.error(err);
+                });
               break;
             case "Sublearn":
               this.setState({ loading: true });
@@ -217,7 +235,10 @@ class Learn extends Component {
                   this.setState({ loading: false });
                   cogoToast.success(result);
                 })
-                .catch((err) => cogoToast.error(err));
+                .catch((err) => {
+                  this.setState({ loading: false });
+                  cogoToast.error(err);
+                });
               break;
             case "Questionnaire":
               this.setState({ loading: true });
@@ -227,7 +248,10 @@ class Learn extends Component {
                   this.setState({ loading: false });
                   cogoToast.success(result);
                 })
-                .catch((err) => cogoToast.error(err));
+                .catch((err) => {
+                  this.setState({ loading: false });
+                  cogoToast.error(err);
+                });
               console.log("learn");
               break;
             default:
@@ -273,6 +297,10 @@ class Learn extends Component {
                         isOpen: false,
                         index: -1,
                       });
+                    })
+                    .catch((err) => {
+                      this.setState({ loading: false });
+                      cogoToast.error(err);
                     });
                   break;
                 case "Sublearn":
@@ -297,6 +325,10 @@ class Learn extends Component {
                         index: -1,
                         index1: -1,
                       });
+                    })
+                    .catch((err) => {
+                      this.setState({ loading: false });
+                      cogoToast.error(err);
                     });
                   break;
                 case "Questionnaire":
@@ -326,6 +358,10 @@ class Learn extends Component {
                         index1: -1,
                         index2: -1,
                       });
+                    })
+                    .catch((err) => {
+                      this.setState({ loading: false });
+                      cogoToast.error(err);
                     });
                   break;
                 default:

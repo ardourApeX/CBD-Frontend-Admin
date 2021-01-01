@@ -80,6 +80,7 @@ class Banner extends Component {
   };
 
   imageSubmitHandler = (e, section, index, mainIndex) => {
+    this.setState({ loading: true });
     console.log(index);
     console.log(mainIndex);
     e.preventDefault();
@@ -110,9 +111,11 @@ class Banner extends Component {
             imagePreviewUrl: "",
             banner: imageData,
             data,
+            loading: false,
           });
         })
         .catch((err) => {
+          this.setState({ loading: false });
           console.log(err);
           cogoToast.error(err);
         });
@@ -146,7 +149,10 @@ class Banner extends Component {
         this.setState({ loading: false, data: this.props.banners });
         console.log(result);
       })
-      .catch((err) => cogoToast.error(err));
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
+      });
   };
   deleteHandler = (event, section) => {
     event.preventDefault();
@@ -169,27 +175,36 @@ class Banner extends Component {
           banner: imageData,
         });
       })
-      .catch((err) => cogoToast.error(err));
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
+      });
   };
   componentDidMount = () => {
     // console.log(this.props.data);
     console.log("Component mounted");
-    this.props.get().then((result) => {
-      let newArray = new Array(this.props.banners.length).fill(
-        new Array(2).fill({
-          image: "",
-          file: "",
-          imageName: "",
-        })
-      );
-      // console.log(result);
-      cogoToast.success(result);
-      this.setState({
-        loading: false,
-        banner: newArray,
-        data: this.props.banners,
+    this.props
+      .get()
+      .then((result) => {
+        let newArray = new Array(this.props.banners.length).fill(
+          new Array(2).fill({
+            image: "",
+            file: "",
+            imageName: "",
+          })
+        );
+        // console.log(result);
+        cogoToast.success(result);
+        this.setState({
+          loading: false,
+          banner: newArray,
+          data: this.props.banners,
+        });
+      })
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
       });
-    });
   };
 
   toggleHandler = (event) => {
@@ -251,10 +266,14 @@ class Banner extends Component {
         });
         cogoToast.success(result);
       })
-      .catch((err) => cogoToast.error(err));
+      .catch((err) => {
+        this.setState({ loading: false });
+        cogoToast.error(err);
+      });
   };
 
   render() {
+    console.log(this.state.data);
     let data = this.state.data.map((elem, index) => {
       console.log(elem);
       return (

@@ -62,7 +62,9 @@ export default class TextForm extends Component {
             this.props.hasDelete) && (
             <button
               className="btn btn-danger btn-lg"
-              onClick={(event) => this.props.deleteHandler(event, sectionName)}
+              onClick={(event) =>
+                this.props.deleteHandler(event, sectionName, this.props.index)
+              }
               style={{ width: "50%" }}
             >
               Delete
