@@ -16,7 +16,9 @@ const ImageForm = ({
     console.log(elem);
     return (
       <Col key={index}>
+
         {elem && <p>{elem.name}</p>}
+
         {elem && (
           <div className="box">
             {imagePreviewUrl[index] &&
