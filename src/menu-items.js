@@ -59,6 +59,14 @@ export default {
           icon: "feather icon-sidebar",
         },
         {
+          id: "Product Category",
+          title: "Category",
+          type: "item",
+          url: "/ProductCategory",
+          classes: "nav-item",
+          icon: "feather icon-sidebar",
+        },
+        {
           id: "Site-content",
           title: "Site Content",
           type: "collapse",

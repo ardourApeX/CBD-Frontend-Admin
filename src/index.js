@@ -16,6 +16,7 @@ import blogReducer from "./store/reducers/blogReducer";
 import keywordReducer from "./store/reducers/keywordReducer";
 import bannerReducer from "./store/reducers/bannerReducer";
 import learnReducer from "./store/reducers/learnReducer";
+import productCategoryReducer from "./store/reducers/productCategoryReducer";
 
 const rootReducer = combineReducers({
   keywordReducer,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   learnReducer,
   userReducer: userReducer,
   withTheme: defaultreducer,
+  productCategoryReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
