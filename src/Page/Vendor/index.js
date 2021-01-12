@@ -1,72 +1,29 @@
 import React from "react";
 import { useEffect } from "react";
 import { connect } from "react-redux";
-import * as actionCreators from "../../store/actions/productCategory";
+import * as actionCreators from "../../store/actions/vendor";
 import cogoToast from "cogo-toast";
 import { useState } from "react";
 import { Spinner } from "react-bootstrap";
 import Table from "../../App/components/CategoryTable";
 import { PlusOutlined } from "@ant-design/icons";
-import { Form, Input, Select, Button, Modal } from "antd";
+import { Form, Input, Button, Modal, InputNumber } from "antd";
 import "antd/dist/antd.css";
 import { useRef } from "react";
 import { ExportCSV } from "../../App/components/ExportCsv";
 import ReactToPdf from "react-to-pdf";
 import ReactToPrint from "react-to-print";
 
-const { Option } = Select;
-
-const countries = [
-  "Hong Kong",
-  "Japan",
-  "Republic of Korea",
-  "Singapore",
-  "Taiwan",
-  "Thailand",
-  "Andorra",
-  "Austria",
-  "Belgium",
-  "Bulgaria",
-  "Cyprus",
-  "Czech",
-  "Denmark",
-  "Estonia",
-  "Finland",
-  "France",
-  "Germany",
-  "Greece",
-  "Iceland",
-  "Ireland",
-  "Italy",
-  "Latvia",
-  "Lithuania",
-  "Luxembourg",
-  "Malta",
-  "Monaco",
-  "Netherlands",
-  "Norway",
-  "Poland",
-  "Portugal",
-  "Romania",
-  "San Marino",
-  "Slovak Republic",
-  "Slovenia",
-  "Spain",
-  "Sweden",
-  "Switzerland",
-  "United Kingdom",
-];
-
-const ProductCategory = ({ categories, get, add, deletee, edit }) => {
-  const [productCategories, setProductCategories] = useState([]);
+const Vendor = ({ vendors, get, add, deletee, edit }) => {
+  console.log(vendors);
+  const [vendorsList, setVendorsList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
-  const [categoryId, setCategoryId] = useState("");
+  const [vendorId, setVendorId] = useState("");
   const ref = useRef();
   const ref1 = useRef();
   const [pdf, setPdf] = useState(true);
-  console.log(categories);
   const options = {
     orientation: "landscape",
     unit: "in",
@@ -85,13 +42,13 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
       });
   }, [get]);
   useEffect(() => {
-    setProductCategories(categories);
-  }, [categories]);
+    setVendorsList(vendors);
+  }, [vendors]);
   const onFinish = (values) => {
     setOpen(false);
     setLoading(true);
     console.log(values);
-    categoryId === ""
+    vendorId === ""
       ? add(values)
           .then((result) => {
             setLoading(false);
@@ -101,11 +58,11 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
             setLoading(false);
             cogoToast.error(err);
           })
-      : edit(values, categoryId)
+      : edit(values, vendorId)
           .then((result) => {
             setLoading(false);
             cogoToast.success(result);
-            setCategoryId("");
+            setVendorId("");
           })
           .catch((err) => {
             setLoading(false);
@@ -118,7 +75,7 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
     form.resetFields();
   };
 
-  const removeCategory = (id) => {
+  const removeVendor = (id) => {
     setLoading(true);
     deletee(id)
       .then((result) => {
@@ -134,17 +91,15 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
   const closeModal = () => {
     form.resetFields();
     setOpen(false);
-    setCategoryId("");
+    setVendorId("");
   };
 
-  const editCategory = (id) => {
-    setCategoryId(id);
-    let category = categories.filter((item) => item._id === id)[0];
+  const editVendor = (id) => {
+    setVendorId(id);
+    let vendor = vendors.filter((item) => item._id === id)[0];
     form.setFieldsValue({
-      categorytitle: category.categorytitle,
-      categorydescription: category.catdescription,
-      parentid: category.parentid ? category.parentid : 0,
-      country: category.blockedcountries,
+      vendorname: vendor.vendorname,
+      vendorid: vendor.vendorid,
     });
     setOpen(true);
   };
@@ -175,18 +130,17 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
           type="primary"
         >
           <PlusOutlined style={{ marginRight: "10px" }} />
-          Add Category
+          Add Vendor
         </Button>
       </div>
       <ExportCSV
-        csvData={productCategories.map((item) => {
+        csvData={vendorsList.map((item) => {
           return {
-            "Sno.": item.categoryid,
-            Name: item.categorytitle,
-            Description: item.catdescription,
+            "Sno.": item.vendorid,
+            Name: item.vendorname,
           };
         })}
-        fileName="All Categories"
+        fileName="All Vendors"
       />
       <ReactToPdf
         x={0}
@@ -195,7 +149,7 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
         onComplete={() => setPdf(true)}
         options={options}
         targetRef={ref1}
-        filename="All Categories.pdf"
+        filename="All Vendors.pdf"
       >
         {({ toPdf }) => (
           <Button
@@ -222,18 +176,18 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
       />
       <div ref={ref1}>
         <Table
-          onEdit={editCategory}
-          onDelete={removeCategory}
-          data={productCategories}
+          onEdit={editVendor}
+          onDelete={removeVendor}
+          data={vendorsList}
           setPdf={pdf}
           ref={ref}
-          columns={["categoryid", "categorytitle", "catdescription"]}
-          titles={["ID", "Name", "Description"]}
+          columns={["vendorid", "vendorname"]}
+          titles={["ID", "Name"]}
         />
       </div>
       <Modal
         visible={open}
-        title={categoryId !== "" ? "Edit Category" : "Add Category"}
+        title={vendorId !== "" ? "Edit Vendor" : "Add Vendor"}
         onCancel={closeModal}
         footer={[
           <Button key="back" onClick={closeModal}>
@@ -249,52 +203,30 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-            label="Name"
-            name="categorytitle"
+            label="Vendor ID"
+            name="vendorid"
             rules={[
               {
                 required: true,
-                message: "Please input Category Name!",
+                message: "Please input Vendor Id!",
+              },
+            ]}
+          >
+            <InputNumber />
+          </Form.Item>
+          <Form.Item
+            label="Vendor Name"
+            name="vendorname"
+            rules={[
+              {
+                required: true,
+                message: "Please input Vendor Name!",
               },
             ]}
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            name="categorydescription"
-            label="Description"
-            rules={[
-              {
-                required: true,
-                message: "Please input Description!",
-              },
-            ]}
-          >
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item initialValue={0} label="Parent Category" name="parentid">
-            <Select>
-              <Option value={0}>Please Select</Option>
-              {categories.map((category) => (
-                <Option key={category._id} value={category.categoryid}>
-                  {category.categorytitle}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item initialValue={[]} label="Blocked Countries" name="country">
-            <Select
-              mode="multiple"
-              placeholder="Please Select Countries to be Blocked"
-              style={{ width: "100%" }}
-            >
-              {countries.map((country, index) => (
-                <Option key={`${country} ${index}`} value={country}>
-                  {country}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Submit
@@ -308,7 +240,7 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
 
 const mapStateToProps = (state) => {
   return {
-    categories: state.productCategoryReducer.data,
+    vendors: state.vendorReducer.data,
   };
 };
 
@@ -321,4 +253,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductCategory);
+export default connect(mapStateToProps, mapDispatchToProps)(Vendor);

@@ -17,6 +17,11 @@ import keywordReducer from "./store/reducers/keywordReducer";
 import bannerReducer from "./store/reducers/bannerReducer";
 import learnReducer from "./store/reducers/learnReducer";
 import productCategoryReducer from "./store/reducers/productCategoryReducer";
+import vendorReducer from "./store/reducers/vendorReducer";
+import packageTypeReducer from "./store/reducers/packageTypeReducer";
+import productReducer from "./store/reducers/productReducer";
+import reviewReducer from "./store/reducers/reviewReducer";
+import couponReducer from "./store/reducers/couponReducer";
 
 const rootReducer = combineReducers({
   keywordReducer,
@@ -29,6 +34,11 @@ const rootReducer = combineReducers({
   userReducer: userReducer,
   withTheme: defaultreducer,
   productCategoryReducer,
+  vendorReducer,
+  packageTypeReducer,
+  productReducer,
+  reviewReducer,
+  couponReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

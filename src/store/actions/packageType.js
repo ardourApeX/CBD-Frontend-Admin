@@ -5,13 +5,13 @@ import { BACK_END_URL } from "../../utilities/Axios/url";
 
 export const get = () => {
   return (dispatch) => {
-    return Axios.get(`${BACK_END_URL}/categories/getCategories`)
+    return Axios.get(`${BACK_END_URL}/packagetype/getAll`)
       .then((result) => {
         dispatch({
-          type: actionTypes.GET_PRODUCT_CATEGORY,
-          data: result.data.categories,
+          type: actionTypes.GET_PACKAGE_TYPE,
+          data: result.data.package,
         });
-        return `Categories Fetched Successfully`;
+        return `Package Types Fetched Successfully`;
       })
       .catch((err) => {
         console.log(err);
@@ -22,16 +22,13 @@ export const get = () => {
 
 export const add = (data) => {
   return (dispatch) => {
-    return Axios.post(`${BACK_END_URL}/categories/add`, {
-      ...data,
-      categoryslug: data.categorytitle.replace(/\s+/g, `-`).toLowerCase(),
-    })
+    return Axios.post(`${BACK_END_URL}/packagetype/addPackageType`, data)
       .then((result) => {
         dispatch({
-          type: actionTypes.ADD_PRODUCT_CATEGORY,
-          data: result.data.category,
+          type: actionTypes.ADD_PACKAGE_TYPE,
+          data: result.data.package,
         });
-        return `Category Added Successfully`;
+        return `Package Type Added Successfully`;
       })
       .catch((err) => {
         console.log(err);
@@ -42,17 +39,14 @@ export const add = (data) => {
 
 export const edit = (data, id) => {
   return (dispatch) => {
-    return Axios.post(`${BACK_END_URL}/categories/edit/${id}`, {
-      ...data,
-      categoryslug: data.categorytitle.replace(/\s+/g, `-`).toLowerCase(),
-    })
+    return Axios.post(`${BACK_END_URL}/packagetype/editPackageType/${id}`, data)
       .then((result) => {
         console.log(result);
         dispatch({
-          type: actionTypes.UPDATE_PRODUCT_CATEGORY,
-          data: result.data.category,
+          type: actionTypes.UPDATE_PACKAGE_TYPE,
+          data: result.data.package,
         });
-        return `Category Edited Successfully`;
+        return `Package Type Edited Successfully`;
       })
       .catch((err) => {
         console.log(err);
@@ -63,13 +57,13 @@ export const edit = (data, id) => {
 
 export const deletee = (id) => {
   return (dispatch) => {
-    return Axios.delete(`${BACK_END_URL}/categories/${id}`)
+    return Axios.delete(`${BACK_END_URL}/packagetype/deletePackageType/${id}`)
       .then((result) => {
         dispatch({
-          type: actionTypes.DELETE_PRODUCT_CATEGORY,
+          type: actionTypes.DELETE_PACKAGE_TYPE,
           data: id,
         });
-        return `Category Deleted Successfully`;
+        return `Package Type Deleted Successfully`;
       })
       .catch((err) => {
         console.log(err);

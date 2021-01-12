@@ -5,13 +5,13 @@ import { BACK_END_URL } from "../../utilities/Axios/url";
 
 export const get = () => {
   return (dispatch) => {
-    return Axios.get(`${BACK_END_URL}/categories/getCategories`)
+    return Axios.get(`${BACK_END_URL}/vendor/getAll`)
       .then((result) => {
         dispatch({
-          type: actionTypes.GET_PRODUCT_CATEGORY,
-          data: result.data.categories,
+          type: actionTypes.GET_VENDOR,
+          data: result.data.vendor,
         });
-        return `Categories Fetched Successfully`;
+        return `Vendors Fetched Successfully`;
       })
       .catch((err) => {
         console.log(err);
@@ -22,16 +22,13 @@ export const get = () => {
 
 export const add = (data) => {
   return (dispatch) => {
-    return Axios.post(`${BACK_END_URL}/categories/add`, {
-      ...data,
-      categoryslug: data.categorytitle.replace(/\s+/g, `-`).toLowerCase(),
-    })
+    return Axios.post(`${BACK_END_URL}/vendor/addVendor`, data)
       .then((result) => {
         dispatch({
-          type: actionTypes.ADD_PRODUCT_CATEGORY,
-          data: result.data.category,
+          type: actionTypes.ADD_VENDOR,
+          data: result.data.vendor,
         });
-        return `Category Added Successfully`;
+        return `Vendor Added Successfully`;
       })
       .catch((err) => {
         console.log(err);
@@ -42,17 +39,14 @@ export const add = (data) => {
 
 export const edit = (data, id) => {
   return (dispatch) => {
-    return Axios.post(`${BACK_END_URL}/categories/edit/${id}`, {
-      ...data,
-      categoryslug: data.categorytitle.replace(/\s+/g, `-`).toLowerCase(),
-    })
+    return Axios.post(`${BACK_END_URL}/vendor/editVendor/${id}`, data)
       .then((result) => {
         console.log(result);
         dispatch({
-          type: actionTypes.UPDATE_PRODUCT_CATEGORY,
-          data: result.data.category,
+          type: actionTypes.UPDATE_VENDOR,
+          data: result.data.vendor,
         });
-        return `Category Edited Successfully`;
+        return `Vendor Edited Successfully`;
       })
       .catch((err) => {
         console.log(err);
@@ -63,13 +57,13 @@ export const edit = (data, id) => {
 
 export const deletee = (id) => {
   return (dispatch) => {
-    return Axios.delete(`${BACK_END_URL}/categories/${id}`)
+    return Axios.delete(`${BACK_END_URL}/vendor/${id}`)
       .then((result) => {
         dispatch({
-          type: actionTypes.DELETE_PRODUCT_CATEGORY,
+          type: actionTypes.DELETE_VENDOR,
           data: id,
         });
-        return `Category Deleted Successfully`;
+        return `Vendor Deleted Successfully`;
       })
       .catch((err) => {
         console.log(err);

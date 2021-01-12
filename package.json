@@ -12,6 +12,7 @@
 		"bootstrap": "^4.3.1",
 		"brace": "^0.11.1",
 		"cogo-toast": "^4.2.3",
+		"file-saver": "^2.0.5",
 		"font-awesome": "^4.7.0",
 		"formik": "^2.1.4",
 		"google-maps-react": "^2.0.2",
@@ -34,9 +35,11 @@
 		"react-router-dom": "^4.3.1",
 		"react-scripts": "^3.0.0",
 		"react-simple-code-editor": "^0.11.0",
+		"react-to-pdf": "0.0.13",
 		"react-window-size": "^1.2.2",
 		"redux": "^4.0.1",
 		"redux-thunk": "^2.3.0",
+		"xlsx": "^0.16.9",
 		"yup": "^0.28.3"
 	},
 	"scripts": {
@@ -56,6 +59,6 @@
 	],
 	"devDependencies": {
 		"@types/prismjs": "^1.16.1",
-		"react-to-print": "^2.1.1"
+		"react-to-print": "^2.12.2"
 	}
 }

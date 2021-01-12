@@ -1,72 +1,27 @@
 import React from "react";
 import { useEffect } from "react";
 import { connect } from "react-redux";
-import * as actionCreators from "../../store/actions/productCategory";
+import * as actionCreators from "../../store/actions/product";
 import cogoToast from "cogo-toast";
 import { useState } from "react";
 import { Spinner } from "react-bootstrap";
 import Table from "../../App/components/CategoryTable";
 import { PlusOutlined } from "@ant-design/icons";
-import { Form, Input, Select, Button, Modal } from "antd";
+import { Form, Input, Button, Modal, InputNumber } from "antd";
 import "antd/dist/antd.css";
 import { useRef } from "react";
 import { ExportCSV } from "../../App/components/ExportCsv";
 import ReactToPdf from "react-to-pdf";
 import ReactToPrint from "react-to-print";
 
-const { Option } = Select;
-
-const countries = [
-  "Hong Kong",
-  "Japan",
-  "Republic of Korea",
-  "Singapore",
-  "Taiwan",
-  "Thailand",
-  "Andorra",
-  "Austria",
-  "Belgium",
-  "Bulgaria",
-  "Cyprus",
-  "Czech",
-  "Denmark",
-  "Estonia",
-  "Finland",
-  "France",
-  "Germany",
-  "Greece",
-  "Iceland",
-  "Ireland",
-  "Italy",
-  "Latvia",
-  "Lithuania",
-  "Luxembourg",
-  "Malta",
-  "Monaco",
-  "Netherlands",
-  "Norway",
-  "Poland",
-  "Portugal",
-  "Romania",
-  "San Marino",
-  "Slovak Republic",
-  "Slovenia",
-  "Spain",
-  "Sweden",
-  "Switzerland",
-  "United Kingdom",
-];
-
-const ProductCategory = ({ categories, get, add, deletee, edit }) => {
-  const [productCategories, setProductCategories] = useState([]);
+const Attribute = ({ attributes, get, add, deletee, edit }) => {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
-  const [categoryId, setCategoryId] = useState("");
+  const [attributeId, setattributeId] = useState("");
   const ref = useRef();
   const ref1 = useRef();
   const [pdf, setPdf] = useState(true);
-  console.log(categories);
   const options = {
     orientation: "landscape",
     unit: "in",
@@ -84,14 +39,10 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
         cogoToast.error(err);
       });
   }, [get]);
-  useEffect(() => {
-    setProductCategories(categories);
-  }, [categories]);
   const onFinish = (values) => {
     setOpen(false);
     setLoading(true);
-    console.log(values);
-    categoryId === ""
+    attributeId === ""
       ? add(values)
           .then((result) => {
             setLoading(false);
@@ -101,11 +52,11 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
             setLoading(false);
             cogoToast.error(err);
           })
-      : edit(values, categoryId)
+      : edit(values, attributeId)
           .then((result) => {
             setLoading(false);
             cogoToast.success(result);
-            setCategoryId("");
+            setattributeId("");
           })
           .catch((err) => {
             setLoading(false);
@@ -118,7 +69,7 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
     form.resetFields();
   };
 
-  const removeCategory = (id) => {
+  const removeAttribute = (id) => {
     setLoading(true);
     deletee(id)
       .then((result) => {
@@ -134,17 +85,16 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
   const closeModal = () => {
     form.resetFields();
     setOpen(false);
-    setCategoryId("");
+    setattributeId("");
   };
 
-  const editCategory = (id) => {
-    setCategoryId(id);
-    let category = categories.filter((item) => item._id === id)[0];
+  const editAttribute = (id) => {
+    setattributeId(id);
+    let attribute = attributes.filter((item) => item._id === id)[0];
+    const { name, slug } = attribute;
     form.setFieldsValue({
-      categorytitle: category.categorytitle,
-      categorydescription: category.catdescription,
-      parentid: category.parentid ? category.parentid : 0,
-      country: category.blockedcountries,
+      attributetitle: name,
+      attributeslug: slug,
     });
     setOpen(true);
   };
@@ -175,18 +125,17 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
           type="primary"
         >
           <PlusOutlined style={{ marginRight: "10px" }} />
-          Add Category
+          Add Attribute
         </Button>
       </div>
       <ExportCSV
-        csvData={productCategories.map((item) => {
+        csvData={attributes.map((item) => {
           return {
-            "Sno.": item.categoryid,
-            Name: item.categorytitle,
-            Description: item.catdescription,
+            ID: item.attributeid,
+            Name: item.name,
           };
         })}
-        fileName="All Categories"
+        fileName="All Attributes"
       />
       <ReactToPdf
         x={0}
@@ -195,7 +144,7 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
         onComplete={() => setPdf(true)}
         options={options}
         targetRef={ref1}
-        filename="All Categories.pdf"
+        filename="All Attributes.pdf"
       >
         {({ toPdf }) => (
           <Button
@@ -222,18 +171,18 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
       />
       <div ref={ref1}>
         <Table
-          onEdit={editCategory}
-          onDelete={removeCategory}
-          data={productCategories}
+          onEdit={editAttribute}
+          onDelete={removeAttribute}
+          data={attributes}
           setPdf={pdf}
           ref={ref}
-          columns={["categoryid", "categorytitle", "catdescription"]}
-          titles={["ID", "Name", "Description"]}
+          columns={["attributeid", "name", "terms"]}
+          titles={["ID", "Name", "Terms"]}
         />
       </div>
       <Modal
         visible={open}
-        title={categoryId !== "" ? "Edit Category" : "Add Category"}
+        title={attributeId !== "" ? "Edit Attribute" : "Add Attribute"}
         onCancel={closeModal}
         footer={[
           <Button key="back" onClick={closeModal}>
@@ -250,51 +199,21 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
         >
           <Form.Item
             label="Name"
-            name="categorytitle"
+            name="attributetitle"
             rules={[
               {
                 required: true,
-                message: "Please input Category Name!",
+                message: "Please input Attribute Name",
               },
             ]}
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            name="categorydescription"
-            label="Description"
-            rules={[
-              {
-                required: true,
-                message: "Please input Description!",
-              },
-            ]}
-          >
-            <Input.TextArea />
+
+          <Form.Item label="Slug" name="attributeslug">
+            <Input />
           </Form.Item>
-          <Form.Item initialValue={0} label="Parent Category" name="parentid">
-            <Select>
-              <Option value={0}>Please Select</Option>
-              {categories.map((category) => (
-                <Option key={category._id} value={category.categoryid}>
-                  {category.categorytitle}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item initialValue={[]} label="Blocked Countries" name="country">
-            <Select
-              mode="multiple"
-              placeholder="Please Select Countries to be Blocked"
-              style={{ width: "100%" }}
-            >
-              {countries.map((country, index) => (
-                <Option key={`${country} ${index}`} value={country}>
-                  {country}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Submit
@@ -308,17 +227,17 @@ const ProductCategory = ({ categories, get, add, deletee, edit }) => {
 
 const mapStateToProps = (state) => {
   return {
-    categories: state.productCategoryReducer.data,
+    attributes: state.productReducer.attributes,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    get: () => dispatch(actionCreators.get()),
-    edit: (data, id) => dispatch(actionCreators.edit(data, id)),
-    deletee: (id) => dispatch(actionCreators.deletee(id)),
-    add: (data) => dispatch(actionCreators.add(data)),
+    get: () => dispatch(actionCreators.getAttribute()),
+    edit: (data, id) => dispatch(actionCreators.editAttribute(data, id)),
+    deletee: (id) => dispatch(actionCreators.deleteAttribute(id)),
+    add: (data) => dispatch(actionCreators.addAttribute(data)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductCategory);
+export default connect(mapStateToProps, mapDispatchToProps)(Attribute);
