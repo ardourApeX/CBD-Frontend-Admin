@@ -48,6 +48,17 @@ const Category = React.lazy(() => import("./Page/Category"));
 const Blog = React.lazy(() => import("./Page/Blog"));
 const Banner = React.lazy(() => import("./Page/Banner"));
 const Learn = React.lazy(() => import("./Page/Learn"));
+const ProductCategory = React.lazy(() => import("./Page/ProductCategory"));
+const Vendor = React.lazy(() => import("./Page/Vendor"));
+const PackageType = React.lazy(() => import("./Page/PackageType"));
+const Attribute = React.lazy(() => import("./Page/Attribute"));
+const ProductList = React.lazy(() => import("./Page/ProductList"));
+const ProductForm = React.lazy(() => import("./Page/ProductForm"));
+const Review = React.lazy(() => import("./Page/Review"));
+const Coupon = React.lazy(() => import("./Page/Coupon"));
+const ComboList = React.lazy(() => import("./Page/ComboList"));
+const ComboForm = React.lazy(() => import("./Page/ComboForm"));
+
 const routes = [
   {
     path: "/dashboard/default",
@@ -156,6 +167,84 @@ const routes = [
     exact: true,
     name: "Learn",
     component: Learn,
+  },
+  {
+    path: "/ProductCategory",
+    exact: true,
+    name: "ProductCategory",
+    component: ProductCategory,
+  },
+  {
+    path: "/Vendor",
+    exact: true,
+    name: "Vendor",
+    component: Vendor,
+  },
+  {
+    path: "/PackageType",
+    exact: true,
+    name: "PackageType",
+    component: PackageType,
+  },
+  {
+    path: "/Attribute",
+    exact: true,
+    name: "Attribute",
+    component: Attribute,
+  },
+  {
+    path: "/Attribute",
+    exact: true,
+    name: "Attribute",
+    component: Attribute,
+  },
+  {
+    path: "/ProductList",
+    exact: true,
+    name: "ProductList",
+    component: ProductList,
+  },
+  {
+    path: "/Review",
+    exact: true,
+    name: "Review",
+    component: Review,
+  },
+  {
+    path: "/Coupon",
+    exact: true,
+    name: "Coupon",
+    component: Coupon,
+  },
+  {
+    path: "/ProductForm/:type",
+    exact: true,
+    name: "ProductForm",
+    component: ProductForm,
+  },
+  {
+    path: "/ProductForm/:type/:id",
+    exact: true,
+    name: "ProductFormEdit",
+    component: ProductForm,
+  },
+  {
+    path: "/ComboList",
+    exact: true,
+    name: "ComboList",
+    component: ComboList,
+  },
+  {
+    path: "/ComboForm/:type",
+    exact: true,
+    name: "ComboForm",
+    component: ComboForm,
+  },
+  {
+    path: "/ComboForm/:type/:id",
+    exact: true,
+    name: "ComboFormEdit",
+    component: ComboForm,
   },
 
   { path: "/docs", exact: true, name: "Documentation", component: OtherDocs },

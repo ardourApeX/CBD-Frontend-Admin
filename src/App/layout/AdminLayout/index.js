@@ -15,109 +15,109 @@ import * as actionTypes from "../../../store/actions/actions";
 import "./app.scss";
 
 class AdminLayout extends Component {
-	fullScreenExitHandler = () => {
-		if (
-			!document.fullscreenElement &&
-			!document.webkitIsFullScreen &&
-			!document.mozFullScreen &&
-			!document.msFullscreenElement
-		) {
-			this.props.onFullScreenExit();
-		}
-	};
+  fullScreenExitHandler = () => {
+    if (
+      !document.fullscreenElement &&
+      !document.webkitIsFullScreen &&
+      !document.mozFullScreen &&
+      !document.msFullscreenElement
+    ) {
+      this.props.onFullScreenExit();
+    }
+  };
 
-	componentWillMount() {
-		if (
-			this.props.windowWidth > 992 &&
-			this.props.windowWidth <= 1024 &&
-			this.props.layout !== "horizontal"
-		) {
-			this.props.onComponentWillMount();
-		}
-	}
+  componentWillMount() {
+    if (
+      this.props.windowWidth > 992 &&
+      this.props.windowWidth <= 1024 &&
+      this.props.layout !== "horizontal"
+    ) {
+      this.props.onComponentWillMount();
+    }
+  }
 
-	mobileOutClickHandler() {
-		if (this.props.windowWidth < 992 && this.props.collapseMenu) {
-			this.props.onComponentWillMount();
-		}
-	}
+  mobileOutClickHandler() {
+    if (this.props.windowWidth < 992 && this.props.collapseMenu) {
+      this.props.onComponentWillMount();
+    }
+  }
 
-	render() {
-		/* full screen exit call */
-		document.addEventListener("fullscreenchange", this.fullScreenExitHandler);
-		document.addEventListener(
-			"webkitfullscreenchange",
-			this.fullScreenExitHandler
-		);
-		document.addEventListener(
-			"mozfullscreenchange",
-			this.fullScreenExitHandler
-		);
-		document.addEventListener("MSFullscreenChange", this.fullScreenExitHandler);
+  render() {
+    /* full screen exit call */
+    document.addEventListener("fullscreenchange", this.fullScreenExitHandler);
+    document.addEventListener(
+      "webkitfullscreenchange",
+      this.fullScreenExitHandler
+    );
+    document.addEventListener(
+      "mozfullscreenchange",
+      this.fullScreenExitHandler
+    );
+    document.addEventListener("MSFullscreenChange", this.fullScreenExitHandler);
 
-		const menu = routes.map((route, index) => {
-			return route.component ? (
-				<Route
-					key={index}
-					path={route.path}
-					exact={route.exact}
-					name={route.name}
-					render={(props) => <route.component {...props} />}
-				/>
-			) : null;
-		});
+    const menu = routes.map((route, index) => {
+      return route.component ? (
+        <Route
+          key={index}
+          path={route.path}
+          exact={route.exact}
+          name={route.name}
+          render={(props) => <route.component {...props} />}
+        />
+      ) : null;
+    });
 
-		return (
-			<Aux>
-				<Fullscreen enabled={this.props.isFullScreen}>
-					<Navigation />
-					<NavBar />
-					<div
-						className="pcoded-main-container"
-						onClick={() => this.mobileOutClickHandler}
-					>
-						<div className="pcoded-wrapper">
-							<div className="pcoded-content">
-								<div className="pcoded-inner-content">
-									<Breadcrumb />
-									<div className="main-body">
-										<div className="page-wrapper">
-											<Suspense fallback={<Loader />}>
-												<Switch>
-													{menu}
-													<Redirect from="/" to={this.props.defaultPath} />
-												</Switch>
-											</Suspense>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</Fullscreen>
-			</Aux>
-		);
-	}
+    return (
+      <Aux>
+        <Fullscreen enabled={this.props.isFullScreen}>
+          <Navigation />
+          <NavBar />
+          <div
+            className="pcoded-main-container"
+            onClick={() => this.mobileOutClickHandler}
+          >
+            <div className="pcoded-wrapper">
+              <div className="pcoded-content">
+                <div className="pcoded-inner-content">
+                  <Breadcrumb />
+                  <div className="main-body">
+                    <div className="page-wrapper">
+                      <Suspense fallback={<Loader />}>
+                        <Switch>
+                          {menu}
+                          <Redirect from="/" to={this.props.defaultPath} />
+                        </Switch>
+                      </Suspense>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Fullscreen>
+      </Aux>
+    );
+  }
 }
 
 const mapStateToProps = (state) => {
-	return {
-		defaultPath: state.withTheme.defaultPath,
-		isFullScreen: state.withTheme.isFullScreen,
-		collapseMenu: state.withTheme.collapseMenu,
-		configBlock: state.withTheme.configBlock,
-		layout: state.withTheme.layout,
-	};
+  return {
+    defaultPath: state.withTheme.defaultPath,
+    isFullScreen: state.withTheme.isFullScreen,
+    collapseMenu: state.withTheme.collapseMenu,
+    configBlock: state.withTheme.configBlock,
+    layout: state.withTheme.layout,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
-	return {
-		onFullScreenExit: () => dispatch({ type: actionTypes.FULL_SCREEN_EXIT }),
-		onComponentWillMount: () => dispatch({ type: actionTypes.COLLAPSE_MENU }),
-	};
+  return {
+    onFullScreenExit: () => dispatch({ type: actionTypes.FULL_SCREEN_EXIT }),
+    onComponentWillMount: () => dispatch({ type: actionTypes.COLLAPSE_MENU }),
+  };
 };
 
 export default connect(
-	mapStateToProps,
-	mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(windowSize(AdminLayout));

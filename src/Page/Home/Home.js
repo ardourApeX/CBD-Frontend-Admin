@@ -110,6 +110,8 @@ class Home extends PureComponent {
       ],
       banner: [],
       thirdSection: [{ image: "", file: "", imageName: "" }],
+      secondSection: [{ image: "", file: "", imageName: "" }],
+      fourthSection: [{ image: "", file: "", imageName: "" }],
     };
 
     this.handleImageChange = this.handleImageChange.bind(this);
