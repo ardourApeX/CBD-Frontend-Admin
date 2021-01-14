@@ -1,8 +1,9 @@
 import React from "react";
-import { Table, Space } from "antd";
+import { Table, Space, Button } from "antd";
 import "antd/dist/antd.css";
 import { CheckOutlined, DeleteFilled, EditFilled } from "@ant-design/icons";
 import { Component } from "react";
+import { Link } from "react-router-dom";
 const { Column } = Table;
 
 class CategoryTable extends Component {
@@ -29,14 +30,42 @@ class CategoryTable extends Component {
           {columns.map((column, index) => (
             <>
               <Column
-                className="antd-table"
                 title={titles[index]}
                 dataIndex={column}
                 key={titles[index]}
               />
             </>
           ))}
-          {setPdf ? (
+          {type === "attribute" ? (
+            <Column
+              title="Terms"
+              render={(text, record) => (
+                <>
+                  <ol type="1">
+                    {Object.keys(record.terms).map((term) => (
+                      <li key={record.terms[term].slug}>
+                        {record.terms[term].name}
+                      </li>
+                    ))}
+                  </ol>
+                  <Link to={`/Attribute/AttributeTerm/${record._id}`}>
+                    Configure terms
+                  </Link>
+                </>
+              )}
+            />
+          ) : null}
+          {type === "ambassador" ? (
+            <Column
+              title="Expand"
+              render={(text, record) => (
+                <>
+                  <Link to={`/Ambassador/view/${record._id}`}>View</Link>
+                </>
+              )}
+            />
+          ) : null}
+          {(onEdit || onDelete) && setPdf ? (
             <Column
               title="Actions"
               render={(text, record) => (
@@ -44,11 +73,18 @@ class CategoryTable extends Component {
                   {!record.approved && onEdit ? (
                     type === "review" ? (
                       <CheckOutlined onClick={() => onEdit(record._id)} />
+                    ) : record.status === true ? null : type ===
+                      "ambassador" ? (
+                      <Button type="primary" onClick={() => onEdit(record._id)}>
+                        Approve
+                      </Button>
                     ) : (
                       <EditFilled onClick={() => onEdit(record._id)} />
                     )
                   ) : null}
-                  <DeleteFilled onClick={() => onDelete(record._id)} />
+                  {onDelete ? (
+                    <DeleteFilled onClick={() => onDelete(record._id)} />
+                  ) : null}
                 </Space>
               )}
               key="Actions"

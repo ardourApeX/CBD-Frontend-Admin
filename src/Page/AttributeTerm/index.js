@@ -14,11 +14,12 @@ import { ExportCSV } from "../../App/components/ExportCsv";
 import ReactToPdf from "react-to-pdf";
 import ReactToPrint from "react-to-print";
 
-const Attribute = ({ attributes, get, add, deletee, edit }) => {
+const AttributeTerm = ({ get, add, deletee, edit, match }) => {
   const [loading, setLoading] = useState(true);
+  const [terms, setTerms] = useState([]);
+  const [attribute, setAttribute] = useState({});
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
-  const [attributeId, setattributeId] = useState("");
   const ref = useRef();
   const ref1 = useRef();
   const [pdf, setPdf] = useState(true);
@@ -29,10 +30,12 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
     compress: true,
   };
   useEffect(() => {
-    get()
+    get(match.params.id)
       .then((result) => {
         setLoading(false);
-        cogoToast.success(result);
+        cogoToast.success(result.message);
+        setTerms(result.terms);
+        setAttribute(result.attribute);
       })
       .catch((err) => {
         setLoading(false);
@@ -42,26 +45,16 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
   const onFinish = (values) => {
     setOpen(false);
     setLoading(true);
-    attributeId === ""
-      ? add(values)
-          .then((result) => {
-            setLoading(false);
-            cogoToast.success(result);
-          })
-          .catch((err) => {
-            setLoading(false);
-            cogoToast.error(err);
-          })
-      : edit(values, attributeId)
-          .then((result) => {
-            setLoading(false);
-            cogoToast.success(result);
-            setattributeId("");
-          })
-          .catch((err) => {
-            setLoading(false);
-            cogoToast.error(err);
-          });
+    console.log(values);
+    add(values)
+      .then((result) => {
+        setLoading(false);
+        cogoToast.success(result);
+      })
+      .catch((err) => {
+        setLoading(false);
+        cogoToast.error(err);
+      });
     form.resetFields();
   };
   const onFinishFailed = (errorInfo) => {
@@ -69,7 +62,7 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
     form.resetFields();
   };
 
-  const removeAttribute = (id) => {
+  const removeAttributeTerm = (id) => {
     setLoading(true);
     deletee(id)
       .then((result) => {
@@ -85,19 +78,8 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
   const closeModal = () => {
     form.resetFields();
     setOpen(false);
-    setattributeId("");
   };
 
-  const editAttribute = (id) => {
-    setattributeId(id);
-    let attribute = attributes.filter((item) => item._id === id)[0];
-    const { name, slug } = attribute;
-    form.setFieldsValue({
-      attributetitle: name,
-      attributeslug: slug,
-    });
-    setOpen(true);
-  };
   return loading ? (
     <div>
       <Spinner
@@ -125,17 +107,17 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
           type="primary"
         >
           <PlusOutlined style={{ marginRight: "10px" }} />
-          Add Attribute
+          Add Attribute Term
         </Button>
       </div>
       <ExportCSV
-        csvData={attributes.map((item) => {
+        csvData={Object.keys(terms).map((item) => {
           return {
-            ID: item.attributeid,
-            Name: item.name,
+            "Sno.": item.vendorid,
+            Name: item.vendorname,
           };
         })}
-        fileName="All Attributes"
+        fileName="All Attribute Terms"
       />
       <ReactToPdf
         x={0}
@@ -144,7 +126,7 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
         onComplete={() => setPdf(true)}
         options={options}
         targetRef={ref1}
-        filename="All Attributes.pdf"
+        filename="All Attribute Terms.pdf"
       >
         {({ toPdf }) => (
           <Button
@@ -171,19 +153,17 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
       />
       <div ref={ref1}>
         <Table
-          onEdit={editAttribute}
-          onDelete={removeAttribute}
-          data={attributes}
+          onDelete={removeAttributeTerm}
+          data={Object.keys(terms).map((slug) => terms[slug])}
           setPdf={pdf}
           ref={ref}
-          columns={["attributeid", "name"]}
-          titles={["ID", "Name"]}
-          type="attribute"
+          columns={["name", "slug", "description"]}
+          titles={["Name", "Slug", "Description"]}
         />
       </div>
       <Modal
         visible={open}
-        title={attributeId !== "" ? "Edit Attribute" : "Add Attribute"}
+        title={"Add New Attribute Term"}
         onCancel={closeModal}
         footer={[
           <Button key="back" onClick={closeModal}>
@@ -199,19 +179,27 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-            label="Name"
-            name="attributetitle"
+            label="Vendor ID"
+            name="vendorid"
             rules={[
               {
                 required: true,
-                message: "Please input Attribute Name",
+                message: "Please input Vendor Id!",
               },
             ]}
           >
-            <Input />
+            <InputNumber />
           </Form.Item>
-
-          <Form.Item label="Slug" name="attributeslug">
+          <Form.Item
+            label="Vendor Name"
+            name="vendorname"
+            rules={[
+              {
+                required: true,
+                message: "Please input Vendor Name!",
+              },
+            ]}
+          >
             <Input />
           </Form.Item>
 
@@ -228,17 +216,17 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
 
 const mapStateToProps = (state) => {
   return {
-    attributes: state.productReducer.attributes,
+    attributeTerms: state.productReducer.attributeTerms,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    get: () => dispatch(actionCreators.getAttribute()),
-    edit: (data, id) => dispatch(actionCreators.editAttribute(data, id)),
-    deletee: (id) => dispatch(actionCreators.deleteAttribute(id)),
-    add: (data) => dispatch(actionCreators.addAttribute(data)),
+    get: (id) => dispatch(actionCreators.getAttributeTerms(id)),
+    // edit: (data, id) => dispatch(actionCreators.edit(data, id)),
+    // deletee: (id) => dispatch(actionCreators.deletee(id)),
+    // add: (data) => dispatch(actionCreators.add(data)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Attribute);
+export default connect(mapStateToProps, mapDispatchToProps)(AttributeTerm);
