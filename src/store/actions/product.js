@@ -20,6 +20,24 @@ export const getAttribute = () => {
   };
 };
 
+export const getAttributeTerms = (id) => {
+  return (dispatch) => {
+    return Axios.get(`${BACK_END_URL}/products/get-attribute-term/${id}`)
+      .then((result) => {
+        console.log(result);
+        return {
+          message: `Attribute Terms Fetched Successfully`,
+          attribute: result.data.attributes,
+          terms: result.data.keys,
+        };
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
 export const addAttribute = (data) => {
   return (dispatch) => {
     return Axios.post(`${BACK_END_URL}/products/add-attribute`, data)
@@ -262,6 +280,56 @@ export const removeComboImage = (data, type) => {
         return {
           message: `Image Deleted Successfully`,
           data: result.data.data,
+        };
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
+export const getSubscribedProducts = () => {
+  return (dispatch) => {
+    return Axios.get(`${BACK_END_URL}/allSubscribedProducts`)
+      .then((result) => {
+        console.log(result);
+        dispatch({
+          type: actionTypes.GET_SUBSCRIBED_PRODUCTS,
+          data: result.data.products,
+        });
+        return `Subscribed Products Fetched Successfully`;
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
+export const getWishlists = () => {
+  return (dispatch) => {
+    return Axios.get(`${BACK_END_URL}/wishlist/allWishlist`)
+      .then((result) => {
+        console.log(result);
+        return {
+          data: result.data.wishlists,
+          message: "Wishlists Added Successfully",
+        };
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
+export const deleteWishlist = () => {
+  return (dispatch) => {
+    return Axios.get(`${BACK_END_URL}/wishlist/deleteWishlist/:id`)
+      .then((result) => {
+        return {
+          message: "Wishlists Deleted Successfully",
         };
       })
       .catch((err) => {

@@ -3,6 +3,8 @@ const initialState = {
   products: [],
   attributes: [],
   combos: [],
+  SubscribedProducts: [],
+  attributeTerms: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -81,6 +83,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         combos: state.combos.filter((item) => item._id !== action.data),
+      };
+    case actionTypes.GET_SUBSCRIBED_PRODUCTS:
+      return {
+        ...state,
+        subscribedProducts: action.data,
       };
     default:
       return state;

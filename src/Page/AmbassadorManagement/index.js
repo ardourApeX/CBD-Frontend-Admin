@@ -1,24 +1,25 @@
 import React from "react";
 import { useEffect } from "react";
 import { connect } from "react-redux";
-import * as actionCreators from "../../store/actions/product";
+import * as actionCreators from "../../store/actions/affiliation";
 import cogoToast from "cogo-toast";
 import { useState } from "react";
 import { Spinner } from "react-bootstrap";
 import Table from "../../App/components/CategoryTable";
 import { PlusOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Modal, InputNumber } from "antd";
+import { Form, Input, Button, Modal, InputNumber, Select } from "antd";
 import "antd/dist/antd.css";
 import { useRef } from "react";
 import { ExportCSV } from "../../App/components/ExportCsv";
 import ReactToPdf from "react-to-pdf";
 import ReactToPrint from "react-to-print";
+import { Option } from "antd/lib/mentions";
 
-const Attribute = ({ attributes, get, add, deletee, edit }) => {
+const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
+  console.log(ambassadors);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
-  const [attributeId, setattributeId] = useState("");
   const ref = useRef();
   const ref1 = useRef();
   const [pdf, setPdf] = useState(true);
@@ -42,26 +43,16 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
   const onFinish = (values) => {
     setOpen(false);
     setLoading(true);
-    attributeId === ""
-      ? add(values)
-          .then((result) => {
-            setLoading(false);
-            cogoToast.success(result);
-          })
-          .catch((err) => {
-            setLoading(false);
-            cogoToast.error(err);
-          })
-      : edit(values, attributeId)
-          .then((result) => {
-            setLoading(false);
-            cogoToast.success(result);
-            setattributeId("");
-          })
-          .catch((err) => {
-            setLoading(false);
-            cogoToast.error(err);
-          });
+    console.log(values);
+    add({ ...values, reactData: true })
+      .then((result) => {
+        setLoading(false);
+        cogoToast.success(result);
+      })
+      .catch((err) => {
+        setLoading(false);
+        cogoToast.error(err);
+      });
     form.resetFields();
   };
   const onFinishFailed = (errorInfo) => {
@@ -69,7 +60,7 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
     form.resetFields();
   };
 
-  const removeAttribute = (id) => {
+  const removeAmbassador = (id) => {
     setLoading(true);
     deletee(id)
       .then((result) => {
@@ -85,18 +76,20 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
   const closeModal = () => {
     form.resetFields();
     setOpen(false);
-    setattributeId("");
   };
 
-  const editAttribute = (id) => {
-    setattributeId(id);
-    let attribute = attributes.filter((item) => item._id === id)[0];
-    const { name, slug } = attribute;
-    form.setFieldsValue({
-      attributetitle: name,
-      attributeslug: slug,
-    });
-    setOpen(true);
+  const editAmbassador = (id) => {
+    console.log(id);
+    setLoading(true);
+    edit(id)
+      .then((result) => {
+        setLoading(false);
+        cogoToast.success(true);
+      })
+      .catch((err) => {
+        setLoading(false);
+        cogoToast.error(err.message);
+      });
   };
   return loading ? (
     <div>
@@ -125,17 +118,21 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
           type="primary"
         >
           <PlusOutlined style={{ marginRight: "10px" }} />
-          Add Attribute
+          Add Ambassador
         </Button>
       </div>
       <ExportCSV
-        csvData={attributes.map((item) => {
+        csvData={ambassadors.map((item) => {
           return {
-            ID: item.attributeid,
-            Name: item.name,
+            Email: item.email,
+            "Phone Number": item.phonenumber,
+            "Created On": item.createdon,
+            ID: item.ambass_id,
+            Extention: item.extention,
+            Approved: item.status ? "True" : "False",
           };
         })}
-        fileName="All Attributes"
+        fileName="All ambassadors"
       />
       <ReactToPdf
         x={0}
@@ -144,7 +141,7 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
         onComplete={() => setPdf(true)}
         options={options}
         targetRef={ref1}
-        filename="All Attributes.pdf"
+        filename="All ambassadors.pdf"
       >
         {({ toPdf }) => (
           <Button
@@ -171,19 +168,44 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
       />
       <div ref={ref1}>
         <Table
-          onEdit={editAttribute}
-          onDelete={removeAttribute}
-          data={attributes}
+          onEdit={editAmbassador}
+          onDelete={removeAmbassador}
+          type="ambassador"
+          data={ambassadors.map((item) => {
+            return {
+              email: item.email,
+              phonenumber: item.phonenumber,
+              createdon: item.createdon,
+              ambass_id: item.ambass_id,
+              extention: item.extention,
+              approvedAmbassador: item.status ? "True" : "False",
+              status: item.status,
+              _id: item._id,
+            };
+          })}
           setPdf={pdf}
           ref={ref}
-          columns={["attributeid", "name"]}
-          titles={["ID", "Name"]}
-          type="attribute"
+          columns={[
+            "email",
+            "phonenumber",
+            "createdon",
+            "ambass_id",
+            "extention",
+            "approvedAmbassador",
+          ]}
+          titles={[
+            "Email",
+            "Phone Number",
+            "Created On",
+            "ID",
+            "Extention",
+            "Approved",
+          ]}
         />
       </div>
       <Modal
         visible={open}
-        title={attributeId !== "" ? "Edit Attribute" : "Add Attribute"}
+        title={"Add Ambassador"}
         onCancel={closeModal}
         footer={[
           <Button key="back" onClick={closeModal}>
@@ -199,20 +221,42 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-            label="Name"
-            name="attributetitle"
+            label="Email"
+            name="email"
             rules={[
               {
                 required: true,
-                message: "Please input Attribute Name",
+                message: "Please Enter Email",
               },
             ]}
           >
             <Input />
           </Form.Item>
-
-          <Form.Item label="Slug" name="attributeslug">
+          <Form.Item label="First Name" name="firstname">
             <Input />
+          </Form.Item>
+
+          <Form.Item label="Last Name" name="lastname">
+            <Input />
+          </Form.Item>
+
+          <Form.Item label="Profession" name="profession">
+            <Input />
+          </Form.Item>
+
+          <Form.Item label="Password" name="password">
+            <Input type="password" />
+          </Form.Item>
+
+          <Form.Item label="Confirm Password" name="password2">
+            <Input type="password" />
+          </Form.Item>
+
+          <Form.Item label="Status" name="status" initialValue="false">
+            <Select>
+              <Option value="false">Inactive</Option>
+              <Option value="true">Active</Option>
+            </Select>
           </Form.Item>
 
           <Form.Item>
@@ -228,17 +272,20 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
 
 const mapStateToProps = (state) => {
   return {
-    attributes: state.productReducer.attributes,
+    ambassadors: state.ambassadorReducer.ambassadors,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    get: () => dispatch(actionCreators.getAttribute()),
-    edit: (data, id) => dispatch(actionCreators.editAttribute(data, id)),
-    deletee: (id) => dispatch(actionCreators.deleteAttribute(id)),
-    add: (data) => dispatch(actionCreators.addAttribute(data)),
+    get: () => dispatch(actionCreators.getAmbassadors()),
+    edit: (id) => dispatch(actionCreators.editAmbassador(id)),
+    deletee: (id) => dispatch(actionCreators.deleteAmbassador(id)),
+    add: (data) => dispatch(actionCreators.addAmbassador(data)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Attribute);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AmbassadorManagement);

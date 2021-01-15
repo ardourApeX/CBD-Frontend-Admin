@@ -58,6 +58,18 @@ const Review = React.lazy(() => import("./Page/Review"));
 const Coupon = React.lazy(() => import("./Page/Coupon"));
 const ComboList = React.lazy(() => import("./Page/ComboList"));
 const ComboForm = React.lazy(() => import("./Page/ComboForm"));
+const SubscribedProducts = React.lazy(() =>
+  import("./Page/SubscribedProducts")
+);
+const AttributeTerm = React.lazy(() => import("./Page/AttributeTerm"));
+const Wishlist = React.lazy(() => import("./Page/Wishlist"));
+const Statistics = React.lazy(() => import("./Page/Statistics"));
+const AmbassadorManagement = React.lazy(() =>
+  import("./Page/AmbassadorManagement")
+);
+const AmbassadorView = React.lazy(() =>
+  import("./Page/AmbassadorManagement/view")
+);
 
 const routes = [
   {
@@ -245,6 +257,42 @@ const routes = [
     exact: true,
     name: "ComboFormEdit",
     component: ComboForm,
+  },
+  {
+    path: "/SubscribedProducts",
+    exact: true,
+    name: "Subscribed Products",
+    component: SubscribedProducts,
+  },
+  {
+    path: "/Attribute/AttributeTerm/:id",
+    exact: true,
+    name: "Attribute Term",
+    component: AttributeTerm,
+  },
+  {
+    path: "/Wishlist",
+    exact: true,
+    name: "Wishlist",
+    component: Wishlist,
+  },
+  {
+    path: "/Statistics",
+    exact: true,
+    name: "Statistics",
+    component: Statistics,
+  },
+  {
+    path: "/AmbassadorManagement",
+    exact: true,
+    name: "AmbassadorManagement",
+    component: AmbassadorManagement,
+  },
+  {
+    path: "/Ambassador/view/:id",
+    exact: true,
+    name: "AmbassadorManagement",
+    component: AmbassadorView,
   },
 
   { path: "/docs", exact: true, name: "Documentation", component: OtherDocs },

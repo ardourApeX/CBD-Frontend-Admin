@@ -107,7 +107,6 @@ const ProductForm = ({
       indication: product.indication,
       direction: product.direction,
       warranty: product.warranty,
-      faq: product.faqcontent.map((item) => item),
       categoryid: boolean
         ? product.categoryid
         : product.categoryid.map((item) => item._id),
@@ -125,18 +124,20 @@ const ProductForm = ({
       allingredients: product.allingredients,
       productid: product.productid.id,
     });
-    product.attributecontent.map((item, index) =>
-      form.setFieldsValue({
-        [`page_attribute[${index}][title]`]: item.title,
-        [`page_attribute[${index}][description]`]: item.description,
-      })
-    );
-    product.faqcontent.map((item, index) =>
-      form.setFieldsValue({
-        [`faq[${index}][title]`]: item.title,
-        [`faq[${index}][description]`]: item.description,
-      })
-    );
+    product.attributecontent &&
+      product.attributecontent.map((item, index) =>
+        form.setFieldsValue({
+          [`page_attribute[${index}][title]`]: item.title,
+          [`page_attribute[${index}][description]`]: item.description,
+        })
+      );
+    product.faqcontent &&
+      product.faqcontent.map((item, index) =>
+        form.setFieldsValue({
+          [`faq[${index}][title]`]: item.title,
+          [`faq[${index}][description]`]: item.description,
+        })
+      );
   };
   const onFinish = (values) => {
     const { menuImage, sectionaImage, sectionbImage, galleryImage } = image;
