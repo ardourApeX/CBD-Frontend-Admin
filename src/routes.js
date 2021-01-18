@@ -70,6 +70,12 @@ const AmbassadorManagement = React.lazy(() =>
 const AmbassadorView = React.lazy(() =>
   import("./Page/AmbassadorManagement/view")
 );
+const Referral = React.lazy(() => import("./Page/Referral"));
+const Orders = React.lazy(() => import("./Page/Orders"));
+const Creatives = React.lazy(() => import("./Page/Creatives"));
+const OrderView = React.lazy(() => import("./Page/Orders/view"));
+const Users = React.lazy(() => import("./Page/Users"));
+const FooterMenu = React.lazy(() => import("./Page/FooterMenu"));
 
 const routes = [
   {
@@ -289,10 +295,46 @@ const routes = [
     component: AmbassadorManagement,
   },
   {
-    path: "/Ambassador/view/:id",
+    path: "/:type/view/:id",
     exact: true,
     name: "AmbassadorManagement",
     component: AmbassadorView,
+  },
+  {
+    path: "/Referrals",
+    exact: true,
+    name: "Referral",
+    component: Referral,
+  },
+  {
+    path: "/Orders",
+    exact: true,
+    name: "Orders",
+    component: Orders,
+  },
+  {
+    path: "/Order/:id",
+    exact: true,
+    name: "Orders View",
+    component: OrderView,
+  },
+  {
+    path: "/Creatives",
+    exact: true,
+    name: "Creatives",
+    component: Creatives,
+  },
+  {
+    path: "/Users",
+    exact: true,
+    name: "Users",
+    component: Users,
+  },
+  {
+    path: "/FooterMenu",
+    exact: true,
+    name: "FooterMenu",
+    component: FooterMenu,
   },
 
   { path: "/docs", exact: true, name: "Documentation", component: OtherDocs },

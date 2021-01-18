@@ -15,7 +15,14 @@ import ReactToPdf from "react-to-pdf";
 import ReactToPrint from "react-to-print";
 import { Option } from "antd/lib/mentions";
 
-const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
+const AmbassadorManagement = ({
+  ambassadors,
+  get,
+  add,
+  deletee,
+  edit,
+  disapprove,
+}) => {
   console.log(ambassadors);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -78,18 +85,29 @@ const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
     setOpen(false);
   };
 
-  const editAmbassador = (id) => {
-    console.log(id);
+  const editAmbassador = (id, type) => {
     setLoading(true);
-    edit(id)
-      .then((result) => {
-        setLoading(false);
-        cogoToast.success(true);
-      })
-      .catch((err) => {
-        setLoading(false);
-        cogoToast.error(err.message);
-      });
+    if (type === "approve") {
+      edit(id)
+        .then((result) => {
+          setLoading(false);
+          cogoToast.success(result);
+        })
+        .catch((err) => {
+          setLoading(false);
+          cogoToast.error(err.message);
+        });
+    } else {
+      disapprove(id)
+        .then((result) => {
+          setLoading(false);
+          cogoToast.success(result);
+        })
+        .catch((err) => {
+          setLoading(false);
+          cogoToast.error(err.message);
+        });
+    }
   };
   return loading ? (
     <div>
@@ -175,7 +193,7 @@ const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
             return {
               email: item.email,
               phonenumber: item.phonenumber,
-              createdon: item.createdon,
+              createdon: new Date(item.createdon).toUTCString(),
               ambass_id: item.ambass_id,
               extention: item.extention,
               approvedAmbassador: item.status ? "True" : "False",
@@ -282,6 +300,7 @@ const mapDispatchToProps = (dispatch) => {
     edit: (id) => dispatch(actionCreators.editAmbassador(id)),
     deletee: (id) => dispatch(actionCreators.deleteAmbassador(id)),
     add: (data) => dispatch(actionCreators.addAmbassador(data)),
+    disapprove: (id) => dispatch(actionCreators.disapproveAmbassador(id)),
   };
 };
 

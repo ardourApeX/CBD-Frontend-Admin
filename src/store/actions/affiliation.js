@@ -50,14 +50,54 @@ export const getAmbassadors = () => {
   };
 };
 
-export const getAmbassadorDetails = (id) => {
+export const getAmbassadorDetails = (id, type) => {
   return (dispatch) => {
-    return Axios.get(`${BACK_END_URL}/ambassador-portal/viewAmbassador/${id}`)
+    let url;
+    if (type === "Ambassador") {
+      url = `${BACK_END_URL}/ambassador-portal/viewAmbassador/${id}`;
+    } else {
+      url = `${BACK_END_URL}/ambassador-portal/referalView/${id}`;
+    }
+    return Axios.get(url)
       .then((result) => {
+        console.log(result);
         return {
-          message: `Ambassadors Details Fetched Successfully`,
+          message: `Details Fetched Successfully`,
           data: result.data.user,
         };
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
+export const getReferals = () => {
+  return (dispatch) => {
+    return Axios.get(`${BACK_END_URL}/ambassador-portal/getReferals`)
+      .then((result) => {
+        return {
+          message: `Referrals Fetched Successfully`,
+          data: result.data.data,
+        };
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
+export const getCreatives = () => {
+  return (dispatch) => {
+    return Axios.get(`${BACK_END_URL}/ambassador-portal/getCreatives`)
+      .then((result) => {
+        dispatch({
+          type: actionTypes.GET_CREATIVES,
+          data: result.data.creatives,
+        });
+        return `Creatives Fetched Successfully`;
       })
       .catch((err) => {
         console.log(err);
@@ -75,6 +115,26 @@ export const addAmbassador = (data) => {
           data: result.data.data,
         });
         return `Ambassador Added Successfully`;
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
+export const addCreative = (data) => {
+  return (dispatch) => {
+    return Axios.post(
+      `${BACK_END_URL}/ambassador-portal/creatives/add-creative`,
+      data
+    )
+      .then((result) => {
+        dispatch({
+          type: actionTypes.ADD_CREATIVE,
+          data: result.data.creative,
+        });
+        return `Creative Added Successfully`;
       })
       .catch((err) => {
         console.log(err);
@@ -103,6 +163,26 @@ export const editAmbassador = (id) => {
   };
 };
 
+export const disapproveAmbassador = (id) => {
+  return (dispatch) => {
+    return Axios.get(
+      `${BACK_END_URL}/ambassador-portal/disapproveAmbassador/${id}`
+    )
+      .then((result) => {
+        console.log(result);
+        dispatch({
+          type: actionTypes.UPDATE_AMBASSADOR,
+          data: result.data.data,
+        });
+        return `Ambassador Disapproved Successfully`;
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
 export const deleteAmbassador = (id) => {
   return (dispatch) => {
     return Axios.delete(`${BACK_END_URL}/ambassador-portal/delete/${id}`)
@@ -112,6 +192,41 @@ export const deleteAmbassador = (id) => {
           data: id,
         });
         return `Ambassador Deleted Successfully`;
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
+export const deleteCreative = (id) => {
+  return (dispatch) => {
+    return Axios.get(`${BACK_END_URL}/ambassador-portal/creatives/delete/${id}`)
+      .then((result) => {
+        dispatch({
+          type: actionTypes.DELETE_CREATIVE,
+          data: id,
+        });
+        return `Creative Deleted Successfully`;
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
+export const makePayment = (id, _id) => {
+  return (dispatch) => {
+    return Axios.get(
+      `${BACK_END_URL}/ambassador-portal/makePayment/${id}/${_id}`
+    )
+      .then((result) => {
+        return {
+          message: `Payment Made Successfully`,
+          data: result.data.user,
+        };
       })
       .catch((err) => {
         console.log(err);

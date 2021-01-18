@@ -1,6 +1,7 @@
 import * as actionTypes from "../actions/actions";
 const initialState = {
   ambassadors: [],
+  creatives: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -32,7 +33,21 @@ const reducer = (state = initialState, action) => {
           (item) => item._id !== action.data
         ),
       };
-
+    case actionTypes.GET_CREATIVES:
+      return {
+        ...state,
+        creatives: action.data,
+      };
+    case actionTypes.ADD_CREATIVE:
+      return {
+        ...state,
+        creatives: [...state.creatives, action.data],
+      };
+    case actionTypes.DELETE_CREATIVE:
+      return {
+        ...state,
+        creatives: state.creatives.filter((item) => item._id !== action.data),
+      };
     default:
       return state;
   }

@@ -12,9 +12,8 @@ import { useRef } from "react";
 import { ExportCSV } from "../../App/components/ExportCsv";
 import ReactToPdf from "react-to-pdf";
 import ReactToPrint from "react-to-print";
-import CountUp from "react-countup";
 
-const AmbassadorView = ({ get, match }) => {
+const AmbassadorView = ({ get, match, makePayment }) => {
   const [data, setData] = useState(null);
   const [generalData, setGeneralData] = useState(null);
   const [accountData, setAccountData] = useState(null);
@@ -31,66 +30,82 @@ const AmbassadorView = ({ get, match }) => {
     compress: true,
   };
   useEffect(() => {
-    get(match.params.id)
+    get(match.params.id, match.params.type)
       .then((result) => {
-        setData(result.data);
-        const data1 = result.data;
-        setGeneralData({
-          "Ambassador Id": data1.ambass_id,
-          Extention: data1.extention,
-          "First Name": data1.fname,
-          "Last Name": data1.lname,
-          Profession: data1.profession,
-          Email: data1.email,
-          Website: data1.website,
-          "Phone Number": data1.phonenumber,
-          Instagram: data1.instagram,
-          Facebook: data1.facebook,
-          "Zip Code": data1.zipcode,
-          "Network Size": data1.networksize,
-          "Why do i want to be an Ambassador": data1.why,
-          Status: data1.status ? "True" : "False",
-          "Created On": data1.createdon,
-        });
-        setAccountData({
-          Name: data1.account ? data1.account.name : "",
-          State: data1.account ? data1.account.state : "",
-          Phone: data1.account ? data1.account.phone : "",
-          City: data1.account ? data1.account.city : "",
-          Zipcode: data1.account ? data1.account.zipcode : "",
-          Fax: data1.account ? data1.account.fax : "",
-          Currency: data1.account ? data1.account.currency : "",
-          Region: data1.account ? data1.account.region : "",
-          Country: data1.account ? data1.account.country : "",
-          Address: data1.account ? data1.account.address : "",
-        });
-        setBankData({
-          "Account Number": data1.bank ? data1.bank.accountNumber : "",
-          "Payment Method": data1.bank ? data1.bank.paymentMethod : "",
-          "Account Name": data1.bank ? data1.bank.accName : "",
-          "Routing Type": data1.bank ? data1.bank.routingType : "",
-          "Bank Name": data1.bank ? data1.bank.bankName : "",
-          "Account Type": data1.bank ? data1.bank.accType : "",
-          "Minimum Pay Amount": data1.bank ? data1.bank.minPayAmt : "",
-          Currency: data1.bank ? data1.bank.currency : "",
-        });
-        setTaxData({
-          Name: data1.tax ? data1.tax.name : "",
-          "Payment Method": data1.tax ? data1.tax.businessType : "",
-          "Account Name": data1.tax ? data1.tax.address : "",
-          "Routing Type": data1.tax ? data1.tax.city : "",
-          "Bank Name": data1.tax ? data1.tax.zipcode : "",
-        });
-        cogoToast.success(result.message);
-        setLoading(false);
+        setLoadData(result);
       })
       .catch((err) => {
         setLoading(false);
         cogoToast.error(err);
       });
-  }, [get, match.params.id]);
+  }, [get, match.params.id, match.params.type]);
 
   console.log(data);
+
+  const setLoadData = (result) => {
+    setData(result.data);
+    const data1 = result.data;
+    setGeneralData({
+      "Ambassador Id": data1.ambass_id,
+      Extention: data1.extention,
+      "First Name": data1.fname,
+      "Last Name": data1.lname,
+      Profession: data1.profession,
+      Email: data1.email,
+      Website: data1.website,
+      "Phone Number": data1.phonenumber,
+      Instagram: data1.instagram,
+      Facebook: data1.facebook,
+      "Zip Code": data1.zipcode,
+      "Network Size": data1.networksize,
+      "Why do i want to be an Ambassador": data1.why,
+      Status: data1.status ? "True" : "False",
+      "Created On": data1.createdon,
+    });
+    setAccountData({
+      Name: data1.account ? data1.account.name : "",
+      State: data1.account ? data1.account.state : "",
+      Phone: data1.account ? data1.account.phone : "",
+      City: data1.account ? data1.account.city : "",
+      Zipcode: data1.account ? data1.account.zipcode : "",
+      Fax: data1.account ? data1.account.fax : "",
+      Currency: data1.account ? data1.account.currency : "",
+      Region: data1.account ? data1.account.region : "",
+      Country: data1.account ? data1.account.country : "",
+      Address: data1.account ? data1.account.address : "",
+    });
+    setBankData({
+      "Account Number": data1.bank ? data1.bank.accountNumber : "",
+      "Payment Method": data1.bank ? data1.bank.paymentMethod : "",
+      "Account Name": data1.bank ? data1.bank.accName : "",
+      "Routing Type": data1.bank ? data1.bank.routingType : "",
+      "Bank Name": data1.bank ? data1.bank.bankName : "",
+      "Account Type": data1.bank ? data1.bank.accType : "",
+      "Minimum Pay Amount": data1.bank ? data1.bank.minPayAmt : "",
+      Currency: data1.bank ? data1.bank.currency : "",
+    });
+    setTaxData({
+      Name: data1.tax ? data1.tax.name : "",
+      "Payment Method": data1.tax ? data1.tax.businessType : "",
+      "Account Name": data1.tax ? data1.tax.address : "",
+      "Routing Type": data1.tax ? data1.tax.city : "",
+      "Bank Name": data1.tax ? data1.tax.zipcode : "",
+    });
+    cogoToast.success(result.message);
+    setLoading(false);
+  };
+
+  const handlePayment = (id, _id) => {
+    setLoading(true);
+    makePayment(id, _id)
+      .then((result) => {
+        setLoadData(result);
+      })
+      .catch((err) => {
+        setLoading(false);
+        cogoToast.error(err);
+      });
+  };
 
   return loading ? (
     <div>
@@ -200,7 +215,7 @@ const AmbassadorView = ({ get, match }) => {
               date: item.date,
               orderid: item.orderid,
               amount: item.amount,
-              status: item.status ? "Paid" : "Not Paid",
+              status: item.paid ? "Paid" : "Not Paid",
             };
           })}
           fileName="All Products Sold"
@@ -240,15 +255,19 @@ const AmbassadorView = ({ get, match }) => {
       </div>
       <div style={{ marginTop: "30px" }} ref={ref1}>
         <Table
+          onPay={handlePayment}
+          type="ambassadorPay"
           data={data.urlvisits.map((item) => {
             return {
               url: item.url,
               refer_url: item.refer_url,
               converted: item.converted ? "true" : "false",
               date: item.date,
-              orderid: item.orderid,
+              // orderid: item.orderid,
               amount: item.amount,
-              status: item.status ? "Paid" : "Not Paid",
+              status: item.paid ? "Paid" : "Not Paid",
+              _id: item._id,
+              ambassId: match.params.id,
             };
           })}
           setPdf={pdf}
@@ -258,7 +277,7 @@ const AmbassadorView = ({ get, match }) => {
             "refer_url",
             "converted",
             "date",
-            "orderid",
+            // "orderid",
             "amount",
             "status",
           ]}
@@ -267,7 +286,7 @@ const AmbassadorView = ({ get, match }) => {
             "refer URL",
             "Converted",
             "Create on",
-            "Order ID",
+            // "Order ID",
             "Amount",
             "Status",
           ]}
@@ -279,7 +298,8 @@ const AmbassadorView = ({ get, match }) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    get: (id) => dispatch(actionCreators.getAmbassadorDetails(id)),
+    get: (id, type) => dispatch(actionCreators.getAmbassadorDetails(id, type)),
+    makePayment: (id, _id) => dispatch(actionCreators.makePayment(id, _id)),
   };
 };
 

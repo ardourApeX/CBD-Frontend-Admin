@@ -1,27 +1,26 @@
 import React from "react";
 import { useEffect } from "react";
 import { connect } from "react-redux";
-import * as actionCreators from "../../store/actions/vendor";
+import * as actionCreators from "../../store/actions/affiliation";
 import cogoToast from "cogo-toast";
 import { useState } from "react";
 import { Spinner } from "react-bootstrap";
 import Table from "../../App/components/CategoryTable";
-import { PlusOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Modal, InputNumber } from "antd";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { Form, Input, Button, Modal, InputNumber, Upload } from "antd";
 import "antd/dist/antd.css";
 import { useRef } from "react";
 import { ExportCSV } from "../../App/components/ExportCsv";
 import ReactToPdf from "react-to-pdf";
 import ReactToPrint from "react-to-print";
-import SearchBar from "../../App/components/SearchBar";
 
-const Vendor = ({ vendors, get, add, deletee, edit }) => {
-  console.log(vendors);
-  const [vendorsList, setVendorsList] = useState([]);
+const Vendor = ({ creatives, get, add, deletee }) => {
+  console.log(creatives);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const [form] = Form.useForm();
-  const [vendorId, setVendorId] = useState("");
   const ref = useRef();
   const ref1 = useRef();
   const [pdf, setPdf] = useState(true);
@@ -42,41 +41,36 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
         cogoToast.error(err);
       });
   }, [get]);
-  useEffect(() => {
-    setVendorsList(vendors);
-  }, [vendors]);
   const onFinish = (values) => {
     setOpen(false);
     setLoading(true);
     console.log(values);
-    vendorId === ""
-      ? add(values)
-          .then((result) => {
-            setLoading(false);
-            cogoToast.success(result);
-          })
-          .catch((err) => {
-            setLoading(false);
-            cogoToast.error(err);
-          })
-      : edit(values, vendorId)
-          .then((result) => {
-            setLoading(false);
-            cogoToast.success(result);
-            setVendorId("");
-          })
-          .catch((err) => {
-            setLoading(false);
-            cogoToast.error(err);
-          });
+    const formData = new FormData();
+    Object.keys(values).map((key) => formData.append(key, values[key]));
+    // if(image){
+    //     formData.append("image", image)
+    // }
+    add(formData)
+      .then((result) => {
+        setLoading(false);
+        cogoToast.success(result);
+      })
+      .catch((err) => {
+        setLoading(false);
+        cogoToast.error(err);
+      });
     form.resetFields();
   };
   const onFinishFailed = (errorInfo) => {
     console.log(errorInfo);
-    form.resetFields();
   };
 
-  const removeVendor = (id) => {
+  const closeModal = () => {
+    form.resetFields();
+    setOpen(false);
+  };
+
+  const removeCreative = (id) => {
     setLoading(true);
     deletee(id)
       .then((result) => {
@@ -87,22 +81,6 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
         setLoading(false);
         cogoToast.error(err);
       });
-  };
-
-  const closeModal = () => {
-    form.resetFields();
-    setOpen(false);
-    setVendorId("");
-  };
-
-  const editVendor = (id) => {
-    setVendorId(id);
-    let vendor = vendors.filter((item) => item._id === id)[0];
-    form.setFieldsValue({
-      vendorname: vendor.vendorname,
-      vendorid: vendor.vendorid,
-    });
-    setOpen(true);
   };
   return loading ? (
     <div>
@@ -131,17 +109,17 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
           type="primary"
         >
           <PlusOutlined style={{ marginRight: "10px" }} />
-          Add Vendor
+          Add Creative
         </Button>
       </div>
       <ExportCSV
-        csvData={vendorsList.map((item) => {
+        csvData={creatives.map((item) => {
           return {
-            "Sno.": item.vendorid,
-            Name: item.vendorname,
+            Title: item.title,
+            Link: item.link,
           };
         })}
-        fileName="All Vendors"
+        fileName="All creatives"
       />
       <ReactToPdf
         x={0}
@@ -150,7 +128,7 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
         onComplete={() => setPdf(true)}
         options={options}
         targetRef={ref1}
-        filename="All Vendors.pdf"
+        filename="All creatives.pdf"
       >
         {({ toPdf }) => (
           <Button
@@ -175,21 +153,19 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
         }}
         content={() => ref.current}
       />
-
       <div ref={ref1}>
         <Table
-          onEdit={editVendor}
-          onDelete={removeVendor}
-          data={vendorsList}
+          onDelete={removeCreative}
+          data={creatives}
           setPdf={pdf}
           ref={ref}
-          columns={["vendorid", "vendorname"]}
-          titles={["ID", "Name"]}
+          columns={["title", "link"]}
+          titles={["Title", "Link"]}
         />
       </div>
       <Modal
         visible={open}
-        title={vendorId !== "" ? "Edit Vendor" : "Add Vendor"}
+        title={"Add Creative"}
         onCancel={closeModal}
         footer={[
           <Button key="back" onClick={closeModal}>
@@ -205,29 +181,69 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-            label="Vendor ID"
-            name="vendorid"
+            label="Title"
+            name="title"
             rules={[
               {
                 required: true,
-                message: "Please input Vendor Id!",
-              },
-            ]}
-          >
-            <InputNumber />
-          </Form.Item>
-          <Form.Item
-            label="Vendor Name"
-            name="vendorname"
-            rules={[
-              {
-                required: true,
-                message: "Please input Vendor Name!",
+                message: "Please input title",
               },
             ]}
           >
             <Input />
           </Form.Item>
+          <Form.Item
+            label="Link"
+            name="link"
+            rules={[
+              {
+                required: true,
+                message: "Please input Link",
+              },
+            ]}
+          >
+            <Input type="url" />
+          </Form.Item>
+
+          {/* <Form.Item label="Image" name="image">
+            <div style={{ display: "flex" }}>
+              <Upload
+                showUploadList={false}
+                beforeUpload={(file) => {
+                  setImage(file);
+                  let reader = new FileReader();
+                  reader.readAsDataURL(file);
+                  reader.onloadend = () => {
+                    setImageUrl(reader.result);
+                  };
+                  return false;
+                }}
+                multiple={false}
+              >
+                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              </Upload>
+            </div>
+            {imageUrl !== "" && (
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: "30px",
+                }}
+              >
+                <img
+                  src={imageUrl}
+                  alt="Product"
+                  style={{
+                    objectFit: "contain",
+                    width: "200px",
+                    height: "200px",
+                    marginTop: "20px",
+                    marginRight: "25px",
+                  }}
+                />
+              </div>
+            )}
+          </Form.Item> */}
 
           <Form.Item>
             <Button type="primary" htmlType="submit">
@@ -242,16 +258,15 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
 
 const mapStateToProps = (state) => {
   return {
-    vendors: state.vendorReducer.data,
+    creatives: state.ambassadorReducer.creatives,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    get: () => dispatch(actionCreators.get()),
-    edit: (data, id) => dispatch(actionCreators.edit(data, id)),
-    deletee: (id) => dispatch(actionCreators.deletee(id)),
-    add: (data) => dispatch(actionCreators.add(data)),
+    get: () => dispatch(actionCreators.getCreatives()),
+    deletee: (id) => dispatch(actionCreators.deleteCreative(id)),
+    add: (data) => dispatch(actionCreators.addCreative(data)),
   };
 };
 
