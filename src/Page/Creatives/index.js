@@ -6,19 +6,20 @@ import cogoToast from "cogo-toast";
 import { useState } from "react";
 import { Spinner } from "react-bootstrap";
 import Table from "../../App/components/CategoryTable";
-import { PlusOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Modal, InputNumber, Select } from "antd";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { Form, Input, Button, Modal, InputNumber, Upload } from "antd";
 import "antd/dist/antd.css";
 import { useRef } from "react";
 import { ExportCSV } from "../../App/components/ExportCsv";
 import ReactToPdf from "react-to-pdf";
 import ReactToPrint from "react-to-print";
-import { Option } from "antd/lib/mentions";
 
-const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
-  console.log(ambassadors);
+const Vendor = ({ creatives, get, add, deletee }) => {
+  console.log(creatives);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const [form] = Form.useForm();
   const ref = useRef();
   const ref1 = useRef();
@@ -44,7 +45,12 @@ const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
     setOpen(false);
     setLoading(true);
     console.log(values);
-    add({ ...values, reactData: true })
+    const formData = new FormData();
+    Object.keys(values).map((key) => formData.append(key, values[key]));
+    // if(image){
+    //     formData.append("image", image)
+    // }
+    add(formData)
       .then((result) => {
         setLoading(false);
         cogoToast.success(result);
@@ -57,10 +63,14 @@ const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
   };
   const onFinishFailed = (errorInfo) => {
     console.log(errorInfo);
-    form.resetFields();
   };
 
-  const removeAmbassador = (id) => {
+  const closeModal = () => {
+    form.resetFields();
+    setOpen(false);
+  };
+
+  const removeCreative = (id) => {
     setLoading(true);
     deletee(id)
       .then((result) => {
@@ -70,25 +80,6 @@ const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
       .catch((err) => {
         setLoading(false);
         cogoToast.error(err);
-      });
-  };
-
-  const closeModal = () => {
-    form.resetFields();
-    setOpen(false);
-  };
-
-  const editAmbassador = (id) => {
-    console.log(id);
-    setLoading(true);
-    edit(id)
-      .then((result) => {
-        setLoading(false);
-        cogoToast.success(true);
-      })
-      .catch((err) => {
-        setLoading(false);
-        cogoToast.error(err.message);
       });
   };
   return loading ? (
@@ -118,21 +109,17 @@ const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
           type="primary"
         >
           <PlusOutlined style={{ marginRight: "10px" }} />
-          Add Ambassador
+          Add Creative
         </Button>
       </div>
       <ExportCSV
-        csvData={ambassadors.map((item) => {
+        csvData={creatives.map((item) => {
           return {
-            Email: item.email,
-            "Phone Number": item.phonenumber,
-            "Created On": item.createdon,
-            ID: item.ambass_id,
-            Extention: item.extention,
-            Approved: item.status ? "True" : "False",
+            Title: item.title,
+            Link: item.link,
           };
         })}
-        fileName="All ambassadors"
+        fileName="All creatives"
       />
       <ReactToPdf
         x={0}
@@ -141,7 +128,7 @@ const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
         onComplete={() => setPdf(true)}
         options={options}
         targetRef={ref1}
-        filename="All ambassadors.pdf"
+        filename="All creatives.pdf"
       >
         {({ toPdf }) => (
           <Button
@@ -168,44 +155,17 @@ const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
       />
       <div ref={ref1}>
         <Table
-          onEdit={editAmbassador}
-          onDelete={removeAmbassador}
-          type="ambassador"
-          data={ambassadors.map((item) => {
-            return {
-              email: item.email,
-              phonenumber: item.phonenumber,
-              createdon: new Date(item.createdon).toUTCString(),
-              ambass_id: item.ambass_id,
-              extention: item.extention,
-              approvedAmbassador: item.status ? "True" : "False",
-              status: item.status,
-              _id: item._id,
-            };
-          })}
+          onDelete={removeCreative}
+          data={creatives}
           setPdf={pdf}
           ref={ref}
-          columns={[
-            "email",
-            "phonenumber",
-            "createdon",
-            "ambass_id",
-            "extention",
-            "approvedAmbassador",
-          ]}
-          titles={[
-            "Email",
-            "Phone Number",
-            "Created On",
-            "ID",
-            "Extention",
-            "Approved",
-          ]}
+          columns={["title", "link"]}
+          titles={["Title", "Link"]}
         />
       </div>
       <Modal
         visible={open}
-        title={"Add Ambassador"}
+        title={"Add Creative"}
         onCancel={closeModal}
         footer={[
           <Button key="back" onClick={closeModal}>
@@ -221,43 +181,69 @@ const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-            label="Email"
-            name="email"
+            label="Title"
+            name="title"
             rules={[
               {
                 required: true,
-                message: "Please Enter Email",
+                message: "Please input title",
               },
             ]}
           >
             <Input />
           </Form.Item>
-          <Form.Item label="First Name" name="firstname">
-            <Input />
+          <Form.Item
+            label="Link"
+            name="link"
+            rules={[
+              {
+                required: true,
+                message: "Please input Link",
+              },
+            ]}
+          >
+            <Input type="url" />
           </Form.Item>
 
-          <Form.Item label="Last Name" name="lastname">
-            <Input />
-          </Form.Item>
-
-          <Form.Item label="Profession" name="profession">
-            <Input />
-          </Form.Item>
-
-          <Form.Item label="Password" name="password">
-            <Input type="password" />
-          </Form.Item>
-
-          <Form.Item label="Confirm Password" name="password2">
-            <Input type="password" />
-          </Form.Item>
-
-          <Form.Item label="Status" name="status" initialValue="false">
-            <Select>
-              <Option value="false">Inactive</Option>
-              <Option value="true">Active</Option>
-            </Select>
-          </Form.Item>
+          {/* <Form.Item label="Image" name="image">
+            <div style={{ display: "flex" }}>
+              <Upload
+                showUploadList={false}
+                beforeUpload={(file) => {
+                  setImage(file);
+                  let reader = new FileReader();
+                  reader.readAsDataURL(file);
+                  reader.onloadend = () => {
+                    setImageUrl(reader.result);
+                  };
+                  return false;
+                }}
+                multiple={false}
+              >
+                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              </Upload>
+            </div>
+            {imageUrl !== "" && (
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: "30px",
+                }}
+              >
+                <img
+                  src={imageUrl}
+                  alt="Product"
+                  style={{
+                    objectFit: "contain",
+                    width: "200px",
+                    height: "200px",
+                    marginTop: "20px",
+                    marginRight: "25px",
+                  }}
+                />
+              </div>
+            )}
+          </Form.Item> */}
 
           <Form.Item>
             <Button type="primary" htmlType="submit">
@@ -272,20 +258,16 @@ const AmbassadorManagement = ({ ambassadors, get, add, deletee, edit }) => {
 
 const mapStateToProps = (state) => {
   return {
-    ambassadors: state.ambassadorReducer.ambassadors,
+    creatives: state.ambassadorReducer.creatives,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    get: () => dispatch(actionCreators.getAmbassadors()),
-    edit: (id) => dispatch(actionCreators.editAmbassador(id)),
-    deletee: (id) => dispatch(actionCreators.deleteAmbassador(id)),
-    add: (data) => dispatch(actionCreators.addAmbassador(data)),
+    get: () => dispatch(actionCreators.getCreatives()),
+    deletee: (id) => dispatch(actionCreators.deleteCreative(id)),
+    add: (data) => dispatch(actionCreators.addCreative(data)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AmbassadorManagement);
+export default connect(mapStateToProps, mapDispatchToProps)(Vendor);

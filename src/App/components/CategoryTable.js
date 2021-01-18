@@ -7,6 +7,12 @@ import { Link } from "react-router-dom";
 const { Column } = Table;
 
 class CategoryTable extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tableData: props.data,
+    };
+  }
   render() {
     const {
       data,
@@ -18,18 +24,39 @@ class CategoryTable extends Component {
       titles,
       type,
     } = this.props;
-    console.log(type);
+
     return (
       <div ref={ref}>
         <Table
           bordered
           size="small"
           pagination={{ pageSize: !setPdf ? data.length : 10 }}
-          dataSource={data}
+          dataSource={this.state.tableData}
         >
           {columns.map((column, index) => (
             <>
               <Column
+                sorter={(a, b) => {
+                  if (
+                    column === "packingid" ||
+                    column === "vendorid" ||
+                    column === "categoryid" ||
+                    column === "attributeid" ||
+                    column === "id" ||
+                    column === "precent_off" ||
+                    column === "duration_in_months" ||
+                    column === "qty" ||
+                    column === "unitPrice" ||
+                    column === "ambass_id" ||
+                    column === "amount"
+                  ) {
+                    return parseInt(a[column]) - parseInt(b[column]);
+                  } else {
+                    return (a[column] || "")
+                      .toString()
+                      .localeCompare((b[column] || "").toString());
+                  }
+                }}
                 title={titles[index]}
                 dataIndex={column}
                 key={titles[index]}
@@ -65,6 +92,16 @@ class CategoryTable extends Component {
               )}
             />
           ) : null}
+          {type === "referrals" ? (
+            <Column
+              title="OrderId"
+              render={(text, record) =>
+                record.orderid && (
+                  <Link to={`/Order/${record.orderid}`}>View Order</Link>
+                )
+              }
+            />
+          ) : null}
           {(onEdit || onDelete) && setPdf ? (
             <Column
               title="Actions"
@@ -78,6 +115,10 @@ class CategoryTable extends Component {
                       <Button type="primary" onClick={() => onEdit(record._id)}>
                         Approve
                       </Button>
+                    ) : type === "referrals" ? (
+                      <Link to={`/Referrals/view/${record._id}`}>
+                        View Profile
+                      </Link>
                     ) : (
                       <EditFilled onClick={() => onEdit(record._id)} />
                     )

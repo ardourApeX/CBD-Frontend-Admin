@@ -12,7 +12,6 @@ import { useRef } from "react";
 import { ExportCSV } from "../../App/components/ExportCsv";
 import ReactToPdf from "react-to-pdf";
 import ReactToPrint from "react-to-print";
-import CountUp from "react-countup";
 
 const AmbassadorView = ({ get, match }) => {
   const [data, setData] = useState(null);
@@ -31,7 +30,7 @@ const AmbassadorView = ({ get, match }) => {
     compress: true,
   };
   useEffect(() => {
-    get(match.params.id)
+    get(match.params.id, match.params.type)
       .then((result) => {
         setData(result.data);
         const data1 = result.data;
@@ -279,7 +278,7 @@ const AmbassadorView = ({ get, match }) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    get: (id) => dispatch(actionCreators.getAmbassadorDetails(id)),
+    get: (id, type) => dispatch(actionCreators.getAmbassadorDetails(id, type)),
   };
 };
 
