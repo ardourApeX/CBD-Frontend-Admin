@@ -13,6 +13,7 @@ import { useRef } from "react";
 import { ExportCSV } from "../../App/components/ExportCsv";
 import ReactToPdf from "react-to-pdf";
 import ReactToPrint from "react-to-print";
+import SearchBar from "../../App/components/SearchBar";
 
 const Vendor = ({ vendors, get, add, deletee, edit }) => {
   console.log(vendors);
@@ -174,6 +175,7 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
         }}
         content={() => ref.current}
       />
+
       <div ref={ref1}>
         <Table
           onEdit={editVendor}

@@ -163,6 +163,26 @@ export const editAmbassador = (id) => {
   };
 };
 
+export const disapproveAmbassador = (id) => {
+  return (dispatch) => {
+    return Axios.get(
+      `${BACK_END_URL}/ambassador-portal/disapproveAmbassador/${id}`
+    )
+      .then((result) => {
+        console.log(result);
+        dispatch({
+          type: actionTypes.UPDATE_AMBASSADOR,
+          data: result.data.data,
+        });
+        return `Ambassador Disapproved Successfully`;
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
 export const deleteAmbassador = (id) => {
   return (dispatch) => {
     return Axios.delete(`${BACK_END_URL}/ambassador-portal/delete/${id}`)
@@ -189,6 +209,24 @@ export const deleteCreative = (id) => {
           data: id,
         });
         return `Creative Deleted Successfully`;
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(ERROR_MESSAGE);
+      });
+  };
+};
+
+export const makePayment = (id, _id) => {
+  return (dispatch) => {
+    return Axios.get(
+      `${BACK_END_URL}/ambassador-portal/makePayment/${id}/${_id}`
+    )
+      .then((result) => {
+        return {
+          message: `Payment Made Successfully`,
+          data: result.data.user,
+        };
       })
       .catch((err) => {
         console.log(err);
