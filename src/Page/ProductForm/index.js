@@ -18,11 +18,23 @@ import * as packageActionCreators from "../../store/actions/packageType";
 import "antd/dist/antd.css";
 import { Option } from "antd/lib/mentions";
 import { Spinner } from "react-bootstrap";
-import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  DeleteFilled,
+  DeleteOutlined,
+  PlusOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import cogoToast from "cogo-toast";
 import "antd/dist/antd.css";
 import { BACK_END_URL } from "../../utilities/Axios/url";
+import { CloneDeep } from "react-lodash";
+
+import { Collapse } from "antd";
+import { cloneDeep } from "lodash";
 const { TabPane } = Tabs;
+
+const { Panel } = Collapse;
 
 const ProductForm = ({
   match,
@@ -38,6 +50,7 @@ const ProductForm = ({
   deleteProductImage,
 }) => {
   const [loading, setLoading] = useState(true);
+  const [attributes, setAttributes] = useState([]);
   const [form] = Form.useForm();
   const [recievedGalleryUrls, setRecievedGalleryUrls] = useState([]);
   const [image, setImage] = useState({
@@ -64,6 +77,7 @@ const ProductForm = ({
   const [normal, setNormal] = useState(
     product ? (product.featured === true ? "1" : "0") : "0"
   );
+
   console.log(product);
   useEffect(() => {
     getVendors().then(() => {
@@ -71,6 +85,9 @@ const ProductForm = ({
         getPackages().then(() => {
           setLoading(false);
           if (match.params.type === "edit") {
+            setAttributes(
+              product.attributesList.length ? product.attributesList : []
+            );
             editValues(product, false);
           }
           if (product) {
@@ -175,6 +192,7 @@ const ProductForm = ({
     if (values.labsheet) {
       formData.append("labsheet", values.labsheet.fileList[0].originFileObj);
     }
+    formData.append("attributes", JSON.stringify(attributes));
     match.params.type === "add"
       ? add(formData)
           .then((result) => {
@@ -194,6 +212,7 @@ const ProductForm = ({
             setLoading(false);
             cogoToast.success(result.message);
             console.log(result.data);
+            setAttributes(result.data.attributesList);
             editValues(
               {
                 ...result.data,
@@ -635,12 +654,134 @@ const ProductForm = ({
                 </Form.Item>
               </div>
             </TabPane>
-            {normal === "1" ? (
-              <>
-                <TabPane forceRender={true} tab="Attributes" key="4"></TabPane>
-                <TabPane forceRender={true} tab="Variations" key="5"></TabPane>
-              </>
-            ) : null}
+            <TabPane forceRender={true} tab="Attributes" key="4">
+              <Button
+                style={{
+                  marginLeft: "auto",
+                  marginBottom: "20px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onClick={() => {
+                  let current = cloneDeep(attributes);
+                  current.push({
+                    title: `Attribute ${current.length + 1}`,
+                    content: [],
+                  });
+                  setAttributes(current);
+                }}
+                type="primary"
+              >
+                <PlusOutlined style={{ marginRight: "10px" }} />
+                Add Attribute
+              </Button>
+              <Collapse accordion>
+                {attributes.map((item, index) => (
+                  <Panel header={item.title} key={item.index}>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <label>Title</label>
+                      <Input
+                        style={{ width: "25%" }}
+                        value={item.title}
+                        onChange={(e) => {
+                          let current = cloneDeep(attributes);
+                          current[index].title = e.target.value;
+                          setAttributes(current);
+                        }}
+                      />
+                    </div>
+                    <Button
+                      style={{
+                        marginTop: "20px",
+                        marginBottom: "20px",
+                        marginLeft: "auto",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      onClick={() => {
+                        let current = cloneDeep(attributes);
+                        console.log(current);
+                        current[index].content.push({
+                          title: "",
+                          value: "",
+                        });
+                        setAttributes(current);
+                      }}
+                      type="primary"
+                    >
+                      <PlusOutlined style={{ marginRight: "10px" }} />
+                      Add Sub Attribute
+                    </Button>
+                    {item.content.map((item1, index1) => (
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "1fr 3fr 1fr",
+                          gridColumnGap: "30px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <label>Key</label>
+                          <Input
+                            value={item1.title}
+                            onChange={(e) => {
+                              let current = cloneDeep(attributes);
+                              current[index].content[index1].title =
+                                e.target.value;
+                              setAttributes(current);
+                            }}
+                          />
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <label>Value</label>
+                          <Input
+                            value={item1.value}
+                            onChange={(e) => {
+                              let current = cloneDeep(attributes);
+                              current[index].content[index1].value =
+                                e.target.value;
+                              setAttributes(current);
+                            }}
+                          />
+                        </div>
+                        <div style={{ position: "relative" }}>
+                          <Button
+                            type="danger"
+                            style={{
+                              color: "white",
+                              position: "absolute",
+                              bottom: "0",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                            onClick={() => {
+                              let current = cloneDeep(attributes);
+                              current[index].content.splice(index1, 1);
+                              setAttributes(current);
+                            }}
+                            icon={<DeleteOutlined />}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </Panel>
+                ))}
+              </Collapse>
+            </TabPane>
+            <TabPane forceRender={true} tab="Variations" key="5"></TabPane>
           </Tabs>
         </div>
 
@@ -1129,7 +1270,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     edit: (data, id) => dispatch(actionCreators.editProduct(data, id)),
-    add: (data) => dispatch(actionCreators.addProduct(data)),
+    add: (data, attributes) =>
+      dispatch(actionCreators.addProduct(data, attributes)),
     getVendors: () => dispatch(vendorActionCreators.get()),
     getCategories: () => dispatch(categoryActionCreators.get()),
     getPackages: () => dispatch(packageActionCreators.get()),
