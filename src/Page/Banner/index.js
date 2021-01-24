@@ -343,7 +343,9 @@ class Banner extends Component {
                 marginBottom: "1rem",
               }}
             >
-              <Button onClick={this.openModal}>Add Banner</Button>
+              <Button variant="dark" size="sm" onClick={this.openModal}>
+                Add Banner
+              </Button>
             </div>
             <Modal show={this.state.isOpen}>
               <Modal.Header closeButton onClick={this.closeModal}>
@@ -453,13 +455,13 @@ class Banner extends Component {
                     />
                   </Form.Group>
 
-                  <Button variant="primary" type="submit">
+                  <Button variant="dark" size="sm" type="submit">
                     Submit
                   </Button>
                 </Form>
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" onClick={this.closeModal}>
+                <Button variant="secondary" size="sm" onClick={this.closeModal}>
                   Close
                 </Button>
               </Modal.Footer>

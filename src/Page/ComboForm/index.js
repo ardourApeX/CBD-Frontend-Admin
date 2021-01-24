@@ -7,6 +7,7 @@ import {
   InputNumber,
   Checkbox,
   Upload,
+  Collapse,
 } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import React, { useEffect, useState } from "react";
@@ -21,6 +22,7 @@ import "antd/dist/antd.css";
 import { BACK_END_URL } from "../../utilities/Axios/url";
 import axios from "axios";
 const { TabPane } = Tabs;
+const { Panel } = Collapse;
 
 const ComboForm = ({ match, add, edit, combos, deleteProductImage }) => {
   const [loading, setLoading] = useState(true);
@@ -289,7 +291,9 @@ const ComboForm = ({ match, add, edit, combos, deleteProductImage }) => {
     </div>
   ) : (
     <div>
-      <h3> {`${match.params.type.toUpperCase()} COMBO`} </h3>
+      <h3 style={{ marginBottom: "30px" }}>
+        {`${match.params.type.toUpperCase()} COMBO`}
+      </h3>
       <Form
         form={form}
         name="basic"
@@ -297,230 +301,314 @@ const ComboForm = ({ match, add, edit, combos, deleteProductImage }) => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "2fr 1fr 1fr",
-            gridColumnGap: "20px",
-          }}
+        <Collapse
+          style={{ backgroundColor: "#f4f4fc", border: "none" }}
+          accordion
         >
-          <Form.Item
-            initialValue={[]}
-            label="Products"
-            name="select_product_combo"
+          <Panel
+            style={{
+              marginBottom: "30px",
+              border: "none !important",
+            }}
+            header="General Information"
+            key="1"
           >
-            <Select
-              mode="multiple"
-              placeholder="Please Select Products"
-              style={{ width: "100%" }}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "2fr 1fr 1fr",
+                gridColumnGap: "20px",
+              }}
             >
-              {products.map((item, index) => (
-                <Option key={`${item.title} ${index}`} value={item._id}>
-                  {item.title}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            label="Title"
-            name="producttitle"
-            rules={[
-              {
-                required: true,
-                message: "Please input Product Title",
-              },
-            ]}
+              <Form.Item
+                initialValue={[]}
+                label="Products"
+                name="select_product_combo"
+              >
+                <Select
+                  mode="multiple"
+                  placeholder="Please Select Products"
+                  style={{ width: "100%" }}
+                >
+                  {products.map((item, index) => (
+                    <Option key={`${item.title} ${index}`} value={item._id}>
+                      {item.title}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="Title"
+                name="producttitle"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input Product Title",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gridColumnGap: "20px",
+              }}
+            >
+              <Form.Item label="Short Description" name="sdescription">
+                <TextArea aria-colspan="3" />
+              </Form.Item>
+
+              <Form.Item label="Long Description" name="description">
+                <TextArea />
+              </Form.Item>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 2fr",
+                gridColumnGap: "20px",
+              }}
+            >
+              <Form.Item initialValue="true" label="Visibility" name="hide">
+                <Select>
+                  <Option value="true">Show</Option>
+                  <Option value="false">Hide</Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                initialValue="0"
+                label="Type Of Product"
+                name="featured"
+              >
+                <Select>
+                  <Option value="0">Normal</Option>
+                  <Option value="1">Featured</Option>
+                </Select>
+              </Form.Item>
+            </div>
+          </Panel>
+          <Panel
+            style={{
+              marginBottom: "30px",
+              border: "none !important",
+            }}
+            header="Price, Inventory and Shipping Information"
+            key="2"
           >
-            <Input />
-          </Form.Item>
-        </div>
+            <div className="card-container">
+              <Tabs type="card">
+                <TabPane forceRender={true} tab="General" key="1">
+                  <div
+                    style={{
+                      marginTop: "20px",
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr 1fr",
+                      gridColumnGap: "10px",
+                    }}
+                  >
+                    <Form.Item
+                      label="Default Sale Price ($)"
+                      name="sale_price"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input Package Type Id!",
+                        },
+                      ]}
+                    >
+                      <InputNumber step="0.1" />
+                    </Form.Item>
+                    <Form.Item label="Barcode" name="barcode">
+                      <InputNumber />
+                    </Form.Item>
+                    <Form.Item
+                      valuePropName="checked"
+                      initialValue={false}
+                      label="Enable reviews"
+                      name="enable_review"
+                    >
+                      <Checkbox />
+                    </Form.Item>
+                  </div>
+                </TabPane>
+                <TabPane forceRender={true} tab="Inventory" key="2">
+                  <div
+                    style={{
+                      marginTop: "20px",
+                    }}
+                  >
+                    <Form.Item
+                      rules={[
+                        {
+                          required: true,
+                          message: "Sku is required",
+                        },
+                      ]}
+                      label="SKU"
+                      name="sku"
+                    >
+                      <Input style={{ width: "30%" }} />
+                    </Form.Item>
+                  </div>
+                </TabPane>
+                <TabPane forceRender={true} tab="Shipping" key="3">
+                  <div
+                    style={{
+                      marginTop: "20px",
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr 2fr",
+                      gridColumnGap: "20px",
+                    }}
+                  >
+                    <Form.Item label="Batch No." name="batch_no">
+                      <InputNumber />
+                    </Form.Item>
+                    <Form.Item label="Expiry" name="expiry">
+                      <Input placeholder="dd/mm/yyyy" />
+                    </Form.Item>
+                    <div
+                      style={{
+                        display: "flex",
+                      }}
+                    >
+                      <Form.Item
+                        style={{ marginRight: "20px" }}
+                        name="volume"
+                        label="Volume"
+                      >
+                        <InputNumber placeholder="length" />
+                      </Form.Item>
+                      <Form.Item
+                        initialValue="cc"
+                        label="Unit"
+                        name="volume_unit"
+                      >
+                        <Select>
+                          <Option value="cc">cc</Option>
+                          <Option value="ml">ml</Option>
+                          <Option value="softgel">softgel</Option>
+                          <Option value="capsule">capsule</Option>
+                          <Option value="oz">oz</Option>
+                          <Option value="lb">lb</Option>
+                        </Select>
+                      </Form.Item>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 3fr ",
+                      gridColumnGap: "10px",
+                    }}
+                  ></div>
+                </TabPane>
+              </Tabs>
+            </div>
+          </Panel>
+          <Panel
+            style={{
+              marginBottom: "30px",
+              border: "none !important",
+            }}
+            header="Direction of Use and Warranty Information"
+            key="3"
+          >
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr 1fr",
+                gridColumnGap: "10px",
+                marginTop: "30px",
+              }}
+            >
+              <Form.Item label="ASIN" name="asin">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Use" name="use">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Storage" name="storage">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Warning" name="warning">
+                <Input />
+              </Form.Item>
+            </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gridColumnGap: "20px",
-          }}
-        >
-          <Form.Item label="Short Description" name="sdescription">
-            <TextArea aria-colspan="3" />
-          </Form.Item>
-
-          <Form.Item label="Long Description" name="description">
-            <TextArea />
-          </Form.Item>
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 2fr",
-            gridColumnGap: "20px",
-          }}
-        >
-          <Form.Item initialValue="true" label="Visibility" name="hide">
-            <Select>
-              <Option value="true">Show</Option>
-              <Option value="false">Hide</Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item initialValue="0" label="Type Of Product" name="featured">
-            <Select>
-              <Option value="0">Normal</Option>
-              <Option value="1">Featured</Option>
-            </Select>
-          </Form.Item>
-        </div>
-
-        <div className="card-container">
-          <Tabs type="card">
-            <TabPane forceRender={true} tab="General" key="1">
-              <div
-                style={{
-                  marginTop: "20px",
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr 1fr",
-                  gridColumnGap: "10px",
-                }}
-              >
-                <Form.Item
-                  label="Default Sale Price ($)"
-                  name="sale_price"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input Package Type Id!",
-                    },
-                  ]}
-                >
-                  <InputNumber step="0.1" />
-                </Form.Item>
-                <Form.Item label="Barcode" name="barcode">
-                  <InputNumber />
-                </Form.Item>
-                <Form.Item
-                  valuePropName="checked"
-                  initialValue={false}
-                  label="Enable reviews"
-                  name="enable_review"
-                >
-                  <Checkbox />
-                </Form.Item>
-              </div>
-            </TabPane>
-            <TabPane forceRender={true} tab="Inventory" key="2">
-              <div
-                style={{
-                  marginTop: "20px",
-                }}
-              >
-                <Form.Item
-                  rules={[
-                    {
-                      required: true,
-                      message: "Sku is required",
-                    },
-                  ]}
-                  label="SKU"
-                  name="sku"
-                >
-                  <Input style={{ width: "30%" }} />
-                </Form.Item>
-              </div>
-            </TabPane>
-            <TabPane forceRender={true} tab="Shipping" key="3">
-              <div
-                style={{
-                  marginTop: "20px",
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr 2fr",
-                  gridColumnGap: "20px",
-                }}
-              >
-                <Form.Item label="Batch No." name="batch_no">
-                  <InputNumber />
-                </Form.Item>
-                <Form.Item label="Expiry" name="expiry">
-                  <Input placeholder="dd/mm/yyyy" />
-                </Form.Item>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                gridColumnGap: "10px",
+              }}
+            >
+              <Form.Item label="Indication" name="indication">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Direction" name="direction">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Warranty" name="warranty">
+                <Input />
+              </Form.Item>
+            </div>
+          </Panel>
+          <Panel
+            style={{
+              marginBottom: "30px",
+              border: "none !important",
+            }}
+            header="Attributes, Ingredients and FAQ's"
+            key="4"
+          >
+            <div>
+              {["", "", "", "", ""].map((_, index) => (
                 <div
                   style={{
-                    display: "flex",
+                    display: "grid",
+                    gridTemplateColumns: "1fr 3fr",
+                    gridColumnGap: "20px",
                   }}
                 >
                   <Form.Item
-                    style={{ marginRight: "20px" }}
-                    name="volume"
-                    label="Volume"
+                    label={`Attribute ${index + 1} Title`}
+                    name={`page_attribute[${index}][title]`}
                   >
-                    <InputNumber placeholder="length" />
+                    <Input />
                   </Form.Item>
-                  <Form.Item initialValue="cc" label="Unit" name="volume_unit">
-                    <Select>
-                      <Option value="cc">cc</Option>
-                      <Option value="ml">ml</Option>
-                      <Option value="softgel">softgel</Option>
-                      <Option value="capsule">capsule</Option>
-                      <Option value="oz">oz</Option>
-                      <Option value="lb">lb</Option>
-                    </Select>
+
+                  <Form.Item
+                    label={`Attribute ${index + 1} Description`}
+                    name={`page_attribute[${index}][description]`}
+                  >
+                    <TextArea />
                   </Form.Item>
                 </div>
-              </div>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 3fr ",
-                  gridColumnGap: "10px",
-                }}
-              ></div>
-            </TabPane>
-          </Tabs>
-        </div>
+              ))}
+            </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr 1fr",
-            gridColumnGap: "10px",
-            marginTop: "30px",
-          }}
-        >
-          <Form.Item label="ASIN" name="asin">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Use" name="use">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Storage" name="storage">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Warning" name="warning">
-            <Input />
-          </Form.Item>
-        </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gridColumnGap: "20px",
+              }}
+            >
+              <Form.Item label="Key Ingredients" name="keyingredients">
+                <TextArea />
+              </Form.Item>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            gridColumnGap: "10px",
-          }}
-        >
-          <Form.Item label="Indication" name="indication">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Direction" name="direction">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Warranty" name="warranty">
-            <Input />
-          </Form.Item>
-        </div>
+              <Form.Item label="All Ingredients" name="allingredients">
+                <TextArea />
+              </Form.Item>
+            </div>
 
-        <div>
-          {["", "", "", "", ""].map((_, index) => (
             <div
               style={{
                 display: "grid",
@@ -528,388 +616,359 @@ const ComboForm = ({ match, add, edit, combos, deleteProductImage }) => {
                 gridColumnGap: "20px",
               }}
             >
-              <Form.Item
-                label={`Attribute ${index + 1} Title`}
-                name={`page_attribute[${index}][title]`}
-              >
+              <Form.Item label={`FAQ Title`} name={`faq[0][title]`}>
                 <Input />
               </Form.Item>
 
-              <Form.Item
-                label={`Attribute ${index + 1} Description`}
-                name={`page_attribute[${index}][description]`}
-              >
+              <Form.Item label={`FAQ Description`} name={`faq[0][description]`}>
                 <TextArea />
               </Form.Item>
             </div>
-          ))}
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gridColumnGap: "20px",
-          }}
-        >
-          <Form.Item label="Key Ingredients" name="keyingredients">
-            <TextArea />
-          </Form.Item>
-
-          <Form.Item label="All Ingredients" name="allingredients">
-            <TextArea />
-          </Form.Item>
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 3fr",
-            gridColumnGap: "20px",
-          }}
-        >
-          <Form.Item label={`FAQ Title`} name={`faq[0][title]`}>
-            <Input />
-          </Form.Item>
-
-          <Form.Item label={`FAQ Description`} name={`faq[0][description]`}>
-            <TextArea />
-          </Form.Item>
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr 1fr",
-            gridColumnGap: "20px",
-          }}
-        >
-          <Form.Item label="Labsheet" name="labsheet">
-            <Upload multiple={false}>
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload>
-          </Form.Item>
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            gridColumnGap: "20px",
-            gridRowGap: "30px",
-          }}
-        >
-          <Form.Item label="Menu Image" name="menu_image">
-            <div style={{ display: "flex" }}>
-              <Upload
-                showUploadList={false}
-                beforeUpload={(file) => {
-                  setImage({
-                    ...image,
-                    menuImage: file,
-                  });
-                  let reader = new FileReader();
-                  reader.readAsDataURL(file);
-                  reader.onloadend = () => {
-                    setImageUrl({
-                      ...imageUrl,
-                      menuPreviewUrl: reader.result,
-                    });
-                  };
-                  return false;
-                }}
-                multiple={false}
-              >
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
-              </Upload>
-            </div>
-            {(imageUrl.menuPreviewUrl !== "" || (combo && combo.menuimage)) && (
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: "30px",
-                }}
-              >
-                <img
-                  src={
-                    imageUrl.menuPreviewUrl !== ""
-                      ? imageUrl.menuPreviewUrl
-                      : `${BACK_END_URL}/${combo.menuimage}`.replace(
-                          "/public",
-                          ""
-                        )
-                  }
-                  alt="Product"
-                  style={{
-                    objectFit: "contain",
-                    width: "200px",
-                    height: "200px",
-                    marginTop: "20px",
-                    marginRight: "25px",
-                  }}
-                />
-                <CloseOutlined
-                  onClick={() =>
-                    handleImageDelete(
-                      "menu_image",
-                      "menuPreviewUrl",
-                      "menuImage",
-                      "product"
-                    )
-                  }
-                />
-              </div>
-            )}
-          </Form.Item>
-          <Form.Item label="Section A Image" name="feature_image">
-            <div style={{ display: "flex" }}>
-              <Upload
-                showUploadList={false}
-                beforeUpload={(file) => {
-                  setImage({
-                    ...image,
-                    sectionaImage: file,
-                  });
-                  let reader = new FileReader();
-                  reader.readAsDataURL(file);
-                  reader.onloadend = () => {
-                    setImageUrl({
-                      ...imageUrl,
-                      sectionaPreviewUrl: reader.result,
-                    });
-                  };
-                  return false;
-                }}
-                multiple={false}
-              >
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
-              </Upload>
-            </div>
-            {(imageUrl.sectionaPreviewUrl !== "" ||
-              (combo && combo.featureimage)) && (
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: "30px",
-                }}
-              >
-                <img
-                  src={
-                    imageUrl.sectionaPreviewUrl !== ""
-                      ? imageUrl.sectionaPreviewUrl
-                      : `${BACK_END_URL}/${combo.featureimage}`.replace(
-                          "/public",
-                          ""
-                        )
-                  }
-                  alt="Product"
-                  style={{
-                    objectFit: "contain",
-                    width: "200px",
-                    height: "200px",
-                    marginTop: "20px",
-                    marginRight: "25px",
-                  }}
-                />
-                <CloseOutlined
-                  onClick={() =>
-                    handleImageDelete(
-                      "feature_image",
-                      "sectionaPreviewUrl",
-                      "sectionaImage",
-                      "product"
-                    )
-                  }
-                />
-              </div>
-            )}
-          </Form.Item>
-          <Form.Item label="Section B Image" name="sectionbimage">
-            <div style={{ display: "flex" }}>
-              <Upload
-                showUploadList={false}
-                beforeUpload={(file) => {
-                  setImage({
-                    ...image,
-                    sectionbImage: file,
-                  });
-                  let reader = new FileReader();
-                  reader.readAsDataURL(file);
-                  reader.onloadend = () => {
-                    setImageUrl({
-                      ...imageUrl,
-                      sectionbPreviewUrl: reader.result,
-                    });
-                  };
-                  return false;
-                }}
-                multiple={false}
-              >
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
-              </Upload>
-            </div>
-            {(imageUrl.sectionbPreviewUrl !== "" ||
-              (combo && combo.sectionbimage)) && (
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: "30px",
-                }}
-              >
-                <img
-                  src={
-                    imageUrl.sectionbPreviewUrl !== ""
-                      ? imageUrl.sectionbPreviewUrl
-                      : `${BACK_END_URL}/${combo.sectionbimage}`.replace(
-                          "/public",
-                          ""
-                        )
-                  }
-                  alt="Product"
-                  style={{
-                    objectFit: "contain",
-                    width: "200px",
-                    height: "200px",
-                    marginTop: "20px",
-                    marginRight: "25px",
-                  }}
-                />
-                <CloseOutlined
-                  onClick={() =>
-                    handleImageDelete(
-                      "sectionbimage",
-                      "sectionbPreviewUrl",
-                      "sectionbImage",
-                      "productMeta"
-                    )
-                  }
-                />
-              </div>
-            )}
-          </Form.Item>
-        </div>
-        <Form.Item label="Product Gallery" name="product_gallery_image">
-          <div style={{ display: "flex" }}>
-            <Upload
-              showUploadList={false}
-              beforeUpload={(file, fileList) => {
-                let galleryImage = [...image.galleryImage];
-                galleryImage.push(file);
-                setImage({
-                  ...image,
-                  galleryImage,
-                });
-                let reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onloadend = () => {
-                  let galleryUrls = [...imageUrl.galleryPreviewUrl];
-                  galleryUrls.push(reader.result);
-                  setImageUrl({
-                    ...imageUrl,
-                    galleryPreviewUrl: galleryUrls,
-                  });
-                };
-                return false;
+          </Panel>
+          <Panel
+            style={{
+              marginBottom: "30px",
+              border: "none !important",
+            }}
+            header="Images"
+            key="5"
+          >
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr 1fr",
+                gridColumnGap: "20px",
               }}
-              multiple={false}
             >
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload>
-          </div>
-          {(imageUrl.galleryPreviewUrl.length > 0 ||
-            recievedGalleryUrls.length > 0) && (
+              <Form.Item label="Labsheet" name="labsheet">
+                <Upload multiple={false}>
+                  <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                </Upload>
+              </Form.Item>
+            </div>
+
             <div
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr 1fr",
-                gridColumnGap: "30px",
+                gridColumnGap: "20px",
+                gridRowGap: "30px",
               }}
             >
-              {recievedGalleryUrls.map((item, index) => (
-                <div
-                  style={{
-                    display: "flex",
-                    marginTop: "30px",
-                  }}
-                >
-                  <img
-                    src={`${BACK_END_URL}/${item}`.replace("/public", "")}
-                    alt="Product"
-                    style={{
-                      objectFit: "contain",
-                      width: "200px",
-                      height: "200px",
-                      marginTop: "20px",
-                      marginRight: "25px",
-                    }}
-                  />
-                  <CloseOutlined
-                    onClick={() => {
-                      setLoading(true);
-                      deleteProductImage(
-                        {
-                          productid: combo._id,
-                          imagetoremove: index,
-                          action: "",
-                        },
-                        "product"
-                      )
-                        .then((result) => {
-                          setLoading(false);
-                          let imageUrls = [...recievedGalleryUrls];
-                          imageUrls.splice(index, 1);
-                          setRecievedGalleryUrls(imageUrls);
-                          cogoToast.success(result.message);
-                          setCombo({
-                            ...combo,
-                            galleryimgdetails: result.galleryimgdetails,
-                          });
-                        })
-                        .catch((err) => cogoToast.error(err));
-                    }}
-                  />
-                </div>
-              ))}
-              {imageUrl.galleryPreviewUrl.map((item, index) => (
-                <div
-                  style={{
-                    display: "flex",
-                    marginTop: "30px",
-                  }}
-                >
-                  <img
-                    src={item}
-                    alt="Product"
-                    style={{
-                      objectFit: "contain",
-                      width: "200px",
-                      height: "200px",
-                      marginTop: "20px",
-                      marginRight: "25px",
-                    }}
-                  />
-                  <CloseOutlined
-                    onClick={() => {
-                      console.log(index);
-                      let imageUrls = [...imageUrl.galleryPreviewUrl];
-                      imageUrls.splice(index, 1);
-                      let images = [...image.galleryImage];
-                      images.splice(index, 1);
-                      setImageUrl({
-                        ...imageUrl,
-                        galleryPreviewUrl: imageUrls,
-                      });
+              <Form.Item label="Menu Image" name="menu_image">
+                <div style={{ display: "flex" }}>
+                  <Upload
+                    showUploadList={false}
+                    beforeUpload={(file) => {
                       setImage({
                         ...image,
-                        galleryImage: images,
+                        menuImage: file,
                       });
+                      let reader = new FileReader();
+                      reader.readAsDataURL(file);
+                      reader.onloadend = () => {
+                        setImageUrl({
+                          ...imageUrl,
+                          menuPreviewUrl: reader.result,
+                        });
+                      };
+                      return false;
                     }}
-                  />
+                    multiple={false}
+                  >
+                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                  </Upload>
                 </div>
-              ))}
+                {(imageUrl.menuPreviewUrl !== "" ||
+                  (combo && combo.menuimage)) && (
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: "30px",
+                    }}
+                  >
+                    <img
+                      src={
+                        imageUrl.menuPreviewUrl !== ""
+                          ? imageUrl.menuPreviewUrl
+                          : `${BACK_END_URL}/${combo.menuimage}`.replace(
+                              "/public",
+                              ""
+                            )
+                      }
+                      alt="Product"
+                      style={{
+                        objectFit: "contain",
+                        width: "200px",
+                        height: "200px",
+                        marginTop: "20px",
+                        marginRight: "25px",
+                      }}
+                    />
+                    <CloseOutlined
+                      onClick={() =>
+                        handleImageDelete(
+                          "menu_image",
+                          "menuPreviewUrl",
+                          "menuImage",
+                          "product"
+                        )
+                      }
+                    />
+                  </div>
+                )}
+              </Form.Item>
+              <Form.Item label="Section A Image" name="feature_image">
+                <div style={{ display: "flex" }}>
+                  <Upload
+                    showUploadList={false}
+                    beforeUpload={(file) => {
+                      setImage({
+                        ...image,
+                        sectionaImage: file,
+                      });
+                      let reader = new FileReader();
+                      reader.readAsDataURL(file);
+                      reader.onloadend = () => {
+                        setImageUrl({
+                          ...imageUrl,
+                          sectionaPreviewUrl: reader.result,
+                        });
+                      };
+                      return false;
+                    }}
+                    multiple={false}
+                  >
+                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                  </Upload>
+                </div>
+                {(imageUrl.sectionaPreviewUrl !== "" ||
+                  (combo && combo.featureimage)) && (
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: "30px",
+                    }}
+                  >
+                    <img
+                      src={
+                        imageUrl.sectionaPreviewUrl !== ""
+                          ? imageUrl.sectionaPreviewUrl
+                          : `${BACK_END_URL}/${combo.featureimage}`.replace(
+                              "/public",
+                              ""
+                            )
+                      }
+                      alt="Product"
+                      style={{
+                        objectFit: "contain",
+                        width: "200px",
+                        height: "200px",
+                        marginTop: "20px",
+                        marginRight: "25px",
+                      }}
+                    />
+                    <CloseOutlined
+                      onClick={() =>
+                        handleImageDelete(
+                          "feature_image",
+                          "sectionaPreviewUrl",
+                          "sectionaImage",
+                          "product"
+                        )
+                      }
+                    />
+                  </div>
+                )}
+              </Form.Item>
+              <Form.Item label="Section B Image" name="sectionbimage">
+                <div style={{ display: "flex" }}>
+                  <Upload
+                    showUploadList={false}
+                    beforeUpload={(file) => {
+                      setImage({
+                        ...image,
+                        sectionbImage: file,
+                      });
+                      let reader = new FileReader();
+                      reader.readAsDataURL(file);
+                      reader.onloadend = () => {
+                        setImageUrl({
+                          ...imageUrl,
+                          sectionbPreviewUrl: reader.result,
+                        });
+                      };
+                      return false;
+                    }}
+                    multiple={false}
+                  >
+                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                  </Upload>
+                </div>
+                {(imageUrl.sectionbPreviewUrl !== "" ||
+                  (combo && combo.sectionbimage)) && (
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: "30px",
+                    }}
+                  >
+                    <img
+                      src={
+                        imageUrl.sectionbPreviewUrl !== ""
+                          ? imageUrl.sectionbPreviewUrl
+                          : `${BACK_END_URL}/${combo.sectionbimage}`.replace(
+                              "/public",
+                              ""
+                            )
+                      }
+                      alt="Product"
+                      style={{
+                        objectFit: "contain",
+                        width: "200px",
+                        height: "200px",
+                        marginTop: "20px",
+                        marginRight: "25px",
+                      }}
+                    />
+                    <CloseOutlined
+                      onClick={() =>
+                        handleImageDelete(
+                          "sectionbimage",
+                          "sectionbPreviewUrl",
+                          "sectionbImage",
+                          "productMeta"
+                        )
+                      }
+                    />
+                  </div>
+                )}
+              </Form.Item>
             </div>
-          )}
-        </Form.Item>
+            <Form.Item label="Product Gallery" name="product_gallery_image">
+              <div style={{ display: "flex" }}>
+                <Upload
+                  showUploadList={false}
+                  beforeUpload={(file, fileList) => {
+                    let galleryImage = [...image.galleryImage];
+                    galleryImage.push(file);
+                    setImage({
+                      ...image,
+                      galleryImage,
+                    });
+                    let reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onloadend = () => {
+                      let galleryUrls = [...imageUrl.galleryPreviewUrl];
+                      galleryUrls.push(reader.result);
+                      setImageUrl({
+                        ...imageUrl,
+                        galleryPreviewUrl: galleryUrls,
+                      });
+                    };
+                    return false;
+                  }}
+                  multiple={false}
+                >
+                  <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                </Upload>
+              </div>
+              {(imageUrl.galleryPreviewUrl.length > 0 ||
+                recievedGalleryUrls.length > 0) && (
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr 1fr",
+                    gridColumnGap: "30px",
+                  }}
+                >
+                  {recievedGalleryUrls.map((item, index) => (
+                    <div
+                      style={{
+                        display: "flex",
+                        marginTop: "30px",
+                      }}
+                    >
+                      <img
+                        src={`${BACK_END_URL}/${item}`.replace("/public", "")}
+                        alt="Product"
+                        style={{
+                          objectFit: "contain",
+                          width: "200px",
+                          height: "200px",
+                          marginTop: "20px",
+                          marginRight: "25px",
+                        }}
+                      />
+                      <CloseOutlined
+                        onClick={() => {
+                          setLoading(true);
+                          deleteProductImage(
+                            {
+                              productid: combo._id,
+                              imagetoremove: index,
+                              action: "",
+                            },
+                            "product"
+                          )
+                            .then((result) => {
+                              setLoading(false);
+                              let imageUrls = [...recievedGalleryUrls];
+                              imageUrls.splice(index, 1);
+                              setRecievedGalleryUrls(imageUrls);
+                              cogoToast.success(result.message);
+                              setCombo({
+                                ...combo,
+                                galleryimgdetails: result.galleryimgdetails,
+                              });
+                            })
+                            .catch((err) => cogoToast.error(err));
+                        }}
+                      />
+                    </div>
+                  ))}
+                  {imageUrl.galleryPreviewUrl.map((item, index) => (
+                    <div
+                      style={{
+                        display: "flex",
+                        marginTop: "30px",
+                      }}
+                    >
+                      <img
+                        src={item}
+                        alt="Product"
+                        style={{
+                          objectFit: "contain",
+                          width: "200px",
+                          height: "200px",
+                          marginTop: "20px",
+                          marginRight: "25px",
+                        }}
+                      />
+                      <CloseOutlined
+                        onClick={() => {
+                          console.log(index);
+                          let imageUrls = [...imageUrl.galleryPreviewUrl];
+                          imageUrls.splice(index, 1);
+                          let images = [...image.galleryImage];
+                          images.splice(index, 1);
+                          setImageUrl({
+                            ...imageUrl,
+                            galleryPreviewUrl: imageUrls,
+                          });
+                          setImage({
+                            ...image,
+                            galleryImage: images,
+                          });
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </Form.Item>
+          </Panel>
+        </Collapse>
 
         <Form.Item>
           <Button
@@ -920,8 +979,10 @@ const ComboForm = ({ match, add, edit, combos, deleteProductImage }) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              borderRadius: "5px",
+              background: "black",
+              color: "white",
             }}
-            type="primary"
             htmlType="submit"
           >
             SUBMIT

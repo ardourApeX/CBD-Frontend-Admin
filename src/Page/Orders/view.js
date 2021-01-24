@@ -214,7 +214,7 @@ const OrderView = ({ match }) => {
         <span style={{ fontWeight: "bold", marginRight: "20px" }}>
           Order Date:
         </span>
-        <span>{new Date(order.createdOn).toString()}</span>
+        <span>{new Date(order.createdOn).toDateString()}</span>
       </p>
     </div>
   );

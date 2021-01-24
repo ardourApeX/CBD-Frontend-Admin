@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 import * as actionCreators from "../../store/actions/affiliation";
 import cogoToast from "cogo-toast";
 import { useState } from "react";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Button } from "react-bootstrap";
 import Table from "../../App/components/CategoryTable";
 import { PlusOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Modal, InputNumber, Select } from "antd";
+import { Form, Input, Modal, Select } from "antd";
 import "antd/dist/antd.css";
 import { useRef } from "react";
 import { ExportCSV } from "../../App/components/ExportCsv";
@@ -133,7 +133,8 @@ const AmbassadorManagement = ({
           onClick={() => {
             setOpen(true);
           }}
-          type="primary"
+          variant="dark"
+          size="sm"
         >
           <PlusOutlined style={{ marginRight: "10px" }} />
           Add Ambassador
@@ -163,8 +164,9 @@ const AmbassadorManagement = ({
       >
         {({ toPdf }) => (
           <Button
+            size="sm"
             style={{ marginRight: "20px" }}
-            type="primary"
+            variant="dark"
             onClick={async () => {
               setPdf(false);
               setTimeout(toPdf, 500);
@@ -180,7 +182,11 @@ const AmbassadorManagement = ({
         trigger={() => {
           // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
           // to the root node of the returned component as it will be overwritten.
-          return <Button type="primary">PRINT</Button>;
+          return (
+            <Button size="sm" variant="dark">
+              PRINT
+            </Button>
+          );
         }}
         content={() => ref.current}
       />
@@ -193,7 +199,7 @@ const AmbassadorManagement = ({
             return {
               email: item.email,
               phonenumber: item.phonenumber,
-              createdon: new Date(item.createdon).toUTCString(),
+              createdon: new Date(item.createdon).toDateString(),
               ambass_id: item.ambass_id,
               extention: item.extention,
               approvedAmbassador: item.status ? "True" : "False",
@@ -226,7 +232,7 @@ const AmbassadorManagement = ({
         title={"Add Ambassador"}
         onCancel={closeModal}
         footer={[
-          <Button key="back" onClick={closeModal}>
+          <Button variant="dark" size="sm" onClick={closeModal}>
             Close
           </Button>,
         ]}
@@ -278,7 +284,7 @@ const AmbassadorManagement = ({
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button variant="dark" size="sm" htmlType="submit">
               Submit
             </Button>
           </Form.Item>

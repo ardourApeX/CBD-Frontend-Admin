@@ -10,6 +10,7 @@ import { Input } from "antd";
 import windowSize from "react-window-size";
 import DEMO from "../../store/actions/constant";
 import { IMAGE_URL } from "../../utilities/Axios/url";
+import SearchBar from "../../App/components/SearchBar";
 
 // const sections = ["Blog Table", "Add Blog", "Update Blog"];
 class Blog extends Component {
@@ -40,6 +41,7 @@ class Blog extends Component {
     this.editHandler = this.editHandler.bind(this);
     this.handleImageChange = this.handleImageChange.bind(this);
     this.imageRemoveHandler = this.imageRemoveHandler.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
   handleImageChange(e, id) {
     e.preventDefault();
@@ -211,6 +213,30 @@ class Blog extends Component {
     }, 35);
   };
 
+  handleSearch = (input) => {
+    this.setState({ search: input });
+    if (input.length) {
+      let blogs = this.props.blogs.map((a) => {
+        return { ...a };
+      });
+      let blogsByTags = blogs.map((item) => {
+        let tags = item.tags.filter((tag) =>
+          tag.toLowerCase().includes(input.toLowerCase())
+        );
+        if (tags.length) {
+          return true;
+        }
+        return false;
+      });
+      blogs = blogs.filter(
+        (item, index) =>
+          item.heading.toLowerCase().includes(input.toLowerCase()) ||
+          blogsByTags[index]
+      );
+      this.setState({ blogs });
+    }
+  };
+
   render() {
     let searchClass = ["main-search"];
     if (this.state.isOpen) {
@@ -222,12 +248,17 @@ class Blog extends Component {
           <td>{this.props.size * this.props.pageNo + index + 1}</td>
           <td>{elem.heading}</td>
           <td>
-            <Button variant="warning" onClick={() => this.updateHandler(index)}>
+            <Button
+              variant="dark"
+              size="sm"
+              onClick={() => this.updateHandler(index)}
+            >
               Edit
             </Button>
             <Button
               onClick={() => this.props.deletee(elem._id)}
               variant="danger"
+              size="sm"
             >
               Delete
             </Button>
@@ -237,8 +268,16 @@ class Blog extends Component {
     });
     return (
       <div>
-        <Button onClick={this.toggleHandler}>{this.state.btnText}</Button>
-        <div id="main-search" className={searchClass.join(" ")}>
+        <Button
+          variant="dark"
+          size="sm"
+          style={{ display: "block" }}
+          onClick={this.toggleHandler}
+        >
+          {this.state.btnText}
+        </Button>
+        <SearchBar onChange={this.handleSearch} />
+        {/* <div id="main-search" className={searchClass.join(" ")}>
           <div className="input-group">
             <input
               type="text"
@@ -257,13 +296,11 @@ class Blog extends Component {
                     let tags = item.tags.filter((tag) =>
                       tag.toLowerCase().includes(e.target.value.toLowerCase())
                     );
-                    console.log(tags);
                     if (tags.length) {
                       return true;
                     }
                     return false;
                   });
-                  console.log(blogsByTags);
                   blogs = blogs.filter(
                     (item, index) =>
                       item.heading
@@ -289,7 +326,7 @@ class Blog extends Component {
               <i className="feather icon-search input-group-text" />
             </span>
           </div>
-        </div>
+        </div> */}
         {/* <input
           type="search"
           id="m-search"

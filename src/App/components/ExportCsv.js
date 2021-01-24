@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "antd";
+import { Button } from "react-bootstrap";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 
@@ -18,8 +18,9 @@ export const ExportCSV = ({ csvData, fileName }) => {
 
   return (
     <Button
-      type="primary"
-      style={{ marginRight: "20px", marginBottom: "20px" }}
+      variant="dark"
+      size="sm"
+      style={{ marginRight: "20px" }}
       onClick={(e) => exportToCSV(csvData, fileName)}
     >
       EXCEL

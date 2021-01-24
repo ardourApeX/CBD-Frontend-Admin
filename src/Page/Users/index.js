@@ -2,9 +2,8 @@ import React from "react";
 import { useEffect } from "react";
 import cogoToast from "cogo-toast";
 import { useState } from "react";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Button } from "react-bootstrap";
 import Table from "../../App/components/CategoryTable";
-import { Button } from "antd";
 import "antd/dist/antd.css";
 import { useRef } from "react";
 import { ExportCSV } from "../../App/components/ExportCsv";
@@ -90,8 +89,9 @@ const User = () => {
       >
         {({ toPdf }) => (
           <Button
+            size="sm"
             style={{ marginRight: "20px" }}
-            type="primary"
+            variant="dark"
             onClick={async () => {
               setPdf(false);
               setTimeout(toPdf, 500);
@@ -107,7 +107,11 @@ const User = () => {
         trigger={() => {
           // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
           // to the root node of the returned component as it will be overwritten.
-          return <Button type="primary">PRINT</Button>;
+          return (
+            <Button size="sm" variant="dark">
+              PRINT
+            </Button>
+          );
         }}
         content={() => ref.current}
       />
@@ -119,7 +123,7 @@ const User = () => {
               email: item.email,
               role: item.role,
               phonenumber: item.phonenumber,
-              createdDate: new Date(item.createdDate).toString(),
+              createdDate: new Date(item.createdDate).toDateString(),
               status: item.status,
               _id: item._id,
             };

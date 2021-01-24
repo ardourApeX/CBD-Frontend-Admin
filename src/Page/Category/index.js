@@ -1,15 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  Card,
-  Nav,
-  Button,
-  Accordion,
-  Spinner,
-  Modal,
-  Form,
-} from "react-bootstrap";
-import { Formik } from "formik";
+import { Card, Button, Accordion, Spinner, Modal, Form } from "react-bootstrap";
 import TextForm from "../../App/components/TextForm";
 import * as actionCreators from "../../store/actions/category";
 import cogoToast from "cogo-toast";
@@ -18,29 +9,6 @@ import AceEditor from "react-ace";
 import "brace/mode/javascript";
 import "brace/theme/chrome";
 
-import FileBase from "react-file-base64";
-import { data } from "jquery";
-
-const Images = [[], [], [], [], [], [], ["Oil-Page-Image.png"]];
-const Heading = [
-  "Topicals",
-  "Pets",
-  "Edibles",
-  "Capsules",
-  "Oils",
-  "Bundles",
-  "Default",
-];
-
-const SubHeading = [
-  ["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
-  ["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
-  ["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
-  ["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
-  ["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
-  ["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
-  ["Banner Title", "Title", "Content", "Bundle Title", "Bundle Content"],
-];
 class Category extends Component {
   constructor(props) {
     super(props);
@@ -373,7 +341,9 @@ class Category extends Component {
                 marginBottom: "1rem",
               }}
             >
-              <Button onClick={this.openModal}>Add Category</Button>
+              <Button variant="dark" size="sm" onClick={this.openModal}>
+                Add Category
+              </Button>
             </div>
             <Modal show={this.state.isOpen}>
               <Modal.Header closeButton onClick={this.closeModal}>
@@ -483,13 +453,13 @@ class Category extends Component {
                     />
                   </Form.Group>
 
-                  <Button variant="primary" type="submit">
+                  <Button variant="dark" size="sm" type="submit">
                     Submit
                   </Button>
                 </Form>
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" onClick={this.closeModal}>
+                <Button variant="secondary" size="sm" onClick={this.closeModal}>
                   Close
                 </Button>
               </Modal.Footer>

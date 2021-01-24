@@ -4,16 +4,15 @@ import { connect } from "react-redux";
 import * as actionCreators from "../../store/actions/vendor";
 import cogoToast from "cogo-toast";
 import { useState } from "react";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Button } from "react-bootstrap";
 import Table from "../../App/components/CategoryTable";
 import { PlusOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Modal, InputNumber } from "antd";
+import { Form, Input, Modal, InputNumber } from "antd";
 import "antd/dist/antd.css";
 import { useRef } from "react";
 import { ExportCSV } from "../../App/components/ExportCsv";
 import ReactToPdf from "react-to-pdf";
 import ReactToPrint from "react-to-print";
-import SearchBar from "../../App/components/SearchBar";
 
 const Vendor = ({ vendors, get, add, deletee, edit }) => {
   console.log(vendors);
@@ -125,10 +124,11 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
             justifyContent: "center",
             alignItems: "center",
           }}
+          size="sm"
           onClick={() => {
             setOpen(true);
           }}
-          type="primary"
+          variant="dark"
         >
           <PlusOutlined style={{ marginRight: "10px" }} />
           Add Vendor
@@ -154,8 +154,9 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
       >
         {({ toPdf }) => (
           <Button
+            size="sm"
             style={{ marginRight: "20px" }}
-            type="primary"
+            variant="dark"
             onClick={async () => {
               setPdf(false);
               setTimeout(toPdf, 500);
@@ -171,7 +172,11 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
         trigger={() => {
           // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
           // to the root node of the returned component as it will be overwritten.
-          return <Button type="primary">PRINT</Button>;
+          return (
+            <Button size="sm" variant="dark">
+              PRINT
+            </Button>
+          );
         }}
         content={() => ref.current}
       />
@@ -192,7 +197,7 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
         title={vendorId !== "" ? "Edit Vendor" : "Add Vendor"}
         onCancel={closeModal}
         footer={[
-          <Button key="back" onClick={closeModal}>
+          <Button size="sm" variant="dark" onClick={closeModal}>
             Close
           </Button>,
         ]}
@@ -230,7 +235,7 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button size="sm" variant="dark" htmlType="submit">
               Submit
             </Button>
           </Form.Item>

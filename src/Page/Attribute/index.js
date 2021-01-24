@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 import * as actionCreators from "../../store/actions/product";
 import cogoToast from "cogo-toast";
 import { useState } from "react";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Button } from "react-bootstrap";
 import Table from "../../App/components/CategoryTable";
 import { PlusOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Modal, InputNumber } from "antd";
+import { Form, Input, Modal } from "antd";
 import "antd/dist/antd.css";
 import { useRef } from "react";
 import { ExportCSV } from "../../App/components/ExportCsv";
@@ -112,6 +112,7 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
     <div>
       <div style={{ display: "flex" }}>
         <Button
+          size="sm"
           style={{
             marginLeft: "auto",
             marginBottom: "20px",
@@ -122,7 +123,7 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
           onClick={() => {
             setOpen(true);
           }}
-          type="primary"
+          variant="dark"
         >
           <PlusOutlined style={{ marginRight: "10px" }} />
           Add Attribute
@@ -148,8 +149,9 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
       >
         {({ toPdf }) => (
           <Button
+            size="sm"
             style={{ marginRight: "20px" }}
-            type="primary"
+            variant="dark"
             onClick={async () => {
               setPdf(false);
               setTimeout(toPdf, 500);
@@ -165,7 +167,11 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
         trigger={() => {
           // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
           // to the root node of the returned component as it will be overwritten.
-          return <Button type="primary">PRINT</Button>;
+          return (
+            <Button size="sm" variant="dark">
+              PRINT
+            </Button>
+          );
         }}
         content={() => ref.current}
       />
@@ -186,7 +192,7 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
         title={attributeId !== "" ? "Edit Attribute" : "Add Attribute"}
         onCancel={closeModal}
         footer={[
-          <Button key="back" onClick={closeModal}>
+          <Button size="sm" variant="dark" onClick={closeModal}>
             Close
           </Button>,
         ]}
@@ -216,7 +222,7 @@ const Attribute = ({ attributes, get, add, deletee, edit }) => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button size="sm" variant="dark" htmlType="submit">
               Submit
             </Button>
           </Form.Item>

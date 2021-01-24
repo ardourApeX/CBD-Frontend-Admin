@@ -88,7 +88,9 @@ export default function BlogForm(props) {
             className="mt-4"
           />
           <hr />
-          <Button onClick={props.submitHandler}>Submit</Button>
+          <Button variant="dark" size="sm" onClick={props.submitHandler}>
+            Submit
+          </Button>
         </Card.Body>
       </Card>
     </div>

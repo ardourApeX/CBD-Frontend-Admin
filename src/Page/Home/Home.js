@@ -416,7 +416,13 @@ class Home extends PureComponent {
           mainTitle = "";
       }
       return (
-        <Card key={index}>
+        <Card
+          key={index}
+          style={{
+            borderRadius: "0 !important",
+            background: "black !important",
+          }}
+        >
           <Card.Header>
             <Accordion.Toggle
               as={Button}
@@ -444,6 +450,8 @@ class Home extends PureComponent {
             )}
             {mainTitle === "Banner" && (
               <Button
+                variant="dark"
+                size="sm"
                 onClick={() => this.setState({ isOpen: true })}
                 style={{ marginLeft: "20px", display: "inline" }}
               >
@@ -644,13 +652,13 @@ class Home extends PureComponent {
                     />
                   </Form.Group>
 
-                  <Button variant="primary" type="submit">
+                  <Button variant="dark" size="sm" type="submit">
                     Submit
                   </Button>
                 </Form>
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" onClick={this.closeModal}>
+                <Button variant="secondary" size="sm" onClick={this.closeModal}>
                   Close
                 </Button>
               </Modal.Footer>

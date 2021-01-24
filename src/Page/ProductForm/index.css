@@ -1,0 +1,13 @@
+.ant-collapse-content {
+  background-color: #f4f4fc !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: black !important;
+  font-weight: 700;
+}
+
+.ant-collapse {
+  background-color: #f4f4fc !important;
+  border: none !important;
+}

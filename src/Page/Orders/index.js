@@ -95,7 +95,7 @@ const Order = () => {
         {({ toPdf }) => (
           <Button
             style={{ marginRight: "20px" }}
-            type="primary"
+            variant="dark"
             onClick={async () => {
               setPdf(false);
               setTimeout(toPdf, 500);
@@ -111,7 +111,7 @@ const Order = () => {
         trigger={() => {
           // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
           // to the root node of the returned component as it will be overwritten.
-          return <Button type="primary">PRINT</Button>;
+          return <Button variant="dark">PRINT</Button>;
         }}
         content={() => ref.current}
       />
@@ -125,7 +125,7 @@ const Order = () => {
               paymentStatus: item.orderStatus,
               amount: item.grandTotal,
               status: item.status,
-              date: item.createdOn,
+              date: new Date(item.createdOn).toDateString(),
               _id: item._id,
             };
           })}

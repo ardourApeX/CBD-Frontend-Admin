@@ -2,9 +2,9 @@ import React from "react";
 import { useEffect } from "react";
 import cogoToast from "cogo-toast";
 import { useState } from "react";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Button } from "react-bootstrap";
 import { PlusOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Modal, Select, Space } from "antd";
+import { Form, Input, Modal, Select } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 import { BACK_END_URL } from "../../utilities/Axios/url";
@@ -165,10 +165,11 @@ const FooterMenus = () => {
             justifyContent: "center",
             alignItems: "center",
           }}
+          size="sm"
           onClick={() => {
             setOpen(true);
           }}
-          type="primary"
+          variant="dark"
         >
           <PlusOutlined style={{ marginRight: "10px" }} />
           Add Footer Menu
@@ -176,7 +177,7 @@ const FooterMenus = () => {
       </div>
       {menus && (
         <Collapse
-          style={{ backgroundColor: "white" }}
+          style={{ backgroundColor: "#f4f4fc" }}
           bordered={false}
           accordion
           onChange={callback}
@@ -185,7 +186,6 @@ const FooterMenus = () => {
             <Panel
               style={{
                 marginBottom: "30px",
-                backgroundColor: "#fafafa",
                 border: "none !important",
               }}
               header={`${menu.label}`}
@@ -224,7 +224,8 @@ const FooterMenus = () => {
                     });
                   }}
                   style={{ width: "fit-content" }}
-                  type="primary"
+                  variant="dark"
+                  size="sm"
                 >
                   Edit
                 </Button>
@@ -232,7 +233,7 @@ const FooterMenus = () => {
               {menu.child.map((child, index1) => (
                 <Collapse
                   style={{
-                    backgroundColor: "white",
+                    // backgroundColor: "white",
                     padding: "30px !important",
                   }}
                   bordered={false}
@@ -434,14 +435,16 @@ const FooterMenus = () => {
                             });
                           }}
                           style={{ width: "fit-content" }}
-                          type="primary"
+                          variant="dark"
+                          size="sm"
                         >
                           Edit
                         </Button>
                         <Button
                           onClick={() => deletee(child._id)}
                           style={{ width: "fit-content" }}
-                          type="danger"
+                          variant="danger"
+                          size="sm"
                         >
                           Delete
                         </Button>
@@ -459,7 +462,7 @@ const FooterMenus = () => {
         title={"Add Footer Menu"}
         onCancel={closeModal}
         footer={[
-          <Button key="back" onClick={closeModal}>
+          <Button variant="dark" size="sm" onClick={closeModal}>
             Close
           </Button>,
         ]}
@@ -563,7 +566,7 @@ const FooterMenus = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button size="sm" variant="dark" htmlType="submit">
               Submit
             </Button>
           </Form.Item>

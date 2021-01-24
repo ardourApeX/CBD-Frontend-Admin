@@ -50,7 +50,7 @@ export default class TextForm extends Component {
         <br />
         <div className="d-flex justify-content-center mt-5">
           <button
-            className="btn btn-primary btn-lg"
+            className="btn btn-dark btn-lg"
             onClick={(event) =>
               this.props.updateHandler(event, sectionName, this.props.index)
             }

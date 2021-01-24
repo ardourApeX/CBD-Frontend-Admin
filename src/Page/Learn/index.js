@@ -1,24 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  Card,
-  Nav,
-  Button,
-  Accordion,
-  Spinner,
-  Modal,
-  Form,
-} from "react-bootstrap";
+import { Card, Button, Accordion, Spinner, Modal } from "react-bootstrap";
 import { Collapse, Input } from "antd";
 import "antd/dist/antd.css";
-import TextForm from "../../App/components/TextForm";
 import * as actionCreators from "../../store/actions/learn";
 import cogoToast from "cogo-toast";
 import AceEditor from "react-ace";
 import "brace/mode/javascript";
 import "brace/theme/chrome";
 import { DeleteFilled, EditFilled, PlusOutlined } from "@ant-design/icons";
-import { Label } from "react-bootstrap";
 const { Panel } = Collapse;
 
 class Learn extends Component {
@@ -162,7 +152,7 @@ class Learn extends Component {
           marginLeft: "30px",
           marginRight: "30px",
           fontSize: "25px",
-          color: "#04a9f5",
+          color: "black",
         }}
         onClick={(event) => {
           event.stopPropagation();
@@ -275,7 +265,8 @@ class Learn extends Component {
           />
           <Button
             style={{ marginTop: "20px" }}
-            variant="secondary"
+            variant="dark"
+            size="sm"
             onClick={() => {
               this.setState({ loading: true });
               switch (this.state.modalType) {
@@ -469,6 +460,8 @@ class Learn extends Component {
                 </Collapse>
               ))}
               <Button
+                variant="primary"
+                size="sm"
                 style={{
                   marginTop: "20px",
                   display: "flex",
@@ -492,6 +485,8 @@ class Learn extends Component {
             </>
           )}
           <Button
+            variant="dark"
+            size="sm"
             style={{
               marginTop: "20px",
               display: "flex",
@@ -638,6 +633,8 @@ class Learn extends Component {
             >
               <div style={{ display: "flex" }}>
                 <Button
+                  variant="dark"
+                  size="sm"
                   style={{
                     marginLeft: "auto",
                     marginBottom: "20px",
@@ -690,7 +687,8 @@ class Learn extends Component {
                     />
                     <Button
                       style={{ marginTop: "20px" }}
-                      variant="primary"
+                      variant="dark"
+                      size="sm"
                       type="submit"
                       onClick={() => {
                         this.setState({ loading: true });
@@ -720,6 +718,8 @@ class Learn extends Component {
                     <div style={{ display: "flex" }}>
                       <h4 style={{ marginTop: "20px" }}>Questions</h4>
                       <Button
+                        variant="dark"
+                        size="sm"
                         style={{
                           marginLeft: "auto",
                           marginBottom: "20px",
@@ -771,8 +771,9 @@ class Learn extends Component {
                             }}
                           />
                           <Button
-                            style={{ marginTop: "20px" }}
-                            variant="primary"
+                            style={{ margin: "20px auto 0 auto" }}
+                            variant="dark"
+                            size="sm"
                             type="submit"
                             onClick={() => {
                               this.setState({ loading: true });
@@ -844,6 +845,8 @@ class Learn extends Component {
                     modalType: "Learn",
                   });
                 }}
+                variant="dark"
+                size="sm"
               >
                 <PlusOutlined style={{ marginRight: "10px" }} />
                 Add Learn
@@ -855,7 +858,7 @@ class Learn extends Component {
               </Modal.Header>
               <Modal.Body>{modalBody}</Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" onClick={this.closeModal}>
+                <Button variant="secondary" size="sm" onClick={this.closeModal}>
                   Close
                 </Button>
               </Modal.Footer>
