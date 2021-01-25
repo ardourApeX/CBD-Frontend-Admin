@@ -1,3 +1,29 @@
+import {
+  faMedium,
+  faCreativeCommonsShare,
+  faWpforms,
+  faAffiliatetheme,
+} from "@fortawesome/free-brands-svg-icons";
+import {
+  faList,
+  faUserTie,
+  faBoxOpen,
+  faHome,
+  faShoppingCart,
+  faPenAlt,
+  faTags,
+  faUsers,
+  faInfoCircle,
+  faImage,
+  faCalculator,
+  faHandsHelping,
+  faUserCog,
+  faAngleDoubleRight,
+  faShoppingBasket,
+  faColumns,
+} from "@fortawesome/free-solid-svg-icons";
+// import {  } from '@fortawesome/free-regular-svg-icons'
+
 export default {
   items: [
     {
@@ -11,7 +37,7 @@ export default {
           title: "Dashboard",
           type: "item",
           url: "/dashboard/default",
-          icon: "feather icon-home",
+          icon: faHome,
         },
       ],
     },
@@ -56,7 +82,7 @@ export default {
           type: "item",
           url: "/Blog",
           classes: "nav-item",
-          icon: "feather icon-sidebar",
+          icon: faMedium,
         },
         {
           id: "Product Category",
@@ -64,7 +90,7 @@ export default {
           type: "item",
           url: "/ProductCategory",
           classes: "nav-item",
-          icon: "feather icon-sidebar",
+          icon: faList,
         },
         {
           id: "Vendor",
@@ -72,7 +98,7 @@ export default {
           type: "item",
           url: "/Vendor",
           classes: "nav-item",
-          icon: "feather icon-sidebar",
+          icon: faUserTie,
         },
         {
           id: "PackageType",
@@ -80,13 +106,13 @@ export default {
           type: "item",
           url: "/PackageType",
           classes: "nav-item",
-          icon: "feather icon-sidebar",
+          icon: faBoxOpen,
         },
         {
           id: "Products",
           title: "Products",
           type: "collapse",
-          icon: "feather icon-menu",
+          icon: faShoppingCart,
           children: [
             {
               id: "Attribute",
@@ -94,7 +120,7 @@ export default {
               type: "item",
               url: "/Attribute",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faAngleDoubleRight,
             },
             {
               id: "Product List",
@@ -102,7 +128,7 @@ export default {
               type: "item",
               url: "/ProductList",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faShoppingBasket,
             },
             {
               id: "Combo List",
@@ -110,7 +136,7 @@ export default {
               type: "item",
               url: "/ComboList",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faShoppingBasket,
             },
             {
               id: "Product Form",
@@ -118,7 +144,7 @@ export default {
               type: "item",
               url: "/ProductForm/add",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faWpforms,
             },
             {
               id: "Combo Form",
@@ -126,7 +152,7 @@ export default {
               type: "item",
               url: "/ComboForm/add",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faWpforms,
             },
           ],
         },
@@ -136,7 +162,7 @@ export default {
           type: "item",
           url: "/Review",
           classes: "nav-item",
-          icon: "feather icon-sidebar",
+          icon: faPenAlt,
         },
         {
           id: "Coupon",
@@ -144,7 +170,7 @@ export default {
           type: "item",
           url: "/Coupon",
           classes: "nav-item",
-          icon: "feather icon-sidebar",
+          icon: faTags,
         },
         {
           id: "Users",
@@ -152,7 +178,7 @@ export default {
           type: "item",
           url: "/Users",
           classes: "nav-item",
-          icon: "feather icon-sidebar",
+          icon: faUsers,
         },
         {
           id: "SubscribedProduct",
@@ -160,7 +186,7 @@ export default {
           type: "item",
           url: "/SubscribedProducts",
           classes: "nav-item",
-          icon: "feather icon-sidebar",
+          icon: faShoppingCart,
         },
         {
           id: "Wishlist",
@@ -168,13 +194,13 @@ export default {
           type: "item",
           url: "/Wishlist",
           classes: "nav-item",
-          icon: "feather icon-sidebar",
+          icon: faList,
         },
         {
           id: "Affiliation",
           title: "Affiliation",
           type: "collapse",
-          icon: "feather icon-menu",
+          icon: faAffiliatetheme,
           children: [
             {
               id: "Statistics",
@@ -182,7 +208,7 @@ export default {
               type: "item",
               url: "/Statistics",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faCalculator,
             },
             {
               id: "Ambassador Management",
@@ -190,7 +216,7 @@ export default {
               type: "item",
               url: "/AmbassadorManagement",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faUserCog,
             },
             {
               id: "Referral",
@@ -198,7 +224,7 @@ export default {
               type: "item",
               url: "/Referrals",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faHandsHelping,
             },
             {
               id: "Creatives",
@@ -206,7 +232,7 @@ export default {
               type: "item",
               url: "/Creatives",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faCreativeCommonsShare,
             },
           ],
         },
@@ -216,7 +242,7 @@ export default {
           type: "item",
           url: "/Orders",
           classes: "nav-item",
-          icon: "feather icon-sidebar",
+          icon: faShoppingBasket,
         },
         {
           id: "FooterMenu",
@@ -224,13 +250,13 @@ export default {
           type: "item",
           url: "/FooterMenu",
           classes: "nav-item",
-          icon: "feather icon-sidebar",
+          icon: faList,
         },
         {
           id: "Site-content",
           title: "Site Content",
           type: "collapse",
-          icon: "feather icon-menu",
+          icon: faColumns,
           // badge: {
           // 	title: "New",
           // 	type: "label-danger",
@@ -242,7 +268,7 @@ export default {
               type: "item",
               url: "/Home",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faHome,
             },
             {
               id: "Shop",
@@ -250,7 +276,7 @@ export default {
               type: "item",
               url: "/Shop",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faShoppingCart,
             },
             {
               id: "Category",
@@ -258,7 +284,7 @@ export default {
               type: "item",
               url: "/Category",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faList,
             },
             {
               id: "Banner",
@@ -266,7 +292,7 @@ export default {
               type: "item",
               url: "/Banner",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faImage,
             },
             {
               id: "Learn",
@@ -274,7 +300,7 @@ export default {
               type: "item",
               url: "/Learn",
               classes: "nav-item",
-              icon: "feather icon-sidebar",
+              icon: faInfoCircle,
             },
           ],
         },

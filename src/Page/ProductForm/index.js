@@ -10,7 +10,7 @@ import {
   Collapse,
 } from "antd";
 import TextArea from "antd/lib/input/TextArea";
-import "./index.css";
+import "../page.css";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import * as actionCreators from "../../store/actions/product";
@@ -334,18 +334,8 @@ const ProductForm = ({
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
-        <Collapse
-          style={{ backgroundColor: "#f4f4fc", border: "none" }}
-          accordion
-        >
-          <Panel
-            style={{
-              marginBottom: "30px",
-              border: "none !important",
-            }}
-            header="General Information"
-            key="1"
-          >
+        <Tabs defaultActiveKey="1">
+          <TabPane forceRender={true} tab="General Information" key="1">
             <div
               style={{
                 display: "grid",
@@ -497,17 +487,14 @@ const ProductForm = ({
                 </Select>
               </Form.Item>
             </div>
-          </Panel>
-          <Panel
-            style={{
-              marginBottom: "30px",
-              border: "none !important",
-            }}
-            header="Price, Inventory and Shipping Information"
+          </TabPane>
+          <TabPane
+            forceRender={true}
+            tab="Price, Inventory and Shipping Information"
             key="2"
           >
             <div className="card-container">
-              <Tabs type="card">
+              <Tabs>
                 <TabPane forceRender={true} tab="General" key="1">
                   <div
                     style={{
@@ -816,13 +803,10 @@ const ProductForm = ({
                 <TabPane forceRender={true} tab="Variations" key="5"></TabPane>
               </Tabs>
             </div>
-          </Panel>
-          <Panel
-            style={{
-              marginBottom: "30px",
-              border: "none !important",
-            }}
-            header="Direction of Use and Warranty Information"
+          </TabPane>
+          <TabPane
+            forceRender={true}
+            tab="Direction of Use and Warranty Information"
             key="3"
           >
             <div
@@ -864,13 +848,10 @@ const ProductForm = ({
                 <Input />
               </Form.Item>
             </div>
-          </Panel>
-          <Panel
-            style={{
-              marginBottom: "30px",
-              border: "none !important",
-            }}
-            header="Attributes, Ingredients and FAQ's"
+          </TabPane>
+          <TabPane
+            forceRender={true}
+            tab="Attributes, Ingredients and FAQ's"
             key="4"
           >
             <div>
@@ -930,15 +911,8 @@ const ProductForm = ({
                 <TextArea />
               </Form.Item>
             </div>
-          </Panel>
-          <Panel
-            style={{
-              marginBottom: "30px",
-              border: "none !important",
-            }}
-            header="Product Category and Images"
-            key="5"
-          >
+          </TabPane>
+          <TabPane forceRender={true} tab="Product Category and Images" key="5">
             <div
               style={{
                 display: "grid",
@@ -1292,8 +1266,62 @@ const ProductForm = ({
                 </div>
               )}
             </Form.Item>
+          </TabPane>
+        </Tabs>
+
+        {/* <Collapse
+          style={{ backgroundColor: "#f4f4fc", border: "none" }}
+          accordion
+        >
+          <Panel
+            style={{
+              marginBottom: "30px",
+              border: "none !important",
+            }}
+            header="General Information"
+            key="1"
+          ></Panel>
+          <Panel
+            style={{
+              marginBottom: "30px",
+              border: "none !important",
+            }}
+            header="Price, Inventory and Shipping Information"
+            key="2"
+          >
+            
           </Panel>
-        </Collapse>
+          <Panel
+            style={{
+              marginBottom: "30px",
+              border: "none !important",
+            }}
+            header="Direction of Use and Warranty Information"
+            key="3"
+          >
+            
+          </Panel>
+          <Panel
+            style={{
+              marginBottom: "30px",
+              border: "none !important",
+            }}
+            header="Attributes, Ingredients and FAQ's"
+            key="4"
+          >
+            
+          </Panel>
+          <Panel
+            style={{
+              marginBottom: "30px",
+              border: "none !important",
+            }}
+            header="Product Category and Images"
+            key="5"
+          >
+            
+          </Panel>
+        </Collapse> */}
 
         <Form.Item>
           <Button

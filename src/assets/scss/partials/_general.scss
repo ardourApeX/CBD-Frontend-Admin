@@ -24,6 +24,11 @@ a {
   }
 }
 
+.nav-link-large {
+  font-size: 1.6rem !important;
+  color: #78777d !important;
+}
+
 h1,
 h2,
 h3,
@@ -167,6 +172,19 @@ p.text-muted {
   .progress-bar {
     background-color: #dfe1ee !important;
   }
+}
+
+.table-header {
+  background-color: #f4f4fc !important;
+}
+
+// .ant-table-column-sorters-with-tooltip,
+.table-header {
+  padding: 20px !important;
+  border-bottom: 1px solid black !important;
+  border-right: none !important;
+  border-left: none !important;
+  border-top: none !important;
 }
 
 .accordion .card {

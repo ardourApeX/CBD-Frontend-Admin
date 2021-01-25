@@ -10,6 +10,7 @@ import {
   Collapse,
 } from "antd";
 import TextArea from "antd/lib/input/TextArea";
+import "../page.css";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import * as actionCreators from "../../store/actions/product";
@@ -301,18 +302,8 @@ const ComboForm = ({ match, add, edit, combos, deleteProductImage }) => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
-        <Collapse
-          style={{ backgroundColor: "#f4f4fc", border: "none" }}
-          accordion
-        >
-          <Panel
-            style={{
-              marginBottom: "30px",
-              border: "none !important",
-            }}
-            header="General Information"
-            key="1"
-          >
+        <Tabs defaultActiveKey="1">
+          <TabPane forceRender={true} tab="General Information" key="1">
             <div
               style={{
                 display: "grid",
@@ -392,131 +383,123 @@ const ComboForm = ({ match, add, edit, combos, deleteProductImage }) => {
                 </Select>
               </Form.Item>
             </div>
-          </Panel>
-          <Panel
-            style={{
-              marginBottom: "30px",
-              border: "none !important",
-            }}
-            header="Price, Inventory and Shipping Information"
+          </TabPane>
+          <TabPane
+            forceRender={true}
+            tab="Price, Inventory and Shipping Information"
             key="2"
           >
-            <div className="card-container">
-              <Tabs type="card">
-                <TabPane forceRender={true} tab="General" key="1">
+            <Tabs>
+              <TabPane forceRender={true} tab="General" key="1">
+                <div
+                  style={{
+                    marginTop: "20px",
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr 1fr",
+                    gridColumnGap: "10px",
+                  }}
+                >
+                  <Form.Item
+                    label="Default Sale Price ($)"
+                    name="sale_price"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input Package Type Id!",
+                      },
+                    ]}
+                  >
+                    <InputNumber step="0.1" />
+                  </Form.Item>
+                  <Form.Item label="Barcode" name="barcode">
+                    <InputNumber />
+                  </Form.Item>
+                  <Form.Item
+                    valuePropName="checked"
+                    initialValue={false}
+                    label="Enable reviews"
+                    name="enable_review"
+                  >
+                    <Checkbox />
+                  </Form.Item>
+                </div>
+              </TabPane>
+              <TabPane forceRender={true} tab="Inventory" key="2">
+                <div
+                  style={{
+                    marginTop: "20px",
+                  }}
+                >
+                  <Form.Item
+                    rules={[
+                      {
+                        required: true,
+                        message: "Sku is required",
+                      },
+                    ]}
+                    label="SKU"
+                    name="sku"
+                  >
+                    <Input style={{ width: "30%" }} />
+                  </Form.Item>
+                </div>
+              </TabPane>
+              <TabPane forceRender={true} tab="Shipping" key="3">
+                <div
+                  style={{
+                    marginTop: "20px",
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr 2fr",
+                    gridColumnGap: "20px",
+                  }}
+                >
+                  <Form.Item label="Batch No." name="batch_no">
+                    <InputNumber />
+                  </Form.Item>
+                  <Form.Item label="Expiry" name="expiry">
+                    <Input placeholder="dd/mm/yyyy" />
+                  </Form.Item>
                   <div
                     style={{
-                      marginTop: "20px",
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr 1fr",
-                      gridColumnGap: "10px",
+                      display: "flex",
                     }}
                   >
                     <Form.Item
-                      label="Default Sale Price ($)"
-                      name="sale_price"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input Package Type Id!",
-                        },
-                      ]}
+                      style={{ marginRight: "20px" }}
+                      name="volume"
+                      label="Volume"
                     >
-                      <InputNumber step="0.1" />
-                    </Form.Item>
-                    <Form.Item label="Barcode" name="barcode">
-                      <InputNumber />
+                      <InputNumber placeholder="length" />
                     </Form.Item>
                     <Form.Item
-                      valuePropName="checked"
-                      initialValue={false}
-                      label="Enable reviews"
-                      name="enable_review"
+                      initialValue="cc"
+                      label="Unit"
+                      name="volume_unit"
                     >
-                      <Checkbox />
+                      <Select>
+                        <Option value="cc">cc</Option>
+                        <Option value="ml">ml</Option>
+                        <Option value="softgel">softgel</Option>
+                        <Option value="capsule">capsule</Option>
+                        <Option value="oz">oz</Option>
+                        <Option value="lb">lb</Option>
+                      </Select>
                     </Form.Item>
                   </div>
-                </TabPane>
-                <TabPane forceRender={true} tab="Inventory" key="2">
-                  <div
-                    style={{
-                      marginTop: "20px",
-                    }}
-                  >
-                    <Form.Item
-                      rules={[
-                        {
-                          required: true,
-                          message: "Sku is required",
-                        },
-                      ]}
-                      label="SKU"
-                      name="sku"
-                    >
-                      <Input style={{ width: "30%" }} />
-                    </Form.Item>
-                  </div>
-                </TabPane>
-                <TabPane forceRender={true} tab="Shipping" key="3">
-                  <div
-                    style={{
-                      marginTop: "20px",
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr 2fr",
-                      gridColumnGap: "20px",
-                    }}
-                  >
-                    <Form.Item label="Batch No." name="batch_no">
-                      <InputNumber />
-                    </Form.Item>
-                    <Form.Item label="Expiry" name="expiry">
-                      <Input placeholder="dd/mm/yyyy" />
-                    </Form.Item>
-                    <div
-                      style={{
-                        display: "flex",
-                      }}
-                    >
-                      <Form.Item
-                        style={{ marginRight: "20px" }}
-                        name="volume"
-                        label="Volume"
-                      >
-                        <InputNumber placeholder="length" />
-                      </Form.Item>
-                      <Form.Item
-                        initialValue="cc"
-                        label="Unit"
-                        name="volume_unit"
-                      >
-                        <Select>
-                          <Option value="cc">cc</Option>
-                          <Option value="ml">ml</Option>
-                          <Option value="softgel">softgel</Option>
-                          <Option value="capsule">capsule</Option>
-                          <Option value="oz">oz</Option>
-                          <Option value="lb">lb</Option>
-                        </Select>
-                      </Form.Item>
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 3fr ",
-                      gridColumnGap: "10px",
-                    }}
-                  ></div>
-                </TabPane>
-              </Tabs>
-            </div>
-          </Panel>
-          <Panel
-            style={{
-              marginBottom: "30px",
-              border: "none !important",
-            }}
-            header="Direction of Use and Warranty Information"
+                </div>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 3fr ",
+                    gridColumnGap: "10px",
+                  }}
+                ></div>
+              </TabPane>
+            </Tabs>
+          </TabPane>
+          <TabPane
+            forceRender={true}
+            tab="Direction of Use and Warranty Information"
             key="3"
           >
             <div
@@ -558,13 +541,10 @@ const ComboForm = ({ match, add, edit, combos, deleteProductImage }) => {
                 <Input />
               </Form.Item>
             </div>
-          </Panel>
-          <Panel
-            style={{
-              marginBottom: "30px",
-              border: "none !important",
-            }}
-            header="Attributes, Ingredients and FAQ's"
+          </TabPane>
+          <TabPane
+            forceRender={true}
+            tab="Attributes, Ingredients and FAQ's"
             key="4"
           >
             <div>
@@ -624,15 +604,8 @@ const ComboForm = ({ match, add, edit, combos, deleteProductImage }) => {
                 <TextArea />
               </Form.Item>
             </div>
-          </Panel>
-          <Panel
-            style={{
-              marginBottom: "30px",
-              border: "none !important",
-            }}
-            header="Images"
-            key="5"
-          >
+          </TabPane>
+          <TabPane forceRender={true} tab="Images" key="5">
             <div
               style={{
                 display: "grid",
@@ -967,8 +940,8 @@ const ComboForm = ({ match, add, edit, combos, deleteProductImage }) => {
                 </div>
               )}
             </Form.Item>
-          </Panel>
-        </Collapse>
+          </TabPane>
+        </Tabs>
 
         <Form.Item>
           <Button

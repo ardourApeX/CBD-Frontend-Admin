@@ -86,11 +86,13 @@ class CategoryTable extends Component {
                   title={titles[index]}
                   dataIndex={column}
                   key={titles[index]}
+                  className="table-header"
                 />
               </>
             ))}
             {type === "attribute" ? (
               <Column
+                className="table-header"
                 title="Terms"
                 render={(text, record) => (
                   <>
@@ -113,6 +115,7 @@ class CategoryTable extends Component {
             ) : null}
             {type === "ambassador" ? (
               <Column
+                className="table-header"
                 title="Expand"
                 render={(text, record) => (
                   <>
@@ -128,6 +131,7 @@ class CategoryTable extends Component {
             ) : null}
             {type === "referrals" || type === "ambassadorPay" ? (
               <Column
+                className="table-header"
                 title="Order ID"
                 render={(text, record) =>
                   record.orderid && (
@@ -143,6 +147,7 @@ class CategoryTable extends Component {
             ) : null}
             {(onEdit || onDelete || onPay) && setPdf ? (
               <Column
+                className="table-header"
                 title="Actions"
                 render={(text, record) => (
                   <Space size="middle">

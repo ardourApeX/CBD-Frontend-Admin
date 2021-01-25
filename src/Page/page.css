@@ -1,0 +1,62 @@
+.ant-collapse-content {
+  background-color: #f4f4fc !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: black !important;
+  font-weight: 700;
+}
+
+.ant-collapse {
+  background-color: #f4f4fc !important;
+  border: none !important;
+}
+
+.ant-input,
+.ant-checkbox-input,
+.ant-checkbox-inner {
+  padding: 7px !important;
+  border: 1px solid black !important;
+  outline: none !important;
+}
+
+.ant-input-number-input {
+  padding: 18px !important;
+  border: 1px solid black !important;
+  outline: none !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: black !important;
+}
+
+.ant-select-selector {
+  padding: 5px !important;
+  height: fit-content !important;
+  border: 1px solid black !important;
+  outline: none !important;
+  display: flex;
+  align-items: center;
+  min-width: 100px;
+}
+
+.ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
+.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.ant-tabs-tab {
+  margin: 0 20px 0 0 !important;
+  padding: 5px !important;
+  align-items: flex-start !important;
+}
+
+.ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap,
+.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
+  white-space: initial !important;
+}
+
+.ant-tabs-ink-bar {
+  background: black !important;
+}
