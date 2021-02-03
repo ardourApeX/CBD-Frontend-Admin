@@ -235,7 +235,7 @@ const Vendor = ({ vendors, get, add, deletee, edit }) => {
           </Form.Item>
 
           <Form.Item>
-            <Button size="sm" variant="dark" htmlType="submit">
+            <Button size="sm" variant="dark" type="submit">
               Submit
             </Button>
           </Form.Item>

@@ -9,8 +9,6 @@ import Aux from "../hoc/_Aux";
 import ScrollToTop from "./layout/ScrollToTop";
 import routes from "../route";
 import { PrivateRoute } from "./PrivateRoute";
-import { connect } from "react-redux";
-import * as actionCreators from "../store/actions/category";
 
 const AdminLayout = Loadable({
   loader: () => import("./layout/AdminLayout"),

@@ -89,8 +89,10 @@ const ComboList = ({ combos, get, deletee, ...props }) => {
       <ExportCSV
         csvData={combos.map((item) => {
           return {
-            ID: item.attributeid,
-            Name: item.name,
+            ID: item._id,
+            Name: item.title,
+            SKU: item.sku,
+            "Sale Price": item.dsaleprice,
           };
         })}
         fileName="All combos"

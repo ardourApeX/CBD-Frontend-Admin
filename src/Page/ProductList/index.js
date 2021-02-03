@@ -87,10 +87,16 @@ const ProductList = ({ products, get, deletee, ...props }) => {
         </div>
       </Link>
       <ExportCSV
-        csvData={products.map((item) => {
+        csvData={products.map((product) => {
           return {
-            ID: item.attributeid,
-            Name: item.name,
+            ID: product.productid.id,
+            Name: product.productid.producttitle,
+            Category: product.categoryid[0]
+              ? product.categoryid[0].categorytitle
+              : "",
+            SKU: product.productid.sku,
+            Type: product.producttype,
+            Date: new Date(product.productid.creationdate).toDateString(),
           };
         })}
         fileName="All products"
