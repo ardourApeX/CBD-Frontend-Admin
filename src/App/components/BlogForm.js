@@ -4,6 +4,7 @@ import "antd/dist/antd.css";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Button, FormControl, InputGroup, Card } from "react-bootstrap";
 import { DeleteFilled } from "@ant-design/icons";
+import { Editor } from "@tinymce/tinymce-react";
 // import ImageForm from
 
 export default function BlogForm(props) {
@@ -11,10 +12,13 @@ export default function BlogForm(props) {
   let { imagePreviewUrl } = props;
   let $imagePreview = null;
   if (imagePreviewUrl.length) {
-    console.log("reached here");
-    console.log(imagePreviewUrl);
     $imagePreview = (
-      <img src={imagePreviewUrl} style={{ width: "5%" }} className="mt-5" />
+      <img
+        src={imagePreviewUrl}
+        alt="Preview"
+        style={{ width: "5%" }}
+        className="mt-5"
+      />
     );
   }
   return (
@@ -44,11 +48,29 @@ export default function BlogForm(props) {
             />
           </InputGroup>
           <label htmlFor="Content">Content</label>
-          <CKEditor
+          {/* <CKEditor
             editor={ClassicEditor}
             data={props.data.content}
             onChange={(event, editor) =>
               props.changeHandler("content", editor.getData())
+            }
+          /> */}
+          <Editor
+            apiKey="hzdaugks23yoyk345tpf4qlu2nqrjid0mtkg4tzod5oo5qc6"
+            initialValue={props.data.content}
+            init={{
+              height: 500,
+              menubar: false,
+              plugins: [
+                "advlist autolink lists link image charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table paste code help wordcount",
+              ],
+              toolbar:
+                "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
+            }}
+            onEditorChange={(content, editor) =>
+              props.changeHandler("content", content)
             }
           />
           <label htmlFor="Tags">Tags</label>

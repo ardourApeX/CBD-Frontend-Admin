@@ -60,6 +60,7 @@ class Blog extends Component {
           imagePreviewUrl: reader.result,
           currentBlog: data,
         });
+        console.log("reached here");
       } else {
         this.setState({
           file: file,
@@ -92,7 +93,7 @@ class Blog extends Component {
     Object.keys(this.state.currentBlog).forEach((key) =>
       formData.append(key, this.state.currentBlog[key])
     );
-    // formData.append("image", this.state.file);
+    formData.append("image", this.state.file);
     console.log(this.props.blogs[index]);
     this.props
       .update(index, formData)
