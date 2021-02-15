@@ -91,10 +91,12 @@ export default function BlogForm(props) {
           <p style={{ marginBottom: 0 }}>
             {imagePreviewUrl.length > 0 ? (
               <>
-                {imagePreviewUrl && imagePreviewUrl.length < 100 && (
+                {imagePreviewUrl !== "" && imagePreviewUrl.length < 100 ? (
                   <span style={{ marginRight: "20px" }}>
                     {props.data.image}
                   </span>
+                ) : (
+                  <span style={{ marginRight: "20px" }}>{props.file.name}</span>
                 )}
                 <DeleteFilled
                   style={{ fontSize: "20px", color: "red" }}

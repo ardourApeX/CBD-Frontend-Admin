@@ -10,10 +10,10 @@ export const update = (index, data) => {
         dispatch({
           type: actionTypes.UPDATE_BLOG,
 
-          payload: data,
+          payload: result,
           index,
         });
-        return result.data.message;
+        return { message: result.data.message, data: result.data.data };
       })
       .catch((err) => {
         console.log(err);

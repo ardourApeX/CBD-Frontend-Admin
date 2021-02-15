@@ -5,7 +5,7 @@ import cogoToast from "cogo-toast";
 import DataTable from "../../App/components/DataTable";
 import BlogForm from "../../App/components/BlogForm";
 import Loader from "../../App/layout/Loader";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { Input } from "antd";
 import windowSize from "react-window-size";
 import DEMO from "../../store/actions/constant";
@@ -26,7 +26,7 @@ class Blog extends Component {
         content: "",
         tags: [],
       },
-      file: "",
+      file: null,
       imagePreviewUrl: "",
       search: "",
       blogs: [],
@@ -93,12 +93,22 @@ class Blog extends Component {
     Object.keys(this.state.currentBlog).forEach((key) =>
       formData.append(key, this.state.currentBlog[key])
     );
-    formData.append("image", this.state.file);
+    if (this.state.imagePreviewUrl !== "" && this.state.file) {
+      formData.append("image", this.state.file);
+    } else {
+      formData.append("imageUrl", this.state.imagePreviewUrl);
+    }
     console.log(this.props.blogs[index]);
     this.props
       .update(index, formData)
       .then((result) => {
-        cogoToast.success(result);
+        console.log(result);
+        this.setState({
+          imagePreviewUrl: `${IMAGE_URL}/${result.data.image}`,
+          file: null,
+          currentBlog: result.data,
+        });
+        cogoToast.success(result.message);
       })
       .catch((err) => cogoToast.error(err));
   };
@@ -155,7 +165,7 @@ class Blog extends Component {
     const data = { ...this.state.currentBlog };
     data.image = "";
     this.setState({
-      file: "",
+      file: null,
       imagePreviewUrl: "",
       currentBlog: data,
     });
@@ -176,7 +186,7 @@ class Blog extends Component {
     this.props
       .getAll(this.props.pageNo, this.props.size)
       .then((result) => {
-        this.setState({ blogs: result.data });
+        this.setState({ blogs: result.data, loading: false });
         cogoToast.success(result.message);
       })
       .catch((err) => cogoToast.error(err));
@@ -257,7 +267,21 @@ class Blog extends Component {
               Edit
             </Button>
             <Button
-              onClick={() => this.props.deletee(elem._id)}
+              onClick={() => {
+                this.setState({ loading: true });
+                this.props
+                  .deletee(elem._id)
+                  .then((result) => {
+                    this.setState({
+                      loading: false,
+                      blogs: this.state.blogs.filter(
+                        (item) => item._id === elem._id
+                      ),
+                    });
+                    cogoToast.success(result);
+                  })
+                  .catch((err) => cogoToast.error(err));
+              }}
               variant="danger"
               size="sm"
             >
@@ -267,7 +291,15 @@ class Blog extends Component {
         </tr>
       );
     });
-    return (
+    return this.state.loading ? (
+      <Spinner
+        animation="border"
+        style={{ position: "fixed", top: "20%", left: "60%" }}
+        role="status"
+      >
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    ) : (
       <div>
         <Button
           variant="dark"
@@ -278,91 +310,6 @@ class Blog extends Component {
           {this.state.btnText}
         </Button>
         <SearchBar onChange={this.handleSearch} />
-        {/* <div id="main-search" className={searchClass.join(" ")}>
-          <div className="input-group">
-            <input
-              type="text"
-              id="m-search"
-              className="form-control"
-              placeholder="Search By Title or Tags"
-              style={{ width: this.state.searchString }}
-              value={this.state.search}
-              onChange={(e) => {
-                this.setState({ search: e.target.value });
-                if (e.target.value.length) {
-                  let blogs = this.props.blogs.map((a) => {
-                    return { ...a };
-                  });
-                  let blogsByTags = blogs.map((item) => {
-                    let tags = item.tags.filter((tag) =>
-                      tag.toLowerCase().includes(e.target.value.toLowerCase())
-                    );
-                    if (tags.length) {
-                      return true;
-                    }
-                    return false;
-                  });
-                  blogs = blogs.filter(
-                    (item, index) =>
-                      item.heading
-                        .toLowerCase()
-                        .includes(e.target.value.toLowerCase()) ||
-                      blogsByTags[index]
-                  );
-                  this.setState({ blogs });
-                }
-              }}
-            />
-            <a
-              href={DEMO.BLANK_LINK}
-              className="input-group-append search-close"
-              onClick={this.searchOffHandler}
-            >
-              <i className="feather icon-x input-group-text" />
-            </a>
-            <span
-              className="input-group-append search-btn btn btn-primary"
-              onClick={this.searchOnHandler}
-            >
-              <i className="feather icon-search input-group-text" />
-            </span>
-          </div>
-        </div> */}
-        {/* <input
-          type="search"
-          id="m-search"
-          className="form-control"
-          style={{ padding: "5px" }}
-          placeholder="Search By Title or Tags"
-          value={this.state.search}
-          onChange={(e) => {
-            this.setState({ search: e.target.value });
-            if (e.target.value !== "") {
-              let blogs = this.props.blogs.map((a) => {
-                return { ...a };
-              });
-              let blogsByTags = blogs.map((item) => {
-                let tags = item.tags.filter((tag) =>
-                  tag.toLowerCase().includes(e.target.value.toLowerCase())
-                );
-                console.log(tags);
-                if (tags.length) {
-                  return true;
-                }
-                return false;
-              });
-              console.log(blogsByTags);
-              blogs = blogs.filter(
-                (item, index) =>
-                  item.heading
-                    .toLowerCase()
-                    .includes(e.target.value.toLowerCase()) ||
-                  blogsByTags[index]
-              );
-              this.setState({ blogs });
-            }
-          }}
-        /> */}
         {this.state.section === 0 ? (
           <DataTable
             header={["#", "Title", "actions"]}
@@ -377,6 +324,7 @@ class Blog extends Component {
             submitHandler={this.submitHandler}
             changeHandler={this.changeHandler}
             handleImageChange={this.handleImageChange}
+            file={this.state.file}
           />
         ) : (
           <BlogForm
@@ -386,6 +334,7 @@ class Blog extends Component {
             changeHandler={this.changeHandler}
             handleImageChange={this.handleImageChange}
             imageRemoveHandler={this.imageRemoveHandler}
+            file={this.state.file}
           />
         )}
       </div>
