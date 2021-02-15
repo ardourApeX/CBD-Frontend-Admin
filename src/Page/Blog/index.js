@@ -87,6 +87,7 @@ class Blog extends Component {
     }
   };
   editHandler = (index) => {
+    this.setState({ loading: true });
     const formData = new FormData();
     console.log(this.state.currentBlog);
     // formData.append("image", this.state.file);
@@ -98,7 +99,6 @@ class Blog extends Component {
     } else {
       formData.append("imageUrl", this.state.imagePreviewUrl);
     }
-    console.log(this.props.blogs[index]);
     this.props
       .update(index, formData)
       .then((result) => {
@@ -107,6 +107,13 @@ class Blog extends Component {
           imagePreviewUrl: `${IMAGE_URL}/${result.data.image}`,
           file: null,
           currentBlog: result.data,
+          loading: false,
+          blogs: this.state.blogs.map((item, index1) => {
+            if (index1 === index) {
+              return result.data;
+            }
+            return item;
+          }),
         });
         cogoToast.success(result.message);
       })
@@ -146,6 +153,7 @@ class Blog extends Component {
 
   submitHandler = () => {
     console.log("SubmitHandler");
+    this.setState({ loading: true });
     const formData = new FormData();
     Object.keys(this.state.currentBlog).forEach((key) =>
       formData.append(key, this.state.currentBlog[key])
@@ -155,6 +163,12 @@ class Blog extends Component {
     this.props
       .add(formData)
       .then((result) => {
+        this.setState({
+          blogs: [...this.state.blogs, result.data],
+          currentBlog: {},
+          section: 0,
+          loading: false,
+        });
         console.log("Success");
         cogoToast.success("Success");
       })

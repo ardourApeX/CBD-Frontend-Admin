@@ -109,7 +109,7 @@ export const add = (data) => {
         // 	pageNo,
         // 	size,
         // });
-        return result.data.message;
+        return { message: result.data.message, data: result.data.data };
       })
       .catch((err) => {
         return Promise.reject(ERROR_MESSAGE);
