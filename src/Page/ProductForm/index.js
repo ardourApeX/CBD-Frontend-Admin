@@ -84,7 +84,7 @@ const ProductForm = ({
           setLoading(false);
           if (match.params.type === "edit") {
             setAttributes(
-              product.attributesList.length ? product.attributesList : []
+              product.attributes.length ? product.attributesList : []
             );
             editValues(product, false);
           }
@@ -693,7 +693,7 @@ const ProductForm = ({
                     Add Attribute
                   </Button>
                   <Collapse accordion>
-                    {attributes.map((item, index) => (
+                    {attributes && attributes.map((item, index) => (
                       <Panel header={item.title} key={item.index}>
                         <div
                           style={{ display: "flex", flexDirection: "column" }}
