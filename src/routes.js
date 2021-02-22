@@ -76,6 +76,7 @@ const Creatives = React.lazy(() => import("./Page/Creatives"));
 const OrderView = React.lazy(() => import("./Page/Orders/view"));
 const Users = React.lazy(() => import("./Page/Users"));
 const FooterMenu = React.lazy(() => import("./Page/FooterMenu"));
+const LeadList = React.lazy(()=>import("./Page/LeadList"));
 
 const routes = [
   {
@@ -222,6 +223,13 @@ const routes = [
     name: "ProductList",
     component: ProductList,
   },
+  {
+    path: "/LeadList",
+    exact: true,
+    name: "LeadList",
+    component: LeadList,
+  },
+
   {
     path: "/Review",
     exact: true,
