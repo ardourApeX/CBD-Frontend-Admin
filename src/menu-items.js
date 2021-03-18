@@ -21,6 +21,7 @@ import {
   faAngleDoubleRight,
   faShoppingBasket,
   faColumns,
+  faAddressCard
 } from "@fortawesome/free-solid-svg-icons";
 // import {  } from '@fortawesome/free-regular-svg-icons'
 
@@ -76,6 +77,14 @@ export default {
         // 		},
         // 	],
         // },
+        {
+          id: "LeadList",
+          title: "LeadList",
+          type: "item",
+          url: "/LeadList",
+          classes: "nav-item",
+          icon: faAddressCard,
+        },
         {
           id: "Blog",
           title: "Blog",
@@ -262,6 +271,14 @@ export default {
           // 	type: "label-danger",
           // },
           children: [
+            {
+              id: "Seo",
+              title: "Seo",
+              type: "item",
+              url: "/Seo",
+              classes: "nav-item",
+              icon: faShoppingCart,
+            },
             {
               id: "Home",
               title: "Home",

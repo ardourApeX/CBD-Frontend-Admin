@@ -40,7 +40,28 @@ export const get = () => {
       });
   };
 };
-
+// export const get = () => {
+//   // console.log("Home get action creator");
+//   return async (dispatch) => {
+//       try {
+//         const home = await Axios.get("/Home/get", { name: "aman" });
+//         const seo = await Axios.get(`/Seo/get/home`);
+//         let seodata = {
+//           seo:seo.data.data
+//         }
+//         let homedata = Object.assign(home.data.data, seodata)
+//         console.log(homedata);
+//         dispatch({
+//                     type: actionTypes.GET_HOME,
+          
+//                     data:homedata,
+//                   });
+//       } catch (err) {
+//         console.log(err);
+//         return Promise.reject(ERROR_MESSAGE);
+//       }
+//   };
+// };
 export const update = (data, section) => {
   console.log(data);
   console.log(section);

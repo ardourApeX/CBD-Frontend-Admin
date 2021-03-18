@@ -20,6 +20,9 @@ import * as packageActionCreators from "../../store/actions/packageType";
 import "antd/dist/antd.css";
 import { Option } from "antd/lib/mentions";
 import { Spinner } from "react-bootstrap";
+import AceEditor from "react-ace";
+import "brace/mode/javascript";
+import "brace/theme/chrome";
 import {
   CloseOutlined,
   DeleteOutlined,
@@ -96,6 +99,7 @@ const ProductForm = ({
     });
   }, []);
   const editValues = (product, boolean) => {
+
     form.setFieldsValue({
       producttitle: product.productid.producttitle,
       sdescription: product.productid.sdescription,
@@ -138,6 +142,9 @@ const ProductForm = ({
       keyingredients: product.keyingredients,
       allingredients: product.allingredients,
       productid: product.productid.id,
+      html:product.html ? product.html :"",
+      html1:product.html1 ? product.html1 :"",
+
     });
     product.attributecontent &&
       product.attributecontent.map((item, index) =>
@@ -312,6 +319,7 @@ const ProductForm = ({
       }
     }
   };
+ 
   return loading ? (
     <div>
       <Spinner
@@ -486,7 +494,54 @@ const ProductForm = ({
                   <Option value="1">Featured</Option>
                 </Select>
               </Form.Item>
+             
+            
+             
             </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gridColumnGap: "20px",
+              }}
+            >
+               <Form.Item
+              initialValue=""
+              label="Add Html"
+              name="html">
+            <AceEditor
+            // value={product ? product.html : "" }
+            // onChange={(code) => {
+            //    console.log(code);
+            
+            // }}
+            mode="javascript"
+            theme="chrome"
+            style={{ width: "100%", height: "100px" }}
+            setOptions={{
+              fontSize: 20,
+            }}
+          />
+          </Form.Item>
+          <Form.Item
+              initialValue=""
+              label="Add Html 1"
+              name="html1">
+            <AceEditor
+            // value={product ? product.html : "" }
+            // onChange={(code) => {
+            //    console.log(code);
+            
+            // }}
+            mode="javascript"
+            theme="chrome"
+            style={{ width: "100%", height: "100px" }}
+            setOptions={{
+              fontSize: 20,
+            }}
+          />
+          </Form.Item>
+              </div>
           </TabPane>
           <TabPane
             forceRender={true}

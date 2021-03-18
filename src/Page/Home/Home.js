@@ -12,6 +12,7 @@ import "antd/dist/antd.css";
 import { Collapse } from "antd";
 const { Panel } = Collapse;
 const Heading = [
+ 
   "Banner",
   "Logo",
   "Category Slider",
@@ -20,6 +21,7 @@ const Heading = [
   "Fourth Section",
 ];
 const SubHeading = [
+  
   ["Title", "Content", "Button Text"],
   ,
   ["Title", "Button Text"],
@@ -32,6 +34,7 @@ class Home extends PureComponent {
     super(props);
     this.state = {
       data: {
+        
         logo: {
           images: [
             {
@@ -109,6 +112,7 @@ class Home extends PureComponent {
         { image: "", file: "", imageName: "" },
       ],
       banner: [],
+      seo:[],
       thirdSection: [{ image: "", file: "", imageName: "" }],
       secondSection: [{ image: "", file: "", imageName: "" }],
       fourthSection: [{ image: "", file: "", imageName: "" }],
@@ -287,6 +291,9 @@ class Home extends PureComponent {
         logo: {
           ...this.props.data.logo,
         },
+        seo:{
+          ...this.props.data.seo
+        },
         banner: [...this.props.data.banner],
         categorySlider: {
           ...this.props.data.categorySlider,
@@ -384,7 +391,7 @@ class Home extends PureComponent {
   };
 
   render() {
-    console.log(this.props.data);
+
     let data = Object.keys(this.props.data || {}).map((elem, index) => {
       let element = { ...this.state.data[elem] };
       element[0] ? console.log("") : delete element.hide;
@@ -394,6 +401,7 @@ class Home extends PureComponent {
       );
       let mainTitle = "";
       switch (elem) {
+       
         case "banner":
           mainTitle = "Banner";
           break;
@@ -434,7 +442,7 @@ class Home extends PureComponent {
               <i className="fa fa-angle-down"></i>
               {mainTitle}
             </Accordion.Toggle>
-            {mainTitle !== "Logo" && (
+            {mainTitle !== "Logo"  &&  (
               <Form.Check
                 checked={this.state.data[elem].hide}
                 type="checkbox"
@@ -448,6 +456,7 @@ class Home extends PureComponent {
                 }}
               />
             )}
+           
             {mainTitle === "Banner" && (
               <Button
                 variant="dark"
@@ -470,8 +479,9 @@ class Home extends PureComponent {
                     updateHandler={this.updateHandler}
                     subHeading={newSubheadings}
                   />
+                 
                 ) : null}
-                {this.state.data[elem].images !== undefined ? (
+                { this.state.data[elem].images !== undefined ? (
                   <ImageForm
                     Images={this.props.data[elem].images}
                     sectionName={elem}

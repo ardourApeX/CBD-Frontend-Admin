@@ -24,6 +24,7 @@ import reviewReducer from "./store/reducers/reviewReducer";
 import couponReducer from "./store/reducers/couponReducer";
 import ambassadorReducer from "./store/reducers/ambassadorReducer";
 import leadReducer from "./store/reducers/leadReducer";
+import seoReducer from "./store/reducers/seoReducer";
 
 const rootReducer = combineReducers({
   keywordReducer,
@@ -42,7 +43,8 @@ const rootReducer = combineReducers({
   reviewReducer,
   couponReducer,
   ambassadorReducer,
-  leadReducer
+  leadReducer,
+  seoReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

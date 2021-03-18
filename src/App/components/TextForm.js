@@ -10,6 +10,11 @@ export default class TextForm extends Component {
     // console.log(this.props.sectionName);
     const sectionName = this.props.sectionName;
     let data = Object.keys(this.props.field).map((elem, index) => {
+      if(sectionName == "seo"){
+        if(elem == "_id" || elem =="__v" || elem == "createdAt" || elem == "updatedAt")
+        return 
+        
+       }
       return (
         <Container className="mt-3" key={index}>
           <h3 className="c-subHeading">{this.props.subHeading[index]}</h3>
@@ -59,7 +64,7 @@ export default class TextForm extends Component {
             Update
           </button>
           {(typeof this.props.sectionName === "number" ||
-            this.props.hasDelete) && (
+            this.props.hasDelete ) && (
             <button
               className="btn btn-danger btn-lg"
               onClick={(event) =>

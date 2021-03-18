@@ -39,8 +39,8 @@ const LeadList = ({ leadlist, get, ...props }) => {
       });
   }, [get]);
 
-  const removeAttribute = (id) => {
-    setLoading(true);
+ // const removeAttribute = (id) => {
+  //  setLoading(true);
     // deletee(id)
     //   .then((result) => {
     //     setLoading(false);
@@ -50,13 +50,13 @@ const LeadList = ({ leadlist, get, ...props }) => {
     //     setLoading(false);
     //     cogoToast.error(err);
     //   });
- };
+// };
 
-  const editAttribute = (id) => {
+ // const editAttribute = (id) => {
     // props.history.push(`/ProductForm/edit/${id}`, {
     //   data: products.filter((item) => item._id === id)[0],
     // });
-  };
+ // };
   return loading ? (
     <div>
       <Spinner
@@ -124,8 +124,8 @@ const LeadList = ({ leadlist, get, ...props }) => {
       /> */}
       <div ref={ref1}>
         <Table
-         onEdit={editAttribute}
-         onDelete={removeAttribute}
+         //onEdit={editAttribute}
+        // onDelete={removeAttribute}
           data={leadlist.map((lead,index) => {
               
            

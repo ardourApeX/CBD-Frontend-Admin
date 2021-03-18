@@ -97,3 +97,9 @@ export const ADD_CREATIVE = "ADD_CREATIVE";
 export const GET_CREATIVES = "GET_CREATIVES";
 export const DELETE_CREATIVE = "DELETE_CREATIVE";
 export const GET_LEAD_LIST = "GET_LEAD_LIST";
+
+
+export const GET_SEO = "GET_SEO";
+export const ADD_SEO = "ADD_SEO";
+export const UPDATE_SEO = "UPDATE_SEO";
+export const DELETE_SEO = "DELETE_SEO";
