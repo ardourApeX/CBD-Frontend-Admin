@@ -5,8 +5,8 @@ import { BACK_END_URL } from "../../utilities/Axios/url";
 
 export const getLeadList = () => {
     return (dispatch) => {
-      return Axios.get(`${BACK_END_URL}/order/cart/list`)
-        .then((result) => {
+      return Axios.get(`${BACK_END_URL}/order/cart/list`)//actual action (axios that fetches the list)
+        .then((result) => {  //result stores the leadlist
           console.log(result);
           dispatch({
             type: actionTypes.GET_LEAD_LIST,

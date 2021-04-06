@@ -319,7 +319,16 @@ const ProductForm = ({
       }
     }
   };
- 
+  const preview=(cho)=>{
+    if(cho==0){
+      var html = document.getElementById("writtenHTML0").value
+  document.getElementsByClassName("preview")[0].innerHTML = html;
+    }
+    else if(cho==1){
+      var html = document.getElementById("writtenHTML1").value
+    }
+  }
+
   return loading ? (
     <div>
       <Spinner
@@ -494,14 +503,11 @@ const ProductForm = ({
                   <Option value="1">Featured</Option>
                 </Select>
               </Form.Item>
-             
-            
-             
             </div>
-            <div
+            <div 
               style={{
                 display: "grid",
-                gridTemplateColumns: "1fr 1fr",
+                gridTemplateRows: "1fr 1fr",
                 gridColumnGap: "20px",
               }}
             >
@@ -510,36 +516,69 @@ const ProductForm = ({
               label="Add Html"
               name="html">
             <AceEditor
-            // value={product ? product.html : "" }
-            // onChange={(code) => {
-            //    console.log(code);
-            
-            // }}
+              onChange={(code) => {
+              document.getElementsByClassName("preview")[0].style.display = "block";
+              document.getElementsByClassName("preview")[0].innerHTML = code;
+              }}
+            id="writtenHTML0"
             mode="javascript"
             theme="chrome"
-            style={{ width: "100%", height: "100px" }}
+            style={{ width: "100%",resize: "both",
+            overflow: "auto", height: "300px" }}
             setOptions={{
               fontSize: 20,
             }}
           />
+          <br/>
+
+            <div 
+            className="preview" 
+            style={{
+                    padding:"20px",
+                    border:"none",
+                    marginTop: "20px",
+                    borderRadius: "5px",
+                    display: "none",
+                    backgroundColor:"lightgray",
+                    width:"100%",
+                    height:"100px",
+                    resize: "both",
+                    overflow: "auto"
+                  }}>
+            </div>
           </Form.Item>
           <Form.Item
               initialValue=""
               label="Add Html 1"
               name="html1">
             <AceEditor
-            // value={product ? product.html : "" }
-            // onChange={(code) => {
-            //    console.log(code);
-            
-            // }}
+             onChange={(code) => {
+              document.getElementsByClassName("preview")[1].style.display = "block";
+              document.getElementsByClassName("preview")[1].innerHTML = code;
+              }}
+            id="writtenHTML1"
             mode="javascript"
             theme="chrome"
-            style={{ width: "100%", height: "100px" }}
+            style={{ width: "100%",resize: "both",
+            overflow: "auto", height: "300px" }}
             setOptions={{
               fontSize: 20,
             }}
           />
+            <div 
+            className="preview" 
+            style={{border:"none",
+                    padding:"20px",
+                    marginTop: "20px",
+                    display: "none",
+                    borderRadius: "5px",
+                    backgroundColor:"lightgray",
+                    width:"100%",
+                    height:"100px",
+                    resize: "both",
+                    overflow: "auto"
+                  }}>
+            </div>
           </Form.Item>
               </div>
           </TabPane>
