@@ -95,14 +95,15 @@ export default {
           icon: faMedium,
         },
         //new item by riyan 7apr2021
-        {
-          id: "NewsletterMailingList",
-          title: "News letter MailingList",
-          type: "item",
-          url: "/NewsletterMailingList",
-          classes: "nav-item",
-          icon: faMailBulk,
-        },
+        
+        // {
+        //   id: "NewsletterMailingList",
+        //   title: "News letter MailingList",
+        //   type: "item",
+        //   url: "/NewsletterMailingList",
+        //   classes: "nav-item",
+        //   icon: faMailBulk,
+        // },
         {
           id: "Product Category",
           title: "Category",
