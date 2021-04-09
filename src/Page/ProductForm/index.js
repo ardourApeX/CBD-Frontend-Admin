@@ -501,20 +501,18 @@ const ProductForm = ({
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gridColumnGap: "20px",
-              }}
+                gridTemplateRows: "1fr 1fr",
+                gridColumnGap: "20px",              }}
             >
                <Form.Item
               initialValue=""
-              label="Add Html"
+              label="Details: these details add HTML code to the details section of the product"
               name="html">
             <AceEditor
-            // value={product ? product.html : "" }
-            // onChange={(code) => {
-            //    console.log(code);
-            
-            // }}
+              onChange={(code) => {
+                document.getElementsByClassName("preview")[0].style.display = "block";
+                document.getElementsByClassName("preview")[0].innerHTML = code;
+                }}
             mode="javascript"
             theme="chrome"
             style={{ width: "100%", height: "100px" }}
@@ -522,17 +520,32 @@ const ProductForm = ({
               fontSize: 20,
             }}
           />
+                    <br/>
+                    <div 
+            className="preview" 
+            style={{
+                    padding:"20px",
+                    border:"none",
+                    marginTop: "20px",
+                    borderRadius: "5px",
+                    display: "none",
+                    backgroundColor:"lightgray",
+                    width:"100%",
+                    height:"100px",
+                    resize: "both",
+                    overflow: "auto"
+                  }}>
+            </div>
           </Form.Item>
           <Form.Item
               initialValue=""
-              label="Add Html 1"
+              label="F.A.Q:this HTML data gets displayed on the FAQ section of a product FAQ"
               name="html1">
             <AceEditor
-            // value={product ? product.html : "" }
-            // onChange={(code) => {
-            //    console.log(code);
-            
-            // }}
+               onChange={(code) => {
+                document.getElementsByClassName("preview")[1].style.display = "block";
+                document.getElementsByClassName("preview")[1].innerHTML = code;
+                }}
             mode="javascript"
             theme="chrome"
             style={{ width: "100%", height: "100px" }}
@@ -540,6 +553,22 @@ const ProductForm = ({
               fontSize: 20,
             }}
           />
+                      <div 
+            className="preview" 
+            style={{border:"none",
+                    padding:"20px",
+                    marginTop: "20px",
+                    display: "none",
+                    borderRadius: "5px",
+                    backgroundColor:"lightgray",
+                    width:"100%",
+                    height:"100px",
+                    resize: "both",
+                    overflow: "auto"
+                  }}>
+            </div>
+
+
           </Form.Item>
               </div>
           </TabPane>

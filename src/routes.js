@@ -48,6 +48,7 @@ const Category = React.lazy(() => import("./Page/Category"));
 const Blog = React.lazy(() => import("./Page/Blog"));
 const Banner = React.lazy(() => import("./Page/Banner"));
 const Learn = React.lazy(() => import("./Page/Learn"));
+//const NewsletterMailingList = React.lazy(() => import("./Page/NewsletterMailingList"));
 const ProductCategory = React.lazy(() => import("./Page/ProductCategory"));
 const Vendor = React.lazy(() => import("./Page/Vendor"));
 const PackageType = React.lazy(() => import("./Page/PackageType"));
@@ -98,6 +99,7 @@ const routes = [
     name: "Basic Badges",
     component: UIBasicBadges,
   },
+  
   {
     path: "/basic/breadcrumb-paging",
     exact: true,
@@ -236,6 +238,12 @@ const routes = [
     name: "LeadList",
     component: LeadList,
   },
+  // {
+  //   path: "/NewsletterMailingList",
+  //   exact: true,
+  //   name: "NewsletterMailingList",
+  //   component: NewsletterMailingList,
+  // },
 
   {
     path: "/Review",
