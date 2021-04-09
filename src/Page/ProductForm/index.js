@@ -513,7 +513,7 @@ const ProductForm = ({
             >
                <Form.Item
               initialValue=""
-              label="Add Html"
+              label="Details"
               name="html">
             <AceEditor
               onChange={(code) => {
@@ -549,7 +549,7 @@ const ProductForm = ({
           </Form.Item>
           <Form.Item
               initialValue=""
-              label="Add Html 1"
+              label="F.A.Q"
               name="html1">
             <AceEditor
              onChange={(code) => {

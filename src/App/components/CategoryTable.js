@@ -110,7 +110,7 @@ class CategoryTable extends Component {
                       Configure terms
                     </Link>
                   </>
-                )}
+                  )}
               />
             ) : null}
             {type === "ambassador" ? (

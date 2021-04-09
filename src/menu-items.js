@@ -21,7 +21,8 @@ import {
   faAngleDoubleRight,
   faShoppingBasket,
   faColumns,
-  faAddressCard
+  faAddressCard,
+  faMailBulk
 } from "@fortawesome/free-solid-svg-icons";
 // import {  } from '@fortawesome/free-regular-svg-icons'
 
@@ -92,6 +93,15 @@ export default {
           url: "/Blog",
           classes: "nav-item",
           icon: faMedium,
+        },
+        //new item by riyan 7apr2021
+        {
+          id: "NewsletterMailingList",
+          title: "News letter MailingList",
+          type: "item",
+          url: "/NewsletterMailingList",
+          classes: "nav-item",
+          icon: faMailBulk,
         },
         {
           id: "Product Category",

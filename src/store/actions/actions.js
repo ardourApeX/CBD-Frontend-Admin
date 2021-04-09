@@ -97,6 +97,7 @@ export const ADD_CREATIVE = "ADD_CREATIVE";
 export const GET_CREATIVES = "GET_CREATIVES";
 export const DELETE_CREATIVE = "DELETE_CREATIVE";
 export const GET_LEAD_LIST = "GET_LEAD_LIST";
+export const GET_NewsletterMailingList = "GET_NewsletterMailingList";
 
 
 export const GET_SEO = "GET_SEO";

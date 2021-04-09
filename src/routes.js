@@ -53,6 +53,7 @@ const Vendor = React.lazy(() => import("./Page/Vendor"));
 const PackageType = React.lazy(() => import("./Page/PackageType"));
 const Attribute = React.lazy(() => import("./Page/Attribute"));
 const ProductList = React.lazy(() => import("./Page/ProductList"));
+const NewsletterMailingList = React.lazy(() => import("./Page/NewsletterMailingList"));
 const ProductForm = React.lazy(() => import("./Page/ProductForm"));
 const Review = React.lazy(() => import("./Page/Review"));
 const Coupon = React.lazy(() => import("./Page/Coupon"));
@@ -229,6 +230,12 @@ const routes = [
     exact: true,
     name: "ProductList",
     component: ProductList,
+  },
+  {
+    path: "/NewsletterMailingList",
+    exact: true,
+    name: "NewsletterMailingList",
+    component: NewsletterMailingList,
   },
   {
     path: "/LeadList",
