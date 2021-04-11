@@ -506,13 +506,13 @@ const ProductForm = ({
             >
                <Form.Item
               initialValue=""
-              label="Details: these details add HTML code to the details section of the product"
+              label="Details: this details add HTML code to the details section of the product"
               name="html">
             <AceEditor
               onChange={(code) => {
-                document.getElementsByClassName("preview")[0].style.display = "block";
                 document.getElementsByClassName("preview")[0].innerHTML = code;
                 }}
+                value={product.html}
             mode="javascript"
             theme="chrome"
             style={{ width: "100%", height: "100px" }}
@@ -539,19 +539,20 @@ const ProductForm = ({
           </Form.Item>
           <Form.Item
               initialValue=""
-              label="F.A.Q:this HTML data gets displayed on the FAQ section of a product FAQ"
+              label="FAQ : This HTML data gets displayed on the FAQ section of a product"
               name="html1">
             <AceEditor
                onChange={(code) => {
-                document.getElementsByClassName("preview")[1].style.display = "block";
                 document.getElementsByClassName("preview")[1].innerHTML = code;
                 }}
             mode="javascript"
             theme="chrome"
+            value={product.html1}
             style={{ width: "100%", height: "100px" }}
             setOptions={{
               fontSize: 20,
             }}
+
           />
                       <div 
             className="preview" 
