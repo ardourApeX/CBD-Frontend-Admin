@@ -509,7 +509,8 @@ const ProductForm = ({
               label="Details: this details add HTML code to the details section of the product"
               name="html">
             <AceEditor
-              onChange={(code) => {
+              onChange={
+                (code) => {
                 document.getElementsByClassName("preview")[0].innerHTML = code;
                 }}
                 value={product.html}
@@ -528,7 +529,6 @@ const ProductForm = ({
                     border:"none",
                     marginTop: "20px",
                     borderRadius: "5px",
-                    display: "none",
                     backgroundColor:"lightgray",
                     width:"100%",
                     height:"100px",
@@ -559,14 +559,14 @@ const ProductForm = ({
             style={{border:"none",
                     padding:"20px",
                     marginTop: "20px",
-                    display: "none",
                     borderRadius: "5px",
                     backgroundColor:"lightgray",
                     width:"100%",
                     height:"100px",
                     resize: "both",
                     overflow: "auto"
-                  }}>
+                  }}
+                  value={product.html}>
             </div>
 
 
