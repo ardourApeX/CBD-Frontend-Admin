@@ -120,10 +120,17 @@ const ProductForm = ({
       volume: product.volume,
       volume_unit: product.volumeunit,
       weight: product.weight,
-      keyingredients: product.keyingredients,
+      keyingredients: product.keyingredients, 
       allingredients: product.allingredients,
       productid: product.productid.id,
+      productKeyword:product.productKeyword
     });
+  //   product.productKeyword &&
+  //   product.productKeyword.map((item,index) =>
+  //   form.setFieldsValue({
+  //     [`productKeyword[${index}][value]`]: item.productKeyword,    })
+  // );
+    console.log(product.productKeyword);
     product.attributecontent &&
       product.attributecontent.map((item, index) =>
         form.setFieldsValue({
@@ -347,7 +354,21 @@ const ProductForm = ({
             ]}
           >
             <Input />
+           
           </Form.Item>
+          <Form.Item
+            // label={`keyword[${index}]`}
+            // name={`productKeyword[${index}][value]`}
+            label="keywords"
+            name="productKeyword"
+            > 
+            <TextArea/>  
+          </Form.Item>
+          {/* <Form.Item
+            label={`keyword[${index}]`}
+            name={`productKeyword[${index+1}][value]`}> 
+            <TextArea/>  
+          </Form.Item> */}
         </div>
 
         <div
