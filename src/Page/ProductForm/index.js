@@ -706,7 +706,7 @@ const ProductForm = ({
         </div>
 
         <div>
-          {["", "", "", "", ""].map((_, index) => (
+        {["", "", "", "", ""].map((_, index) => (
             <div
               style={{
                 display: "grid",
@@ -746,7 +746,7 @@ const ProductForm = ({
             <TextArea />
           </Form.Item>
         </div>
-
+        {["", "", "", "", ""].map((_, index) => (
         <div
           style={{
             display: "grid",
@@ -754,15 +754,16 @@ const ProductForm = ({
             gridColumnGap: "20px",
           }}
         >
-          <Form.Item label={`FAQ Title`} name={`faq[0][title]`}>
+          <Form.Item label={`FAQ Title${index+1}`} name={`faq[${index}][title]`}>
             <Input />
           </Form.Item>
 
-          <Form.Item label={`FAQ Description`} name={`faq[0][description]`}>
+          <Form.Item label={`FAQ Description${index+1}`} name={`faq[${index}][description]`}>
             <TextArea />
           </Form.Item>
         </div>
-
+        
+                            ))}
         <div
           style={{
             display: "grid",
