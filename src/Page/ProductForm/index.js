@@ -123,7 +123,8 @@ const ProductForm = ({
       keyingredients: product.keyingredients, 
       allingredients: product.allingredients,
       productid: product.productid.id,
-      productKeyword:product.productKeyword
+      productKeyword:product.productKeyword,
+      productAltText:product.productAltText
     });
   //   product.productKeyword &&
   //   product.productKeyword.map((item,index) =>
@@ -369,6 +370,14 @@ const ProductForm = ({
             name={`productKeyword[${index+1}][value]`}> 
             <TextArea/>  
           </Form.Item> */}
+                   <Form.Item
+            // label={`keyword[${index}]`}
+            // name={`productKeyword[${index}][value]`}
+            label="Image Alt Text"
+            name="productAltText"
+            > 
+            <Input/>  
+          </Form.Item>
         </div>
 
         <div
