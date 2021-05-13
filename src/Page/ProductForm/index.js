@@ -51,6 +51,12 @@ const ProductForm = ({
   deleteProductImage,
 }) => {
   const [loading, setLoading] = useState(true);
+   var [faqcontent1, setfaq] = useState([
+     {title:" ",description:" "},
+   ]);
+   var [productKeyword1, setProductKeyword] = useState([
+    {title:" "},
+  ]);
   const [attributes, setAttributes] = useState([]);
   const [form] = Form.useForm();
   const [recievedGalleryUrls, setRecievedGalleryUrls] = useState([]);
@@ -78,7 +84,29 @@ const ProductForm = ({
   const [normal, setNormal] = useState(
     product ? (product.featured === true ? "1" : "0") : "0"
   );
-
+const addfaq=()=>{
+ setfaq([...faqcontent1,{title:"",description:""}]);
+}
+const subfaq=(index)=>{
+  const values=[...faqcontent1]; 
+  values.splice(index,1);
+  form.setFieldsValue({
+    [`faq[${index}][title]`]: null,
+    [`faq[${index}][description]`]: null,
+  })
+  setfaq(values);
+  }
+  const addProductKeyword=()=>{
+    setProductKeyword([...productKeyword1,{title:""}]);
+   }
+   const subProductKeyword=(index)=>{
+     const values=[...productKeyword1]; 
+     values.splice(index,1);
+     form.setFieldsValue({
+       [`productKeyword[${index}][title]`]: null,
+     })
+     setProductKeyword(values);
+     }
   console.log(product);
   useEffect(() => {
     getVendors().then(() => {
@@ -140,12 +168,24 @@ const ProductForm = ({
       volume_unit: product.volumeunit,
       weight: product.weight,
       keyingredients: product.keyingredients,
+      // productKeyword:product.productKeyword,
       allingredients: product.allingredients,
       productid: product.productid.id,
       html:product.html ? product.html :"",
       html1:product.html1 ? product.html1 :"",
-
     });
+    var productKeywordtemp=[];
+      product.productKeyword&&
+      product.productKeyword.map((item,index)=>{
+        productKeywordtemp.push({title:item.title,
+          description:item.description});
+        form.setFieldsValue(
+          {[`productKeyword[${index}][title]`]: item.title},
+        )
+      });
+      setProductKeyword(productKeywordtemp);
+    
+
     product.attributecontent &&
       product.attributecontent.map((item, index) =>
         form.setFieldsValue({
@@ -153,14 +193,20 @@ const ProductForm = ({
           [`page_attribute[${index}][description]`]: item.description,
         })
       );
-    product.faqcontent &&
+      var faqtemp=[];
+      product.faqcontent &&
       product.faqcontent.map((item, index) =>
+      {
+        faqtemp.push({title:item.title,
+        description:item.description});
+        
         form.setFieldsValue({
           [`faq[${index}][title]`]: item.title,
           [`faq[${index}][description]`]: item.description,
         })
-      );
-  };
+      });
+      setfaq(faqtemp);
+   };
   const onFinish = (values) => {
     const { menuImage, sectionaImage, sectionbImage, galleryImage } = image;
     setLoading(true);
@@ -319,7 +365,6 @@ const ProductForm = ({
       }
     }
   };
- 
   return loading ? (
     <div>
       <Spinner
@@ -378,7 +423,34 @@ const ProductForm = ({
                 <Input />
               </Form.Item>
             </div>
-
+            <Form.Item 
+            label={`keywords Section:`}>
+            {productKeyword1.map((field, index) => (
+               <Form.Item >
+              <Form.Item
+            // label={`keyword[${index}]`}
+            // name={`productKeyword[${index}][value]`}
+            label={`keywords${index+1}`}
+            name={`productKeyword[${index}][title]`}
+            key={index} 
+            > 
+            <Input/>  
+          </Form.Item>
+          <Button
+                        shape="circle"
+                        onClick={()=>subProductKeyword(index)}>-
+                      </Button>
+     </Form.Item>
+            ))}
+                                  <Button
+                        style={{
+                          background: "black",
+                          color: "white",
+                        }}            
+                        shape="circle"
+                        onClick={()=>addProductKeyword()}>+
+                      </Button>
+                      </Form.Item>
             <div
               style={{
                 display: "grid",
@@ -508,34 +580,33 @@ const ProductForm = ({
               initialValue=""
               label="Details: this details add HTML code to the details section of the product"
               name="html">
-            <AceEditor
-              onChange={
-                (code) => {
-                document.getElementsByClassName("preview")[0].innerHTML = code;
+              <AceEditor
+                onChange={
+                  (code) => {
+                  document.getElementsByClassName("preview")[0].innerHTML = code;
                 }}
-                value={product.html}
-            mode="javascript"
-            theme="chrome"
-            style={{ width: "100%", height: "100px" }}
-            setOptions={{
-              fontSize: 20,
-            }}
-          />
-                    <br/>
-                    <div 
-            className="preview" 
-            style={{
-                    padding:"20px",
-                    border:"none",
-                    marginTop: "20px",
-                    borderRadius: "5px",
-                    backgroundColor:"lightgray",
-                    width:"100%",
-                    height:"100px",
-                    resize: "both",
-                    overflow: "auto"
-                  }}>
-            </div>
+                mode="javascript"
+                theme="chrome"
+                style={{ width: "100%", height: "100px" }}
+                setOptions={{
+                  fontSize: 20,
+                }}
+                />
+              <br/>
+              <div 
+              className="preview" 
+              style={{
+                padding:"20px",
+                border:"none",
+                marginTop: "20px",
+                borderRadius: "5px",
+                backgroundColor:"lightgray",
+                width:"100%",
+                height:"100px",
+                resize: "both",
+                overflow: "auto"
+              }}>
+              </div>
           </Form.Item>
           <Form.Item
               initialValue=""
@@ -547,7 +618,6 @@ const ProductForm = ({
                 }}
             mode="javascript"
             theme="chrome"
-            value={product.html1}
             style={{ width: "100%", height: "100px" }}
             setOptions={{
               fontSize: 20,
@@ -565,8 +635,7 @@ const ProductForm = ({
                     height:"100px",
                     resize: "both",
                     overflow: "auto"
-                  }}
-                  value={product.html}>
+                  }}>
             </div>
 
 
@@ -980,7 +1049,7 @@ const ProductForm = ({
                 <TextArea />
               </Form.Item>
             </div>
-
+            
             <div
               style={{
                 display: "grid",
@@ -988,15 +1057,42 @@ const ProductForm = ({
                 gridColumnGap: "20px",
               }}
             >
-              <Form.Item label={`FAQ Title`} name={`faq[0][title]`}>
-                <Input />
-              </Form.Item>
-
-              <Form.Item label={`FAQ Description`} name={`faq[0][description]`}>
-                <TextArea />
-              </Form.Item>
             </div>
-          </TabPane>
+
+            <Form.Item 
+            label={`FAQ Section:`}>
+            {faqcontent1.map((field, index) => (
+               <Form.Item >
+                  <Form.Item 
+                  key={index} 
+                  label={`FAQ Title ${index+1}`} 
+                  name={`faq[${index}][title]`}>
+                    <Input />
+                  </Form.Item>
+           
+                  <Form.Item 
+                   key={index}
+                   label={`FAQ Description ${index+1}`} 
+                   name={`faq[${index}][description]`}>
+                     <TextArea />
+                   </Form.Item>
+                   
+                   <Button
+              shape="circle"
+              onClick={()=>subfaq(index)}>-
+            </Button>
+               </Form.Item>
+            ))}
+            <Button
+              style={{
+                background: "black",
+                color: "white",
+              }}            
+              shape="circle"
+              onClick={()=>addfaq()}>+
+            </Button>
+            </Form.Item>
+           </TabPane>
           <TabPane forceRender={true} tab="Product Category and Images" key="5">
             <div
               style={{
