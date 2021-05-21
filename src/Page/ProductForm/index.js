@@ -591,9 +591,10 @@ const subfaq=(index)=>{
                 setOptions={{
                   fontSize: 20,
                 }}
-                />
-              <br/>
-              <div 
+                /> 
+                {/* <Input/> */}
+          </Form.Item>
+          <div 
               className="preview" 
               style={{
                 padding:"20px",
@@ -607,7 +608,6 @@ const subfaq=(index)=>{
                 overflow: "auto"
               }}>
               </div>
-          </Form.Item>
           <Form.Item
               initialValue=""
               label="FAQ : This HTML data gets displayed on the FAQ section of a product"
@@ -624,7 +624,8 @@ const subfaq=(index)=>{
             }}
 
           />
-                      <div 
+          </Form.Item>
+          <div 
             className="preview" 
             style={{border:"none",
                     padding:"20px",
@@ -637,9 +638,6 @@ const subfaq=(index)=>{
                     overflow: "auto"
                   }}>
             </div>
-
-
-          </Form.Item>
               </div>
           </TabPane>
           <TabPane
