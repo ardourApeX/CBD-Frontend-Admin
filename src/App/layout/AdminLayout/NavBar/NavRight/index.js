@@ -138,16 +138,16 @@ class NavRight extends Component {
 									</a> */}
                 </div>
                 <ul className="pro-body">
-                  <li>
+                  {/* <li>
                     <a href={DEMO.BLANK_LINK} className="dropdown-item">
                       <i className="feather icon-settings" /> Settings
                     </a>
-                  </li>
-                  <li>
+                  </li> */}
+                  {/* <li>
                     <a href={DEMO.BLANK_LINK} className="dropdown-item">
                       <i className="feather icon-user" /> Profile
                     </a>
-                  </li>
+                  </li> */}
                   <li>
                     <a
                       href={DEMO.BLANK_LINK}
