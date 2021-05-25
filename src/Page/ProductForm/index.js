@@ -173,6 +173,10 @@ const subfaq=(index)=>{
       productid: product.productid.id,
       html:product.html ? product.html :"",
       html1:product.html1 ? product.html1 :"",
+      menuImageAlt:product.menuImageAlt, 
+      sectionAImageAlt:product.sectionAImageAlt,  
+      sectionBImageAlt:product.sectionBImageAlt,  
+      galleryImageAlt:product.galleryImageAlt,
     });
     var productKeywordtemp=[];
       product.productKeyword&&
@@ -1159,6 +1163,7 @@ const subfaq=(index)=>{
                 </div>
                 {(imageUrl.menuPreviewUrl !== "" ||
                   (product && product.productid.menuimage)) && (
+                  <div>
                   <div
                     style={{
                       display: "flex",
@@ -1194,6 +1199,14 @@ const subfaq=(index)=>{
                       }
                     />
                   </div>
+                  {imageUrl.menuPreviewUrl !=null?(
+                    <Form.Item  
+                    label={`alt text`} 
+                    name={`menuImageAlt`}>
+                      <Input />
+                    </Form.Item>
+                    ):null}
+                  </div>
                 )}
               </Form.Item>
               <Form.Item label="Section A Image" name="feature_image">
@@ -1222,6 +1235,7 @@ const subfaq=(index)=>{
                 </div>
                 {(imageUrl.sectionaPreviewUrl !== "" ||
                   (product && product.productid.featurefilepath)) && (
+                  <div>
                   <div
                     style={{
                       display: "flex",
@@ -1257,6 +1271,14 @@ const subfaq=(index)=>{
                       }
                     />
                   </div>
+                  {imageUrl.sectionaPreviewUrl !=null?
+                (              
+                   <Form.Item  
+                    label={`alt text`} 
+                    name={`sectionAImageAlt`}>
+                      <Input />
+                    </Form.Item>):null}
+                  </div>
                 )}
               </Form.Item>
               <Form.Item label="Section B Image" name="sectionbimage">
@@ -1285,6 +1307,7 @@ const subfaq=(index)=>{
                 </div>
                 {(imageUrl.sectionbPreviewUrl !== "" ||
                   (product && product.sectionbimage)) && (
+                  <div>
                   <div
                     style={{
                       display: "flex",
@@ -1319,6 +1342,13 @@ const subfaq=(index)=>{
                         )
                       }
                     />
+                  </div>
+                  {imageUrl.sectionbPreviewUrl !=null?
+                (                                        <Form.Item  
+                    label={`alt text`} 
+                    name={`sectionBImageAlt`}>
+                      <Input />
+                    </Form.Item>):null}
                   </div>
                 )}
               </Form.Item>
@@ -1376,7 +1406,7 @@ const subfaq=(index)=>{
                           height: "200px",
                           marginTop: "20px",
                           marginRight: "25px",
-                        }}
+                        }}  
                       />
                       <CloseOutlined
                         onClick={() => {
@@ -1442,6 +1472,13 @@ const subfaq=(index)=>{
                       />
                     </div>
                   ))}
+                   {
+                (                                        <Form.Item  
+                    label={`gallery Alt text`} 
+                    name={`galleryImageAlt`}>
+                      <Input />
+                    </Form.Item>)
+                  }
                 </div>
               )}
             </Form.Item>
