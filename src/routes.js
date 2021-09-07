@@ -56,6 +56,7 @@ const Attribute = React.lazy(() => import("./Page/Attribute"));
 const ProductList = React.lazy(() => import("./Page/ProductList"));
 const ProductForm = React.lazy(() => import("./Page/ProductForm"));
 const Review = React.lazy(() => import("./Page/Review"));
+const CreateReview = React.lazy(() => import("./Page/Review/createReview"));
 const Coupon = React.lazy(() => import("./Page/Coupon"));
 const ComboList = React.lazy(() => import("./Page/ComboList"));
 const ComboForm = React.lazy(() => import("./Page/ComboForm"));
@@ -250,6 +251,12 @@ const routes = [
     exact: true,
     name: "Review",
     component: Review,
+  },
+  {
+    path: "/Review/create",
+    exact: true,
+    name: "Create Review",
+    component: CreateReview,
   },
   {
     path: "/Coupon",

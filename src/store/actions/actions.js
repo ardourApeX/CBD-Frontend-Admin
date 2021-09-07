@@ -79,6 +79,7 @@ export const DELETE_COMBO = "DELETE_COMBO";
 
 export const UPDATE_REVIEW = "UPDATE_REVIEW";
 export const GET_REVIEWS = "GET_REVIEWS";
+export const ADD_REVIEWS = "ADD_REVIEWS";
 export const DELETE_REVIEW = "DELETE_REVIEW";
 
 export const ADD_COUPON = "ADD_COUPON";

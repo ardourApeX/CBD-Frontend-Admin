@@ -1,7 +1,7 @@
-import * as actionTypes from "../actions/actions";
+import * as actionTypes from '../actions/actions'
 const initialState = {
   data: [],
-};
+}
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -9,25 +9,30 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         data: action.data,
-      };
+      }
+    case actionTypes.ADD_REVIEWS:
+      return {
+        ...state,
+        // data: action.data,
+      }
     case actionTypes.UPDATE_REVIEW:
       return {
         ...state,
         data: state.data.map((item) => {
           if (item._id === action.data._id) {
-            return action.data;
+            return action.data
           }
-          return item;
+          return item
         }),
-      };
+      }
     case actionTypes.DELETE_REVIEW:
       return {
         ...state,
         data: state.data.filter((item) => item._id !== action.data),
-      };
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default reducer;
+export default reducer
