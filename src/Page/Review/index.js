@@ -49,17 +49,18 @@ const Review = ({ reviews, get, deletee, edit, history }) => {
       })
   }
 
-  const editReview = (id) => {
+  const editReview = (record) => {
     setLoading(true)
-    edit(id)
-      .then((result) => {
-        setLoading(false)
-        cogoToast.success(result)
-      })
-      .catch((err) => {
-        setLoading(false)
-        cogoToast.error(err)
-      })
+    history.push('/Review/edit', record)
+    // edit(id)
+    //   .then((result) => {
+    //     setLoading(false)
+    //     cogoToast.success(result)
+    //   })
+    //   .catch((err) => {
+    //     setLoading(false)
+    //     cogoToast.error(err)
+    //   })
   }
   return loading ? (
     <div>
@@ -137,9 +138,10 @@ const Review = ({ reviews, get, deletee, edit, history }) => {
           onDelete={removeReview}
           data={reviews.map((review) => {
             return {
+              ...review,
               title: review.title,
               content: review.content,
-              email: review.userid ? review.userid.email : '',
+              email: review.userid ? review.userid.email : review.name
             }
           })}
           setPdf={pdf}

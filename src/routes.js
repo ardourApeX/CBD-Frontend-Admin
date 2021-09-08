@@ -253,7 +253,7 @@ const routes = [
     component: Review,
   },
   {
-    path: "/Review/create",
+    path: "/Review/:mode",
     exact: true,
     name: "Create Review",
     component: CreateReview,

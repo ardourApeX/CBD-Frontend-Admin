@@ -42,6 +42,26 @@ export const AddReviews = (data, cb) => {
   }
 }
 
+export const editReviewCompletely = (data, cb) => {
+  return (dispatch) => {
+    return Axios.post(`${BACK_END_URL}/review/admin/edit`, data, cb)
+      .then((result) => {
+        console.log(result)
+        cb(false, result)
+        // dispatch({
+        //   type: actionTypes.UPDATE_REVIEW,
+        //   data: result.data.review,
+        // })
+        return `Review Edited Successfully`
+      })
+      .catch((err) => {
+        console.log(err)
+        cb(true, err)
+        return Promise.reject(ERROR_MESSAGE)
+      })
+  }
+}
+
 export const editReview = (id) => {
   return (dispatch) => {
     return Axios.get(`${BACK_END_URL}/review/approve/${id}/${true}`)

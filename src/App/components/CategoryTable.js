@@ -153,7 +153,7 @@ class CategoryTable extends Component {
                   <Space size="middle">
                     {!record.approved && onEdit ? (
                       type === "review" ? (
-                        <CheckOutlined onClick={() => onEdit(record._id)} />
+                        <EditFilled onClick={() => onEdit(record)} />
                       ) : type === "ambassador" ? (
                         !record.status ? (
                           <Button

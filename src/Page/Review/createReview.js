@@ -5,7 +5,7 @@ import { Option } from 'antd/lib/mentions'
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import * as actionCreators from '../../store/actions/product'
-import { AddReviews } from '../../store/actions/review'
+import { AddReviews, editReviewCompletely } from '../../store/actions/review'
 
 // import ImageForm from
 
@@ -14,16 +14,36 @@ function CreateReview({
   get,
   deletee,
   AddReviews,
+  editReviewCompletely,
+  match,
   history,
+  location,
   ...props
 }) {
-  const [state, setState] = useState({
-    title: '',
-    name: '',
-    rating: 4,
-    productmetaid: null,
-    content: '',
-  })
+  const [editMode, setEditMode] = useState(
+    match?.params?.mode === 'edit' ? true : false,
+  )
+
+  const [state, setState] = useState(
+    editMode
+      ? {
+          title: '',
+          name: '',
+          rating: 4,
+          productmetaid: null,
+          content: '',
+          ...location.state,
+        }
+      : {
+          title: '',
+          name: '',
+          rating: 4,
+          productmetaid: null,
+          content: '',
+        },
+  )
+
+  console.log({ match, location, editMode, state })
 
   useEffect(() => {
     get()
@@ -35,10 +55,16 @@ function CreateReview({
   }, [])
 
   const handleSubmit = () => {
-    AddReviews(state, (error, response) => {
-      console.log({ error, response })
-      if (!error) history.push('/Review')
-    })
+    if (editMode)
+      editReviewCompletely(state, (error, response) => {
+        console.log({ error, response })
+        if (!error) history.push('/Review')
+      })
+    else
+      AddReviews(state, (error, response) => {
+        console.log({ error, response })
+        if (!error) history.push('/Review')
+      })
   }
 
   return (
@@ -47,6 +73,7 @@ function CreateReview({
         <Card.Body>
           <Form>
             <Form.Item
+              initialValue={state.title}
               label="Title"
               name="title"
               rules={[
@@ -64,6 +91,7 @@ function CreateReview({
             </Form.Item>
 
             <Form.Item
+              initialValue={state.name}
               label="Name"
               name="name"
               rules={[
@@ -81,6 +109,7 @@ function CreateReview({
             </Form.Item>
 
             <Form.Item
+              initialValue={state.rating}
               label="Rating"
               name="rating"
               rules={[
@@ -102,6 +131,7 @@ function CreateReview({
             </Form.Item>
 
             <Form.Item
+              initialValue={state.content}
               label="Content"
               name="content"
               rules={[
@@ -121,6 +151,7 @@ function CreateReview({
 
             <Form.Item
               // initialValue="simple"
+              initialValue={state.productmetaid}
               label="Product"
               value={state.productmetaid}
               name="producttype"
@@ -190,6 +221,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     get: () => dispatch(actionCreators.getProducts()),
     AddReviews: (data, cb) => dispatch(AddReviews(data, cb)),
+    editReviewCompletely: (data, cb) =>
+      dispatch(editReviewCompletely(data, cb)),
   }
 }
 
