@@ -13,7 +13,7 @@ import ReactToPdf from 'react-to-pdf'
 import ReactToPrint from 'react-to-print'
 
 const Review = ({ reviews, get, deletee, edit, history }) => {
-  console.log(reviews)
+  // console.log(reviews)
   const [loading, setLoading] = useState(true)
   const ref = useRef()
   const ref1 = useRef()

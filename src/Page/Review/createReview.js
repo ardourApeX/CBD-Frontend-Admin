@@ -43,12 +43,12 @@ function CreateReview({
         },
   )
 
-  console.log({ match, location, editMode, state })
+  // console.log({ match, location, editMode, state })
 
   useEffect(() => {
     get()
       .then((result) => {
-        console.log({ result })
+        // console.log({ result })
         // setLoading(false)
       })
       .catch(console.log)
@@ -57,12 +57,12 @@ function CreateReview({
   const handleSubmit = () => {
     if (editMode)
       editReviewCompletely(state, (error, response) => {
-        console.log({ error, response })
+        // console.log({ error, response })
         if (!error) history.push('/Review')
       })
     else
       AddReviews(state, (error, response) => {
-        console.log({ error, response })
+        // console.log({ error, response })
         if (!error) history.push('/Review')
       })
   }
