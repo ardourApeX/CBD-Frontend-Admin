@@ -8,34 +8,34 @@ import {
   Checkbox,
   Upload,
   Collapse,
-} from "antd";
-import TextArea from "antd/lib/input/TextArea";
-import "../page.css";
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import * as actionCreators from "../../store/actions/product";
-import * as vendorActionCreators from "../../store/actions/vendor";
-import * as categoryActionCreators from "../../store/actions/productCategory";
-import * as packageActionCreators from "../../store/actions/packageType";
-import "antd/dist/antd.css";
-import { Option } from "antd/lib/mentions";
-import { Spinner } from "react-bootstrap";
-import AceEditor from "react-ace";
-import "brace/mode/javascript";
-import "brace/theme/chrome";
+} from 'antd'
+import TextArea from 'antd/lib/input/TextArea'
+import '../page.css'
+import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
+import * as actionCreators from '../../store/actions/product'
+import * as vendorActionCreators from '../../store/actions/vendor'
+import * as categoryActionCreators from '../../store/actions/productCategory'
+import * as packageActionCreators from '../../store/actions/packageType'
+import 'antd/dist/antd.css'
+import { Option } from 'antd/lib/mentions'
+import { Spinner } from 'react-bootstrap'
+import AceEditor from 'react-ace'
+import 'brace/mode/javascript'
+import 'brace/theme/chrome'
 import {
   CloseOutlined,
   DeleteOutlined,
   PlusOutlined,
   UploadOutlined,
-} from "@ant-design/icons";
-import cogoToast from "cogo-toast";
-import "antd/dist/antd.css";
-import { BACK_END_URL } from "../../utilities/Axios/url";
-import { cloneDeep } from "lodash";
-const { TabPane } = Tabs;
+} from '@ant-design/icons'
+import cogoToast from 'cogo-toast'
+import 'antd/dist/antd.css'
+import { BACK_END_URL } from '../../utilities/Axios/url'
+import { cloneDeep } from 'lodash'
+const { TabPane } = Tabs
 
-const { Panel } = Collapse;
+const { Panel } = Collapse
 
 const ProductForm = ({
   match,
@@ -50,84 +50,79 @@ const ProductForm = ({
   products,
   deleteProductImage,
 }) => {
-  const [loading, setLoading] = useState(true);
-   var [faqcontent1, setfaq] = useState([
-     {title:" ",description:" "},
-   ]);
-   var [productKeyword1, setProductKeyword] = useState([
-    {title:" "},
-  ]);
-  const [attributes, setAttributes] = useState([]);
-  const [form] = Form.useForm();
-  const [recievedGalleryUrls, setRecievedGalleryUrls] = useState([]);
+  const [loading, setLoading] = useState(true)
+  var [faqcontent1, setfaq] = useState([{ title: ' ', description: ' ' }])
+  var [productKeyword1, setProductKeyword] = useState([{ title: ' ' }])
+  const [attributes, setAttributes] = useState([])
+  const [form] = Form.useForm()
+  const [recievedGalleryUrls, setRecievedGalleryUrls] = useState([])
   const [image, setImage] = useState({
     menuImage: null,
     sectionaImage: null,
     sectionbImage: null,
     galleryImage: [],
-  });
+  })
   const [imageUrl, setImageUrl] = useState({
-    menuPreviewUrl: "",
-    sectionaPreviewUrl: "",
-    sectionbPreviewUrl: "",
+    menuPreviewUrl: '',
+    sectionaPreviewUrl: '',
+    sectionbPreviewUrl: '',
     galleryPreviewUrl: [],
-  });
+  })
   const [imageType, setImageType] = useState({
     menuImage: false,
     sectionaImage: false,
     sectionbImage: false,
     galleryImage: false,
-  });
-  const [product, setProduct] = useState(
-    products.filter((item) => item._id === match.params.id)[0]
-  );
-  const [normal, setNormal] = useState(
-    product ? (product.featured === true ? "1" : "0") : "0"
-  );
-const addfaq=()=>{
- setfaq([...faqcontent1,{title:"",description:""}]);
-}
-const subfaq=(index)=>{
-  const values=[...faqcontent1]; 
-  values.splice(index,1);
-  form.setFieldsValue({
-    [`faq[${index}][title]`]: null,
-    [`faq[${index}][description]`]: null,
   })
-  setfaq(values);
+  const [product, setProduct] = useState(
+    products.filter((item) => item._id === match.params.id)[0],
+  )
+  const [normal, setNormal] = useState(
+    product ? (product.featured === true ? '1' : '0') : '0',
+  )
+  const addfaq = () => {
+    setfaq([...faqcontent1, { title: '', description: '' }])
   }
-  const addProductKeyword=()=>{
-    setProductKeyword([...productKeyword1,{title:""}]);
-   }
-   const subProductKeyword=(index)=>{
-     const values=[...productKeyword1]; 
-     values.splice(index,1);
-     form.setFieldsValue({
-       [`productKeyword[${index}][title]`]: null,
-     })
-     setProductKeyword(values);
-     }
-  console.log(product);
+  const subfaq = (index) => {
+    const values = [...faqcontent1]
+    values.splice(index, 1)
+    form.setFieldsValue({
+      [`faq[${index}][title]`]: null,
+      [`faq[${index}][description]`]: null,
+    })
+    setfaq(values)
+  }
+  const addProductKeyword = () => {
+    setProductKeyword([...productKeyword1, { title: '' }])
+  }
+  const subProductKeyword = (index) => {
+    const values = [...productKeyword1]
+    values.splice(index, 1)
+    form.setFieldsValue({
+      [`productKeyword[${index}][title]`]: null,
+    })
+    setProductKeyword(values)
+  }
+  console.log(product)
   useEffect(() => {
     getVendors().then(() => {
       getCategories().then(() => {
         getPackages().then(() => {
-          setLoading(false);
-          if (match.params.type === "edit") {
+          setLoading(false)
+          if (match.params.type === 'edit') {
             setAttributes(
-              product.attributes.length ? product.attributesList : []
-            );
-            editValues(product, false);
+              product.attributes.length ? product.attributesList : [],
+            )
+            editValues(product, false)
           }
           if (product) {
-            setRecievedGalleryUrls(product.galleryimgdetails);
+            setRecievedGalleryUrls(product.galleryimgdetails)
           }
-        });
-      });
-    });
-  }, []);
+        })
+      })
+    })
+  }, [])
   const editValues = (product, boolean) => {
-
     form.setFieldsValue({
       producttitle: product.productid.producttitle,
       sdescription: product.productid.sdescription,
@@ -135,8 +130,8 @@ const subfaq=(index)=>{
       producttype: product.producttype,
       vendorid: product.vendorid,
       packagingtype: product.packagingtype,
-      hide: product.visibilitytype === true ? "true" : "false",
-      featured: product.featured === true ? "1" : "0",
+      hide: product.visibilitytype === true ? 'true' : 'false',
+      featured: product.featured === true ? '1' : '0',
       regular_price: product.dregularprice,
       sale_price: product.dsaleprice,
       barcode: product.barcode,
@@ -171,209 +166,207 @@ const subfaq=(index)=>{
       // productKeyword:product.productKeyword,
       allingredients: product.allingredients,
       productid: product.productid.id,
-      html:product.html ? product.html :"",
-      html1:product.html1 ? product.html1 :"",
-      menuImageAlt:product.menuImageAlt, 
-      sectionAImageAlt:product.sectionAImageAlt,  
-      sectionBImageAlt:product.sectionBImageAlt,  
-      galleryImageAlt:product.galleryImageAlt,
-    });
-    var productKeywordtemp=[];
-      product.productKeyword&&
-      product.productKeyword.map((item,index)=>{
-        productKeywordtemp.push({title:item.title,
-          description:item.description});
-        form.setFieldsValue(
-          {[`productKeyword[${index}][title]`]: item.title},
-        )
-      });
-      setProductKeyword(productKeywordtemp);
-    
+      html: product.html ? product.html : '',
+      html1: product.html1 ? product.html1 : '',
+      menuImageAlt: product.menuImageAlt,
+      sectionAImageAlt: product.sectionAImageAlt,
+      sectionBImageAlt: product.sectionBImageAlt,
+      galleryImageAlt: product.galleryImageAlt,
+    })
+    var productKeywordtemp = []
+    product.productKeyword &&
+      product.productKeyword.map((item, index) => {
+        productKeywordtemp.push({
+          title: item.title,
+          description: item.description,
+        })
+        form.setFieldsValue({ [`productKeyword[${index}][title]`]: item.title })
+      })
+    setProductKeyword(productKeywordtemp)
 
     product.attributecontent &&
       product.attributecontent.map((item, index) =>
         form.setFieldsValue({
           [`page_attribute[${index}][title]`]: item.title,
           [`page_attribute[${index}][description]`]: item.description,
-        })
-      );
-      var faqtemp=[];
-      product.faqcontent &&
-      product.faqcontent.map((item, index) =>
-      {
-        faqtemp.push({title:item.title,
-        description:item.description});
-        
+        }),
+      )
+    var faqtemp = []
+    product.faqcontent &&
+      product.faqcontent.map((item, index) => {
+        faqtemp.push({ title: item.title, description: item.description })
+
         form.setFieldsValue({
           [`faq[${index}][title]`]: item.title,
           [`faq[${index}][description]`]: item.description,
         })
-      });
-      setfaq(faqtemp);
-   };
+      })
+    setfaq(faqtemp)
+  }
   const onFinish = (values) => {
-    const { menuImage, sectionaImage, sectionbImage, galleryImage } = image;
-    setLoading(true);
-    const formData = new FormData();
-    console.log(values);
+    const { menuImage, sectionaImage, sectionbImage, galleryImage } = image
+    setLoading(true)
+    const formData = new FormData()
+    console.log(values)
     Object.keys(values)
       .filter(
         (item) =>
-          item !== "menu_image" ||
-          item !== "feature_image" ||
-          item !== "product_gallery_image" ||
-          item !== "sectionbimage" ||
-          item !== "labsheet"
+          item !== 'menu_image' ||
+          item !== 'feature_image' ||
+          item !== 'product_gallery_image' ||
+          item !== 'sectionbimage' ||
+          item !== 'labsheet',
       )
       .forEach((key) => {
-        if (values[key] || typeof values[key] === "boolean") {
-          formData.append(key, values[key]);
+        if (values[key] || typeof values[key] === 'boolean') {
+          formData.append(key, values[key])
         }
-      });
+      })
     if (menuImage) {
-      formData.append("menu_image", menuImage);
+      formData.append('menu_image', menuImage)
     }
     if (sectionaImage) {
-      formData.append("feature_image", sectionaImage);
+      formData.append('feature_image', sectionaImage)
     }
     if (galleryImage.length > 0) {
       galleryImage.map((item, index) =>
-        formData.append(`product_gallery_image_${index}`, item)
-      );
+        formData.append(`product_gallery_image_${index}`, item),
+      )
     }
     if (sectionbImage) {
-      formData.append("sectionbimage", sectionbImage);
+      formData.append('sectionbimage', sectionbImage)
     }
     if (values.labsheet) {
-      formData.append("labsheet", values.labsheet.fileList[0].originFileObj);
+      formData.append('labsheet', values.labsheet.fileList[0].originFileObj)
     }
-    formData.append("attributes", JSON.stringify(attributes));
-    match.params.type === "add"
+    formData.append('attributes', JSON.stringify(attributes))
+    match.params.type === 'add'
       ? add(formData)
           .then((result) => {
-            setLoading(false);
-            cogoToast.success(result);
-            form.resetFields();
-            clearOut();
+            setLoading(false)
+            cogoToast.success(result)
+            form.resetFields()
+            clearOut()
           })
           .catch((err) => {
-            setLoading(false);
-            cogoToast.error(err);
-            form.resetFields();
-            clearOut();
+            setLoading(false)
+            cogoToast.error(err)
+            form.resetFields()
+            clearOut()
           })
       : edit(formData, match.params.id)
           .then((result) => {
-            setLoading(false);
-            cogoToast.success(result.message);
-            console.log(result.data);
-            setAttributes(result.data.attributesList);
+            setLoading(false)
+            cogoToast.success(result.message)
+            console.log(result.data)
+            setAttributes(result.data.attributesList)
             editValues(
               {
                 ...result.data,
                 productid: result.product,
               },
-              true
-            );
+              true,
+            )
             setProduct({
               ...result.data,
               productid: result.product,
-            });
+            })
           })
           .catch((err) => {
-            setLoading(false);
-            cogoToast.error(err);
-          });
-  };
+            setLoading(false)
+            cogoToast.error(err)
+          })
+  }
   const clearOut = () => {
     setImageUrl({
-      menuPreviewUrl: "",
-      sectionaPreviewUrl: "",
-      sectionbPreviewUrl: "",
+      menuPreviewUrl: '',
+      sectionaPreviewUrl: '',
+      sectionbPreviewUrl: '',
       galleryPreviewUrl: [],
-    });
+    })
     setImage({
       menuImage: null,
       sectionaImage: null,
       sectionbImage: null,
       galleryImage: [],
-    });
-  };
+    })
+  }
   const onFinishFailed = (errorInfo) => {
-    console.log(errorInfo);
-    form.resetFields();
-  };
+    console.log({ errorInfo })
+    // errorInfo.errorFields.le
+    // form.resetFields()
+  }
   const handleImageDelete = (
     formField,
     stateField,
     anotherStateField,
-    type
+    type,
   ) => {
-    if (match.params.type === "add" || imageType[anotherStateField]) {
+    if (match.params.type === 'add' || imageType[anotherStateField]) {
       setImageUrl({
         ...imageUrl,
-        [stateField]: "",
-      });
+        [stateField]: '',
+      })
       setImage({
         ...image,
         [anotherStateField]: null,
-      });
-      form.resetFields([formField]);
+      })
+      form.resetFields([formField])
     } else {
-      setLoading(true);
-      let data;
-      if (type === "product") {
-        if (formField === "menu_image") {
+      setLoading(true)
+      let data
+      if (type === 'product') {
+        if (formField === 'menu_image') {
           data = {
-            action: "menu_remove",
+            action: 'menu_remove',
             productid: product.productid._id,
-          };
+          }
         } else {
           data = {
-            action: "f_remove",
+            action: 'f_remove',
             productid: product.productid._id,
-          };
+          }
         }
-        deleteProductImage(data, "product")
+        deleteProductImage(data, 'product')
           .then((result) => {
-            setLoading(false);
+            setLoading(false)
             setImageType({
               ...imageType,
               [anotherStateField]: true,
-            });
-            cogoToast.success(result.message);
+            })
+            cogoToast.success(result.message)
             setProduct({
               ...product,
               productid: result.data,
-            });
+            })
           })
-          .catch((err) => cogoToast.error(err));
+          .catch((err) => cogoToast.error(err))
       } else {
         data = {
           productid: product._id,
-        };
-        deleteProductImage(data, "productMeta")
+        }
+        deleteProductImage(data, 'productMeta')
           .then((result) => {
-            setLoading(false);
+            setLoading(false)
             setImageType({
               ...imageType,
               [anotherStateField]: true,
-            });
-            cogoToast.success(result.message);
+            })
+            cogoToast.success(result.message)
             setProduct({
               ...product,
-              sectionbimage: "",
-            });
+              sectionbimage: '',
+            })
           })
-          .catch((err) => cogoToast.error(err));
+          .catch((err) => cogoToast.error(err))
       }
     }
-  };
+  }
   return loading ? (
     <div>
       <Spinner
         animation="border"
-        style={{ position: "fixed", top: "20%", left: "60%" }}
+        style={{ position: 'fixed', top: '20%', left: '60%' }}
         role="status"
       >
         <span className="sr-only">Loading...</span>
@@ -381,7 +374,7 @@ const subfaq=(index)=>{
     </div>
   ) : (
     <div>
-      <h3 style={{ marginBottom: "30px" }}>
+      <h3 style={{ marginBottom: '30px' }}>
         {`${match.params.type.toUpperCase()} PRODUCT`}
       </h3>
       <Form
@@ -389,25 +382,25 @@ const subfaq=(index)=>{
         name="basic"
         layout="vertical"
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        // onFinishFailed={onFinishFailed}
       >
         <Tabs defaultActiveKey="1">
           <TabPane forceRender={true} tab="General Information" key="1">
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr 1fr",
-                gridColumnGap: "20px",
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                gridColumnGap: '20px',
               }}
             >
-              {match.params.type === "edit" ? (
+              {match.params.type === 'edit' ? (
                 <Form.Item
                   label="Serial Number"
                   name="productid"
                   rules={[
                     {
                       required: true,
-                      message: "Please input Product ID",
+                      message: 'Please input Product ID',
                     },
                   ]}
                 >
@@ -420,62 +413,89 @@ const subfaq=(index)=>{
                 rules={[
                   {
                     required: true,
-                    message: "Please input Product Title",
+                    message: 'Please input Product Title',
                   },
                 ]}
               >
                 <Input />
               </Form.Item>
             </div>
-            <Form.Item 
-            label={`keywords Section:`}>
-            {productKeyword1.map((field, index) => (
-               <Form.Item >
-              <Form.Item
-            // label={`keyword[${index}]`}
-            // name={`productKeyword[${index}][value]`}
-            label={`keywords${index+1}`}
-            name={`productKeyword[${index}][title]`}
-            key={index} 
-            > 
-            <Input/>  
-          </Form.Item>
-          <Button
-                        shape="circle"
-                        onClick={()=>subProductKeyword(index)}>-
-                      </Button>
-     </Form.Item>
-            ))}
-                                  <Button
-                        style={{
-                          background: "black",
-                          color: "white",
-                        }}            
-                        shape="circle"
-                        onClick={()=>addProductKeyword()}>+
-                      </Button>
-                      </Form.Item>
+            <Form.Item label={`keywords Section:`}>
+              {productKeyword1.map((field, index) => (
+                <Form.Item>
+                  <Form.Item
+                    // label={`keyword[${index}]`}
+                    // name={`productKeyword[${index}][value]`}
+                    label={`keywords${index + 1}`}
+                    name={`productKeyword[${index}][title]`}
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please enter a keyword',
+                      },
+                    ]}
+                    key={index}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Button
+                    shape="circle"
+                    onClick={() => subProductKeyword(index)}
+                  >
+                    -
+                  </Button>
+                </Form.Item>
+              ))}
+              <Button
+                style={{
+                  background: 'black',
+                  color: 'white',
+                }}
+                shape="circle"
+                onClick={() => addProductKeyword()}
+              >
+                +
+              </Button>
+            </Form.Item>
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gridColumnGap: "20px",
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gridColumnGap: '20px',
               }}
             >
-              <Form.Item label="Short Description" name="sdescription">
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please enter a description',
+                  },
+                ]}
+                label="Short Description"
+                name="sdescription"
+              >
                 <TextArea aria-colspan="3" />
               </Form.Item>
 
-              <Form.Item label="Long Description" name="description">
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please enter a description',
+                  },
+                ]}
+                label="Long Description"
+                name="description"
+              >
                 <TextArea />
               </Form.Item>
             </div>
 
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 2fr",
-                gridColumnGap: "20px",
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 2fr',
+                gridColumnGap: '20px',
               }}
             >
               <Form.Item
@@ -485,7 +505,7 @@ const subfaq=(index)=>{
                 rules={[
                   {
                     required: true,
-                    message: "Please Select Product Type",
+                    message: 'Please Select Product Type',
                   },
                 ]}
               >
@@ -502,7 +522,7 @@ const subfaq=(index)=>{
                 rules={[
                   {
                     required: true,
-                    message: "Please Select vendor",
+                    message: 'Please Select vendor',
                   },
                 ]}
               >
@@ -522,7 +542,7 @@ const subfaq=(index)=>{
                 rules={[
                   {
                     required: true,
-                    message: "Please Select Packaging Type",
+                    message: 'Please Select Packaging Type',
                   },
                 ]}
               >
@@ -538,9 +558,9 @@ const subfaq=(index)=>{
 
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 2fr",
-                gridColumnGap: "20px",
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 2fr',
+                gridColumnGap: '20px',
               }}
             >
               <Form.Item
@@ -550,7 +570,7 @@ const subfaq=(index)=>{
                 rules={[
                   {
                     required: true,
-                    message: "Please Enter Product Visibility",
+                    message: 'Please Enter Product Visibility',
                   },
                 ]}
               >
@@ -570,79 +590,94 @@ const subfaq=(index)=>{
                   <Option value="1">Featured</Option>
                 </Select>
               </Form.Item>
-             
-            
-             
             </div>
             <div
               style={{
-                display: "grid",
-                gridTemplateRows: "1fr 1fr",
-                gridColumnGap: "20px",              }}
+                display: 'grid',
+                gridTemplateRows: '1fr 1fr',
+                gridColumnGap: '20px',
+              }}
             >
-               <Form.Item
-              initialValue=""
-              label="Details: this details add HTML code to the details section of the product"
-              name="html">
-              <AceEditor
-                onChange={
-                  (code) => {
-                  document.getElementsByClassName("preview")[0].innerHTML = code;
-                }}
-                mode="javascript"
-                theme="chrome"
-                style={{ width: "100%", height: "100px" }}
-                setOptions={{
-                  fontSize: 20,
-                }}
-                /> 
+              <Form.Item
+                initialValue=""
+                label="Details: this details add HTML code to the details section of the product"
+                name="html"
+                rules={[
+                  {
+                    required: true,
+                    message: 'This felid is required',
+                  },
+                ]}
+              >
+                <AceEditor
+                  onChange={(code) => {
+                    document.getElementsByClassName(
+                      'preview',
+                    )[0].innerHTML = code
+                  }}
+                  mode="javascript"
+                  theme="chrome"
+                  style={{ width: '100%', height: '100px' }}
+                  setOptions={{
+                    fontSize: 20,
+                  }}
+                />
                 {/* <Input/> */}
-          </Form.Item>
-          <div 
-              className="preview" 
-              style={{
-                padding:"20px",
-                border:"none",
-                marginTop: "20px",
-                borderRadius: "5px",
-                backgroundColor:"lightgray",
-                width:"100%",
-                height:"100px",
-                resize: "both",
-                overflow: "auto"
-              }}>
-              </div>
-          <Form.Item
-              initialValue=""
-              label="FAQ : This HTML data gets displayed on the FAQ section of a product"
-              name="html1">
-            <AceEditor
-               onChange={(code) => {
-                document.getElementsByClassName("preview")[1].innerHTML = code;
+              </Form.Item>
+              <div
+                className="preview"
+                style={{
+                  padding: '20px',
+                  border: 'none',
+                  marginTop: '20px',
+                  borderRadius: '5px',
+                  backgroundColor: 'lightgray',
+                  width: '100%',
+                  height: '100px',
+                  resize: 'both',
+                  overflow: 'auto',
                 }}
-            mode="javascript"
-            theme="chrome"
-            style={{ width: "100%", height: "100px" }}
-            setOptions={{
-              fontSize: 20,
-            }}
-
-          />
-          </Form.Item>
-          <div 
-            className="preview" 
-            style={{border:"none",
-                    padding:"20px",
-                    marginTop: "20px",
-                    borderRadius: "5px",
-                    backgroundColor:"lightgray",
-                    width:"100%",
-                    height:"100px",
-                    resize: "both",
-                    overflow: "auto"
-                  }}>
+              ></div>
+              <Form.Item
+                initialValue=""
+                label="FAQ : This HTML data gets displayed on the FAQ section of a product"
+                name="html1"
+                rules={[
+                  {
+                    required: true,
+                    message: 'This felid is required',
+                  },
+                ]}
+              >
+                <AceEditor
+                  onChange={(code) => {
+                    document.getElementsByClassName(
+                      'preview',
+                    )[1].innerHTML = code
+                  }}
+                  mode="javascript"
+                  theme="chrome"
+                  style={{ width: '100%', height: '100px' }}
+                  setOptions={{
+                    fontSize: 20,
+                  }}
+                />
+              </Form.Item>
+              <div
+                className="preview"
+                style={{
+                  border: 'none',
+                  padding: '20px',
+                  marginTop: '20px',
+                  borderRadius: '5px',
+                  backgroundColor: 'lightgray',
+                  width: '100%',
+                  height: '100px',
+                  resize: 'both',
+                  overflow: 'auto',
+                }}
+              ></div>
             </div>
-              </div>
           </TabPane>
           <TabPane
             forceRender={true}
@@ -654,10 +689,10 @@ const subfaq=(index)=>{
                 <TabPane forceRender={true} tab="General" key="1">
                   <div
                     style={{
-                      marginTop: "20px",
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr",
-                      gridColumnGap: "10px",
+                      marginTop: '20px',
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr',
+                      gridColumnGap: '10px',
                     }}
                   >
                     <Form.Item
@@ -666,7 +701,7 @@ const subfaq=(index)=>{
                       rules={[
                         {
                           required: true,
-                          message: "Please input Package Type Id!",
+                          message: 'Please input Package Type Id!',
                         },
                       ]}
                     >
@@ -678,7 +713,7 @@ const subfaq=(index)=>{
                       rules={[
                         {
                           required: true,
-                          message: "Please input Package Type Id!",
+                          message: 'Please input Package Type Id!',
                         },
                       ]}
                     >
@@ -707,9 +742,9 @@ const subfaq=(index)=>{
                   </div>
                   <div
                     style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr 1fr",
-                      gridColumnGap: "20px",
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr 1fr',
+                      gridColumnGap: '20px',
                     }}
                   >
                     <Form.Item label="Serving Size" name="servingsize">
@@ -726,20 +761,20 @@ const subfaq=(index)=>{
                 <TabPane forceRender={true} tab="Inventory" key="2">
                   <div
                     style={{
-                      marginTop: "20px",
+                      marginTop: '20px',
                     }}
                   >
                     <Form.Item
                       rules={[
                         {
                           required: true,
-                          message: "Sku is required",
+                          message: 'Sku is required',
                         },
                       ]}
                       label="SKU"
                       name="sku"
                     >
-                      <Input style={{ width: "30%" }} />
+                      <Input style={{ width: '30%' }} />
                     </Form.Item>
                     <Form.Item
                       valuePropName="checked"
@@ -754,10 +789,10 @@ const subfaq=(index)=>{
                 <TabPane forceRender={true} tab="Shipping" key="3">
                   <div
                     style={{
-                      marginTop: "20px",
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr 2fr",
-                      gridColumnGap: "20px",
+                      marginTop: '20px',
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr 2fr',
+                      gridColumnGap: '20px',
                     }}
                   >
                     <Form.Item label="Batch No." name="batch_no">
@@ -769,9 +804,9 @@ const subfaq=(index)=>{
                     <Form.Item label="Dimensions (Inches)">
                       <div
                         style={{
-                          display: "grid",
-                          gridTemplateColumns: "1fr 1fr 1fr",
-                          gridColumnGap: "10px",
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 1fr 1fr',
+                          gridColumnGap: '10px',
                         }}
                       >
                         <Form.Item name="_length">
@@ -788,18 +823,18 @@ const subfaq=(index)=>{
                   </div>
                   <div
                     style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 3fr ",
-                      gridColumnGap: "10px",
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 3fr ',
+                      gridColumnGap: '10px',
                     }}
                   >
                     <div
                       style={{
-                        display: "flex",
+                        display: 'flex',
                       }}
                     >
                       <Form.Item
-                        style={{ marginRight: "20px" }}
+                        style={{ marginRight: '20px' }}
                         name="volume"
                         label="Volume"
                       >
@@ -828,132 +863,133 @@ const subfaq=(index)=>{
                 <TabPane forceRender={true} tab="Attributes" key="4">
                   <Button
                     style={{
-                      marginLeft: "auto",
-                      marginBottom: "20px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "black",
-                      color: "white",
+                      marginLeft: 'auto',
+                      marginBottom: '20px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: 'black',
+                      color: 'white',
                     }}
                     onClick={() => {
-                      let current = cloneDeep(attributes);
+                      let current = cloneDeep(attributes)
                       current.push({
                         title: `Attribute ${current.length + 1}`,
                         content: [],
-                      });
-                      setAttributes(current);
+                      })
+                      setAttributes(current)
                     }}
                   >
-                    <PlusOutlined style={{ marginRight: "10px" }} />
+                    <PlusOutlined style={{ marginRight: '10px' }} />
                     Add Attribute
                   </Button>
                   <Collapse accordion>
-                    {attributes && attributes.map((item, index) => (
-                      <Panel header={item.title} key={item.index}>
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <label>Title</label>
-                          <Input
-                            style={{ width: "25%" }}
-                            value={item.title}
-                            onChange={(e) => {
-                              let current = cloneDeep(attributes);
-                              current[index].title = e.target.value;
-                              setAttributes(current);
-                            }}
-                          />
-                        </div>
-                        <Button
-                          style={{
-                            marginTop: "20px",
-                            marginBottom: "20px",
-                            marginLeft: "auto",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            backgroundColor: "black",
-                            color: "white",
-                          }}
-                          onClick={() => {
-                            let current = cloneDeep(attributes);
-                            console.log(current);
-                            current[index].content.push({
-                              title: "",
-                              value: "",
-                            });
-                            setAttributes(current);
-                          }}
-                        >
-                          <PlusOutlined style={{ marginRight: "10px" }} />
-                          Add Sub Attribute
-                        </Button>
-                        {item.content.map((item1, index1) => (
+                    {attributes &&
+                      attributes.map((item, index) => (
+                        <Panel header={item.title} key={item.index}>
                           <div
+                            style={{ display: 'flex', flexDirection: 'column' }}
+                          >
+                            <label>Title</label>
+                            <Input
+                              style={{ width: '25%' }}
+                              value={item.title}
+                              onChange={(e) => {
+                                let current = cloneDeep(attributes)
+                                current[index].title = e.target.value
+                                setAttributes(current)
+                              }}
+                            />
+                          </div>
+                          <Button
                             style={{
-                              display: "grid",
-                              gridTemplateColumns: "1fr 3fr 1fr",
-                              gridColumnGap: "30px",
+                              marginTop: '20px',
+                              marginBottom: '20px',
+                              marginLeft: 'auto',
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              backgroundColor: 'black',
+                              color: 'white',
+                            }}
+                            onClick={() => {
+                              let current = cloneDeep(attributes)
+                              console.log(current)
+                              current[index].content.push({
+                                title: '',
+                                value: '',
+                              })
+                              setAttributes(current)
                             }}
                           >
+                            <PlusOutlined style={{ marginRight: '10px' }} />
+                            Add Sub Attribute
+                          </Button>
+                          {item.content.map((item1, index1) => (
                             <div
                               style={{
-                                display: "flex",
-                                flexDirection: "column",
+                                display: 'grid',
+                                gridTemplateColumns: '1fr 3fr 1fr',
+                                gridColumnGap: '30px',
                               }}
                             >
-                              <label>Key</label>
-                              <Input
-                                value={item1.title}
-                                onChange={(e) => {
-                                  let current = cloneDeep(attributes);
-                                  current[index].content[index1].title =
-                                    e.target.value;
-                                  setAttributes(current);
-                                }}
-                              />
-                            </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                              }}
-                            >
-                              <label>Value</label>
-                              <Input
-                                value={item1.value}
-                                onChange={(e) => {
-                                  let current = cloneDeep(attributes);
-                                  current[index].content[index1].value =
-                                    e.target.value;
-                                  setAttributes(current);
-                                }}
-                              />
-                            </div>
-                            <div style={{ position: "relative" }}>
-                              <Button
-                                type="danger"
+                              <div
                                 style={{
-                                  color: "white",
-                                  position: "absolute",
-                                  bottom: "0",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
+                                  display: 'flex',
+                                  flexDirection: 'column',
                                 }}
-                                onClick={() => {
-                                  let current = cloneDeep(attributes);
-                                  current[index].content.splice(index1, 1);
-                                  setAttributes(current);
+                              >
+                                <label>Key</label>
+                                <Input
+                                  value={item1.title}
+                                  onChange={(e) => {
+                                    let current = cloneDeep(attributes)
+                                    current[index].content[index1].title =
+                                      e.target.value
+                                    setAttributes(current)
+                                  }}
+                                />
+                              </div>
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
                                 }}
-                                icon={<DeleteOutlined />}
-                              />
+                              >
+                                <label>Value</label>
+                                <Input
+                                  value={item1.value}
+                                  onChange={(e) => {
+                                    let current = cloneDeep(attributes)
+                                    current[index].content[index1].value =
+                                      e.target.value
+                                    setAttributes(current)
+                                  }}
+                                />
+                              </div>
+                              <div style={{ position: 'relative' }}>
+                                <Button
+                                  type="danger"
+                                  style={{
+                                    color: 'white',
+                                    position: 'absolute',
+                                    bottom: '0',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                  }}
+                                  onClick={() => {
+                                    let current = cloneDeep(attributes)
+                                    current[index].content.splice(index1, 1)
+                                    setAttributes(current)
+                                  }}
+                                  icon={<DeleteOutlined />}
+                                />
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </Panel>
-                    ))}
+                          ))}
+                        </Panel>
+                      ))}
                   </Collapse>
                 </TabPane>
                 <TabPane forceRender={true} tab="Variations" key="5"></TabPane>
@@ -967,10 +1003,10 @@ const subfaq=(index)=>{
           >
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr 1fr",
-                gridColumnGap: "10px",
-                marginTop: "30px",
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                gridColumnGap: '10px',
+                marginTop: '30px',
               }}
             >
               <Form.Item label="ASIN" name="asin">
@@ -989,9 +1025,9 @@ const subfaq=(index)=>{
 
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr",
-                gridColumnGap: "10px",
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr',
+                gridColumnGap: '10px',
               }}
             >
               <Form.Item label="Indication" name="indication">
@@ -1011,12 +1047,12 @@ const subfaq=(index)=>{
             key="4"
           >
             <div>
-              {["", "", "", "", ""].map((_, index) => (
+              {['', '', '', '', ''].map((_, index) => (
                 <div
                   style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 3fr",
-                    gridColumnGap: "20px",
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 3fr',
+                    gridColumnGap: '20px',
                   }}
                 >
                   <Form.Item
@@ -1038,9 +1074,9 @@ const subfaq=(index)=>{
 
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gridColumnGap: "20px",
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gridColumnGap: '20px',
               }}
             >
               <Form.Item label="Key Ingredients" name="keyingredients">
@@ -1051,56 +1087,57 @@ const subfaq=(index)=>{
                 <TextArea />
               </Form.Item>
             </div>
-            
+
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 3fr",
-                gridColumnGap: "20px",
+                display: 'grid',
+                gridTemplateColumns: '1fr 3fr',
+                gridColumnGap: '20px',
               }}
-            >
-            </div>
+            ></div>
 
-            <Form.Item 
-            label={`FAQ Section:`}>
-            {faqcontent1.map((field, index) => (
-               <Form.Item >
-                  <Form.Item 
-                  key={index} 
-                  label={`FAQ Title ${index+1}`} 
-                  name={`faq[${index}][title]`}>
+            <Form.Item label={`FAQ Section:`}>
+              {faqcontent1.map((field, index) => (
+                <Form.Item>
+                  <Form.Item
+                    key={index}
+                    label={`FAQ Title ${index + 1}`}
+                    name={`faq[${index}][title]`}
+                  >
                     <Input />
                   </Form.Item>
-           
-                  <Form.Item 
-                   key={index}
-                   label={`FAQ Description ${index+1}`} 
-                   name={`faq[${index}][description]`}>
-                     <TextArea />
-                   </Form.Item>
-                   
-                   <Button
-              shape="circle"
-              onClick={()=>subfaq(index)}>-
-            </Button>
-               </Form.Item>
-            ))}
-            <Button
-              style={{
-                background: "black",
-                color: "white",
-              }}            
-              shape="circle"
-              onClick={()=>addfaq()}>+
-            </Button>
+
+                  <Form.Item
+                    key={index}
+                    label={`FAQ Description ${index + 1}`}
+                    name={`faq[${index}][description]`}
+                  >
+                    <TextArea />
+                  </Form.Item>
+
+                  <Button shape="circle" onClick={() => subfaq(index)}>
+                    -
+                  </Button>
+                </Form.Item>
+              ))}
+              <Button
+                style={{
+                  background: 'black',
+                  color: 'white',
+                }}
+                shape="circle"
+                onClick={() => addfaq()}
+              >
+                +
+              </Button>
             </Form.Item>
-           </TabPane>
+          </TabPane>
           <TabPane forceRender={true} tab="Product Category and Images" key="5">
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr 1fr",
-                gridColumnGap: "20px",
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                gridColumnGap: '20px',
               }}
             >
               <Form.Item
@@ -1109,7 +1146,7 @@ const subfaq=(index)=>{
                 rules={[
                   {
                     required: true,
-                    message: "Please Select Product Category",
+                    message: 'Please Select Product Category',
                   },
                 ]}
               >
@@ -1131,250 +1168,245 @@ const subfaq=(index)=>{
 
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr",
-                gridColumnGap: "20px",
-                gridRowGap: "30px",
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr',
+                gridColumnGap: '20px',
+                gridRowGap: '30px',
               }}
             >
               <Form.Item label="Menu Image" name="menu_image">
-                <div style={{ display: "flex" }}>
+                <div style={{ display: 'flex' }}>
                   <Upload
                     showUploadList={false}
                     beforeUpload={(file) => {
                       setImage({
                         ...image,
                         menuImage: file,
-                      });
-                      let reader = new FileReader();
-                      reader.readAsDataURL(file);
+                      })
+                      let reader = new FileReader()
+                      reader.readAsDataURL(file)
                       reader.onloadend = () => {
                         setImageUrl({
                           ...imageUrl,
                           menuPreviewUrl: reader.result,
-                        });
-                      };
-                      return false;
+                        })
+                      }
+                      return false
                     }}
                     multiple={false}
                   >
                     <Button icon={<UploadOutlined />}>Click to Upload</Button>
                   </Upload>
                 </div>
-                {(imageUrl.menuPreviewUrl !== "" ||
+                {(imageUrl.menuPreviewUrl !== '' ||
                   (product && product.productid.menuimage)) && (
                   <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      marginTop: "30px",
-                    }}
-                  >
-                    <img
-                      src={
-                        imageUrl.menuPreviewUrl !== ""
-                          ? imageUrl.menuPreviewUrl
-                          : `${BACK_END_URL}/${product.productid.menuimage}`.replace(
-                              "/public",
-                              ""
-                            )
-                      }
-                      alt="Product"
+                    <div
                       style={{
-                        objectFit: "contain",
-                        width: "200px",
-                        height: "200px",
-                        marginTop: "20px",
-                        marginRight: "25px",
+                        display: 'flex',
+                        marginTop: '30px',
                       }}
-                    />
-                    <CloseOutlined
-                      onClick={() =>
-                        handleImageDelete(
-                          "menu_image",
-                          "menuPreviewUrl",
-                          "menuImage",
-                          "product"
-                        )
-                      }
-                    />
-                  </div>
-                  {imageUrl.menuPreviewUrl !=null?(
-                    <Form.Item  
-                    label={`alt text`} 
-                    name={`menuImageAlt`}>
-                      <Input />
-                    </Form.Item>
-                    ):null}
+                    >
+                      <img
+                        src={
+                          imageUrl.menuPreviewUrl !== ''
+                            ? imageUrl.menuPreviewUrl
+                            : `${BACK_END_URL}/${product.productid.menuimage}`.replace(
+                                '/public',
+                                '',
+                              )
+                        }
+                        alt="Product"
+                        style={{
+                          objectFit: 'contain',
+                          width: '200px',
+                          height: '200px',
+                          marginTop: '20px',
+                          marginRight: '25px',
+                        }}
+                      />
+                      <CloseOutlined
+                        onClick={() =>
+                          handleImageDelete(
+                            'menu_image',
+                            'menuPreviewUrl',
+                            'menuImage',
+                            'product',
+                          )
+                        }
+                      />
+                    </div>
+                    {imageUrl.menuPreviewUrl != null ? (
+                      <Form.Item label={`alt text`} name={`menuImageAlt`}>
+                        <Input />
+                      </Form.Item>
+                    ) : null}
                   </div>
                 )}
               </Form.Item>
               <Form.Item label="Section A Image" name="feature_image">
-                <div style={{ display: "flex" }}>
+                <div style={{ display: 'flex' }}>
                   <Upload
                     showUploadList={false}
                     beforeUpload={(file) => {
                       setImage({
                         ...image,
                         sectionaImage: file,
-                      });
-                      let reader = new FileReader();
-                      reader.readAsDataURL(file);
+                      })
+                      let reader = new FileReader()
+                      reader.readAsDataURL(file)
                       reader.onloadend = () => {
                         setImageUrl({
                           ...imageUrl,
                           sectionaPreviewUrl: reader.result,
-                        });
-                      };
-                      return false;
+                        })
+                      }
+                      return false
                     }}
                     multiple={false}
                   >
                     <Button icon={<UploadOutlined />}>Click to Upload</Button>
                   </Upload>
                 </div>
-                {(imageUrl.sectionaPreviewUrl !== "" ||
+                {(imageUrl.sectionaPreviewUrl !== '' ||
                   (product && product.productid.featurefilepath)) && (
                   <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      marginTop: "30px",
-                    }}
-                  >
-                    <img
-                      src={
-                        imageUrl.sectionaPreviewUrl !== ""
-                          ? imageUrl.sectionaPreviewUrl
-                          : `${BACK_END_URL}/${product.productid.featurefilepath}`.replace(
-                              "/public",
-                              ""
-                            )
-                      }
-                      alt="Product"
+                    <div
                       style={{
-                        objectFit: "contain",
-                        width: "200px",
-                        height: "200px",
-                        marginTop: "20px",
-                        marginRight: "25px",
+                        display: 'flex',
+                        marginTop: '30px',
                       }}
-                    />
-                    <CloseOutlined
-                      onClick={() =>
-                        handleImageDelete(
-                          "feature_image",
-                          "sectionaPreviewUrl",
-                          "sectionaImage",
-                          "product"
-                        )
-                      }
-                    />
-                  </div>
-                  {imageUrl.sectionaPreviewUrl !=null?
-                (              
-                   <Form.Item  
-                    label={`alt text`} 
-                    name={`sectionAImageAlt`}>
-                      <Input />
-                    </Form.Item>):null}
+                    >
+                      <img
+                        src={
+                          imageUrl.sectionaPreviewUrl !== ''
+                            ? imageUrl.sectionaPreviewUrl
+                            : `${BACK_END_URL}/${product.productid.featurefilepath}`.replace(
+                                '/public',
+                                '',
+                              )
+                        }
+                        alt="Product"
+                        style={{
+                          objectFit: 'contain',
+                          width: '200px',
+                          height: '200px',
+                          marginTop: '20px',
+                          marginRight: '25px',
+                        }}
+                      />
+                      <CloseOutlined
+                        onClick={() =>
+                          handleImageDelete(
+                            'feature_image',
+                            'sectionaPreviewUrl',
+                            'sectionaImage',
+                            'product',
+                          )
+                        }
+                      />
+                    </div>
+                    {imageUrl.sectionaPreviewUrl != null ? (
+                      <Form.Item label={`alt text`} name={`sectionAImageAlt`}>
+                        <Input />
+                      </Form.Item>
+                    ) : null}
                   </div>
                 )}
               </Form.Item>
               <Form.Item label="Section B Image" name="sectionbimage">
-                <div style={{ display: "flex" }}>
+                <div style={{ display: 'flex' }}>
                   <Upload
                     showUploadList={false}
                     beforeUpload={(file) => {
                       setImage({
                         ...image,
                         sectionbImage: file,
-                      });
-                      let reader = new FileReader();
-                      reader.readAsDataURL(file);
+                      })
+                      let reader = new FileReader()
+                      reader.readAsDataURL(file)
                       reader.onloadend = () => {
                         setImageUrl({
                           ...imageUrl,
                           sectionbPreviewUrl: reader.result,
-                        });
-                      };
-                      return false;
+                        })
+                      }
+                      return false
                     }}
                     multiple={false}
                   >
                     <Button icon={<UploadOutlined />}>Click to Upload</Button>
                   </Upload>
                 </div>
-                {(imageUrl.sectionbPreviewUrl !== "" ||
+                {(imageUrl.sectionbPreviewUrl !== '' ||
                   (product && product.sectionbimage)) && (
                   <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      marginTop: "30px",
-                    }}
-                  >
-                    <img
-                      src={
-                        imageUrl.sectionbPreviewUrl !== ""
-                          ? imageUrl.sectionbPreviewUrl
-                          : `${BACK_END_URL}/${product.sectionbimage}`.replace(
-                              "/public",
-                              ""
-                            )
-                      }
-                      alt="Product"
+                    <div
                       style={{
-                        objectFit: "contain",
-                        width: "200px",
-                        height: "200px",
-                        marginTop: "20px",
-                        marginRight: "25px",
+                        display: 'flex',
+                        marginTop: '30px',
                       }}
-                    />
-                    <CloseOutlined
-                      onClick={() =>
-                        handleImageDelete(
-                          "sectionbimage",
-                          "sectionbPreviewUrl",
-                          "sectionbImage",
-                          "productMeta"
-                        )
-                      }
-                    />
-                  </div>
-                  {imageUrl.sectionbPreviewUrl !=null?
-                (                                        <Form.Item  
-                    label={`alt text`} 
-                    name={`sectionBImageAlt`}>
-                      <Input />
-                    </Form.Item>):null}
+                    >
+                      <img
+                        src={
+                          imageUrl.sectionbPreviewUrl !== ''
+                            ? imageUrl.sectionbPreviewUrl
+                            : `${BACK_END_URL}/${product.sectionbimage}`.replace(
+                                '/public',
+                                '',
+                              )
+                        }
+                        alt="Product"
+                        style={{
+                          objectFit: 'contain',
+                          width: '200px',
+                          height: '200px',
+                          marginTop: '20px',
+                          marginRight: '25px',
+                        }}
+                      />
+                      <CloseOutlined
+                        onClick={() =>
+                          handleImageDelete(
+                            'sectionbimage',
+                            'sectionbPreviewUrl',
+                            'sectionbImage',
+                            'productMeta',
+                          )
+                        }
+                      />
+                    </div>
+                    {imageUrl.sectionbPreviewUrl != null ? (
+                      <Form.Item label={`alt text`} name={`sectionBImageAlt`}>
+                        <Input />
+                      </Form.Item>
+                    ) : null}
                   </div>
                 )}
               </Form.Item>
             </div>
             <Form.Item label="Product Gallery" name="product_gallery_image">
-              <div style={{ display: "flex" }}>
+              <div style={{ display: 'flex' }}>
                 <Upload
                   showUploadList={false}
                   beforeUpload={(file, fileList) => {
-                    let galleryImage = [...image.galleryImage];
-                    galleryImage.push(file);
+                    let galleryImage = [...image.galleryImage]
+                    galleryImage.push(file)
                     setImage({
                       ...image,
                       galleryImage,
-                    });
-                    let reader = new FileReader();
-                    reader.readAsDataURL(file);
+                    })
+                    let reader = new FileReader()
+                    reader.readAsDataURL(file)
                     reader.onloadend = () => {
-                      let galleryUrls = [...imageUrl.galleryPreviewUrl];
-                      galleryUrls.push(reader.result);
+                      let galleryUrls = [...imageUrl.galleryPreviewUrl]
+                      galleryUrls.push(reader.result)
                       setImageUrl({
                         ...imageUrl,
                         galleryPreviewUrl: galleryUrls,
-                      });
-                    };
-                    return false;
+                      })
+                    }
+                    return false
                   }}
                   multiple={false}
                 >
@@ -1385,52 +1417,52 @@ const subfaq=(index)=>{
                 recievedGalleryUrls.length > 0) && (
                 <div
                   style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr 1fr",
-                    gridColumnGap: "30px",
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr 1fr',
+                    gridColumnGap: '30px',
                   }}
                 >
                   {recievedGalleryUrls.map((item, index) => (
                     <div
                       style={{
-                        display: "flex",
-                        marginTop: "30px",
+                        display: 'flex',
+                        marginTop: '30px',
                       }}
                     >
                       <img
-                        src={`${BACK_END_URL}/${item}`.replace("/public", "")}
+                        src={`${BACK_END_URL}/${item}`.replace('/public', '')}
                         alt="Product"
                         style={{
-                          objectFit: "contain",
-                          width: "200px",
-                          height: "200px",
-                          marginTop: "20px",
-                          marginRight: "25px",
-                        }}  
+                          objectFit: 'contain',
+                          width: '200px',
+                          height: '200px',
+                          marginTop: '20px',
+                          marginRight: '25px',
+                        }}
                       />
                       <CloseOutlined
                         onClick={() => {
-                          setLoading(true);
+                          setLoading(true)
                           deleteProductImage(
                             {
                               productid: product._id,
                               imagetoremove: index,
-                              action: "",
+                              action: '',
                             },
-                            "product"
+                            'product',
                           )
                             .then((result) => {
-                              setLoading(false);
-                              let imageUrls = [...recievedGalleryUrls];
-                              imageUrls.splice(index, 1);
-                              setRecievedGalleryUrls(imageUrls);
-                              cogoToast.success(result.message);
+                              setLoading(false)
+                              let imageUrls = [...recievedGalleryUrls]
+                              imageUrls.splice(index, 1)
+                              setRecievedGalleryUrls(imageUrls)
+                              cogoToast.success(result.message)
                               setProduct({
                                 ...product,
                                 galleryimgdetails: result.galleryimgdetails,
-                              });
+                              })
                             })
-                            .catch((err) => cogoToast.error(err));
+                            .catch((err) => cogoToast.error(err))
                         }}
                       />
                     </div>
@@ -1438,46 +1470,47 @@ const subfaq=(index)=>{
                   {imageUrl.galleryPreviewUrl.map((item, index) => (
                     <div
                       style={{
-                        display: "flex",
-                        marginTop: "30px",
+                        display: 'flex',
+                        marginTop: '30px',
                       }}
                     >
                       <img
                         src={item}
                         alt="Product"
                         style={{
-                          objectFit: "contain",
-                          width: "200px",
-                          height: "200px",
-                          marginTop: "20px",
-                          marginRight: "25px",
+                          objectFit: 'contain',
+                          width: '200px',
+                          height: '200px',
+                          marginTop: '20px',
+                          marginRight: '25px',
                         }}
                       />
                       <CloseOutlined
                         onClick={() => {
-                          console.log(index);
-                          let imageUrls = [...imageUrl.galleryPreviewUrl];
-                          imageUrls.splice(index, 1);
-                          let images = [...image.galleryImage];
-                          images.splice(index, 1);
+                          console.log(index)
+                          let imageUrls = [...imageUrl.galleryPreviewUrl]
+                          imageUrls.splice(index, 1)
+                          let images = [...image.galleryImage]
+                          images.splice(index, 1)
                           setImageUrl({
                             ...imageUrl,
                             galleryPreviewUrl: imageUrls,
-                          });
+                          })
                           setImage({
                             ...image,
                             galleryImage: images,
-                          });
+                          })
                         }}
                       />
                     </div>
                   ))}
-                   {
-                (                                        <Form.Item  
-                    label={`gallery Alt text`} 
-                    name={`galleryImageAlt`}>
+                  {
+                    <Form.Item
+                      label={`gallery Alt text`}
+                      name={`galleryImageAlt`}
+                    >
                       <Input />
-                    </Form.Item>)
+                    </Form.Item>
                   }
                 </div>
               )}
@@ -1542,15 +1575,15 @@ const subfaq=(index)=>{
         <Form.Item>
           <Button
             style={{
-              marginLeft: "auto",
-              marginRight: "auto",
-              marginTop: "20px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              background: "black",
-              color: "white",
-              borderRadius: "5px",
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              marginTop: '20px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              background: 'black',
+              color: 'white',
+              borderRadius: '5px',
             }}
             htmlType="submit"
           >
@@ -1559,8 +1592,8 @@ const subfaq=(index)=>{
         </Form.Item>
       </Form>
     </div>
-  );
-};
+  )
+}
 
 const mapStateToProps = (state) => {
   return {
@@ -1568,8 +1601,8 @@ const mapStateToProps = (state) => {
     categories: state.productCategoryReducer.data,
     packages: state.packageTypeReducer.data,
     products: state.productReducer.products,
-  };
-};
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -1581,7 +1614,7 @@ const mapDispatchToProps = (dispatch) => {
     getPackages: () => dispatch(packageActionCreators.get()),
     deleteProductImage: (data, type) =>
       dispatch(actionCreators.removeProductImage(data, type)),
-  };
-};
+  }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductForm)
