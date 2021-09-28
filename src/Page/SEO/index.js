@@ -306,7 +306,7 @@ class Seo extends Component {
 									/>
 									<Form.Label>OG Type</Form.Label>
 									<AceEditor
-										value={this.state.formData.keywords}
+										value={this.state.formData.og_type}
 										onChange={(code) => {
 											const currentData = { ...this.state.formData };
 											currentData.og_type = code;
@@ -322,7 +322,7 @@ class Seo extends Component {
 									/>
 									<Form.Label>OG Title</Form.Label>
 									<AceEditor
-										value={this.state.formData.keywords}
+										value={this.state.formData.og_title}
 										onChange={(code) => {
 											const currentData = { ...this.state.formData };
 											currentData.og_title = code;
@@ -338,7 +338,7 @@ class Seo extends Component {
 									/>
 									<Form.Label>OG Description</Form.Label>
 									<AceEditor
-										value={this.state.formData.keywords}
+										value={this.state.formData.og_description}
 										onChange={(code) => {
 											const currentData = { ...this.state.formData };
 											currentData.og_description = code;
@@ -354,7 +354,7 @@ class Seo extends Component {
 									/>
 									<Form.Label>OG Image</Form.Label>
 									<AceEditor
-										value={this.state.formData.keywords}
+										value={this.state.formData.og_image}
 										onChange={(code) => {
 											const currentData = { ...this.state.formData };
 											currentData.og_image = code;
@@ -370,7 +370,7 @@ class Seo extends Component {
 									/>
 									<Form.Label>OG URL</Form.Label>
 									<AceEditor
-										value={this.state.formData.keywords}
+										value={this.state.formData.og_url}
 										onChange={(code) => {
 											const currentData = { ...this.state.formData };
 											currentData.og_url = code;
@@ -386,7 +386,7 @@ class Seo extends Component {
 									/>
 									<Form.Label>OG Sitename</Form.Label>
 									<AceEditor
-										value={this.state.formData.keywords}
+										value={this.state.formData.og_siteName}
 										onChange={(code) => {
 											const currentData = { ...this.state.formData };
 											currentData.og_siteName = code;
