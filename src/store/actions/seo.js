@@ -73,11 +73,11 @@ export const get = () => {
 };
 
 export const add = (data) => {
-	console.log("Shop get action creator");
+	console.log("Shop get action creator ", data);
 	return async (dispatch) => {
 		return Axios.post("/Seo/add", data)
-			.then(async (result) => {
-				await dispatch({
+			.then((result) => {
+				dispatch({
 					type: actionTypes.ADD_SEO,
 					data: result.data.data,
 				});

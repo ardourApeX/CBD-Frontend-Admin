@@ -28,7 +28,7 @@ export default class TextForm extends Component {
 					<AceEditor
 						value={this.props.field[elem]}
 						onChange={(code) => {
-							// console.log(code);
+							console.log(code);
 							this.props.changeHandler(
 								elem,
 								sectionName,
@@ -57,6 +57,78 @@ export default class TextForm extends Component {
 		});
 		return (
 			<div>
+				<h3>Meta Tags</h3>
+				<div
+					style={{
+						width: "100%",
+						display: "flex",
+						justifyContent: "space-between",
+						alignItems: "center",
+						padding: "0 20px",
+					}}
+					class="meta-check"
+				>
+					<div>
+						<label
+							style={{ marginRight: "10px" }}
+							class="meta-check-label"
+							for="follow"
+						>
+							Follow
+						</label>
+						<input
+							class="meta-check-input"
+							type="checkbox"
+							value=""
+							id="follow"
+						/>
+					</div>
+					<div>
+						<label
+							style={{ marginRight: "10px" }}
+							class="meta-check-label"
+							for="index"
+						>
+							Index
+						</label>
+						<input
+							class="meta-check-input"
+							type="checkbox"
+							value=""
+							id="index"
+						/>
+					</div>
+					<div>
+						<label
+							style={{ marginRight: "10px" }}
+							class="meta-check-label"
+							for="nofollow"
+						>
+							No Follow
+						</label>
+						<input
+							class="meta-check-input"
+							type="checkbox"
+							value=""
+							id="nofollow"
+						/>
+					</div>
+					<div>
+						<label
+							style={{ marginRight: "10px" }}
+							class="meta-check-label"
+							for="noindex"
+						>
+							No Index
+						</label>
+						<input
+							class="meta-check-input"
+							type="checkbox"
+							value=""
+							id="noindex"
+						/>
+					</div>
+				</div>
 				<Form>{data}</Form>
 				<br />
 				<div className="d-flex justify-content-center mt-5">

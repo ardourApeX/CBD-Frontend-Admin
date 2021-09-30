@@ -10,6 +10,7 @@ import "brace/mode/javascript";
 import "brace/theme/chrome";
 
 import FileBase from "react-file-base64";
+import { configConsumerProps } from "antd/lib/config-provider";
 
 class Seo extends Component {
 	constructor(props) {
@@ -22,6 +23,13 @@ class Seo extends Component {
 				titleContent: "",
 				description: "",
 				keywords: "",
+				og_type: "",
+				og_title: "",
+				og_description: "",
+				og_image: "",
+				og_url: "",
+				og_siteName: "",
+				robot: "",
 			},
 			data: [],
 			seo: [],
@@ -142,6 +150,7 @@ class Seo extends Component {
 						og_image: "",
 						og_url: "",
 						og_siteName: "",
+						robot: [],
 					},
 					data: this.props.seo,
 				});
@@ -151,6 +160,16 @@ class Seo extends Component {
 				this.setState({ loading: false });
 				cogoToast.error(err);
 			});
+	};
+	toggleRobot = (tagName, robotString) => {
+		console.log("Toggling Checkboxes from ROBOT");
+		const robotList = robotString.split(",");
+		if (robotList.includes(tagName)) {
+			return robotList.filter((item) => item !== tagName).join(",");
+		} else {
+			tagName = robotString !== "" ? `,${tagName}` : tagName;
+			return robotString + tagName;
+		}
 	};
 
 	render() {
@@ -196,6 +215,7 @@ class Seo extends Component {
 									"OG Image",
 									"OG URL",
 									"OG Sitename",
+									"Robot",
 								]}
 								updateHandler={this.updateHandler}
 								deleteHandler={this.deleteHandler}
@@ -400,6 +420,113 @@ class Seo extends Component {
 											fontSize: 20,
 										}}
 									/>
+									<Form.Label>Robot</Form.Label>
+									<div
+										style={{
+											width: "100%",
+											display: "flex",
+											justifyContent: "space-between",
+											alignItems: "center",
+											padding: "0 20px",
+										}}
+										class="meta-check"
+									>
+										<div>
+											<label
+												style={{ marginRight: "10px" }}
+												class="meta-check-label"
+												for="follow"
+											>
+												Follow
+											</label>
+											<input
+												class="meta-check-input"
+												type="checkbox"
+												value="Follow"
+												id="follow"
+												onChange={(event) => {
+													const currentData = { ...this.state.formData };
+													currentData.robot = this.toggleRobot(
+														event.target.value,
+														currentData.robot
+													);
+
+													this.setState({ formData: currentData });
+												}}
+											/>
+										</div>
+										<div>
+											<label
+												style={{ marginRight: "10px" }}
+												class="meta-check-label"
+												for="index"
+											>
+												Index
+											</label>
+											<input
+												class="meta-check-input"
+												type="checkbox"
+												value="Index"
+												id="index"
+												onChange={(event) => {
+													const currentData = { ...this.state.formData };
+													currentData.robot = this.toggleRobot(
+														event.target.value,
+														currentData.robot
+													);
+
+													this.setState({ formData: currentData });
+												}}
+											/>
+										</div>
+										<div>
+											<label
+												style={{ marginRight: "10px" }}
+												class="meta-check-label"
+												for="nofollow"
+											>
+												No Follow
+											</label>
+											<input
+												class="meta-check-input"
+												type="checkbox"
+												value="No Follow"
+												id="nofollow"
+												onChange={(event) => {
+													const currentData = { ...this.state.formData };
+													currentData.robot = this.toggleRobot(
+														event.target.value,
+														currentData.robot
+													);
+
+													this.setState({ formData: currentData });
+												}}
+											/>
+										</div>
+										<div>
+											<label
+												style={{ marginRight: "10px" }}
+												class="meta-check-label"
+												for="noindex"
+											>
+												No Index
+											</label>
+											<input
+												class="meta-check-input"
+												type="checkbox"
+												value="No Index"
+												id="noindex"
+												onChange={(event) => {
+													const currentData = { ...this.state.formData };
+													currentData.robot = this.toggleRobot(
+														event.target.value,
+														currentData.robot
+													);
+													this.setState({ formData: currentData });
+												}}
+											/>
+										</div>
+									</div>
 									<Button variant="dark" size="sm" type="submit">
 										Submit
 									</Button>
