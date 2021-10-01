@@ -154,7 +154,7 @@ class Seo extends Component {
 						og_image: "",
 						og_url: "",
 						og_siteName: "",
-						robot: [],
+						robot: "",
 					},
 					data: this.props.seo,
 				});

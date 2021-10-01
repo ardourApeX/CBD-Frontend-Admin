@@ -3,11 +3,10 @@ import { Form, Container } from "react-bootstrap";
 import AceEditor from "react-ace";
 import "brace/mode/javascript";
 import "brace/theme/chrome";
-import { element } from "prop-types";
 
 export default class TextForm extends Component {
 	render() {
-		console.log("Props value ", this.props);
+		// console.log("Props value ", this.props);
 		// console.log(this.props.sectionName);
 		const sectionName = this.props.sectionName;
 		const Data = () => (
@@ -182,7 +181,7 @@ export default class TextForm extends Component {
 
 		return (
 			<div>
-				<Data />
+				{Data()}
 				<br />
 				<div className="d-flex justify-content-center mt-5">
 					<button
