@@ -59,7 +59,7 @@ export const get = () => {
 					og_image: "",
 					og_url: "",
 					og_siteName: "",
-					robot: "Follow",
+					robot: "follow",
 				}));
 				dispatch({
 					type: actionTypes.GET_SEO,
@@ -78,9 +78,22 @@ export const add = (data) => {
 	return async (dispatch) => {
 		return Axios.post("/Seo/add", data)
 			.then((result) => {
+				// ADDING SOME ADDITIONAL FIELDS TO EACH SEO
+				console.log("ACTUAL DATA", result.data.data);
+				const mockData = {
+					...result.data.data,
+					og_type: "",
+					og_title: "",
+					og_description: "",
+					og_image: "",
+					og_url: "",
+					og_siteName: "",
+					robot: "follow",
+				};
+				console.log("MOCK DATA", mockData);
 				dispatch({
 					type: actionTypes.ADD_SEO,
-					data: result.data.data,
+					data: mockData,
 				});
 				return result.data.message;
 			})

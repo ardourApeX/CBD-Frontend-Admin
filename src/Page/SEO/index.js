@@ -110,6 +110,8 @@ class Seo extends Component {
 					})
 				);
 				cogoToast.success(result);
+
+				//Setting data equals to seo after adding seo
 				this.setState({
 					loading: false,
 					banner: newArray,
@@ -450,7 +452,7 @@ class Seo extends Component {
 											<input
 												class="meta-check-input"
 												type="checkbox"
-												value="Follow"
+												value="follow"
 												id="follow"
 												onChange={(event) => {
 													const currentData = { ...this.state.formData };
@@ -474,7 +476,7 @@ class Seo extends Component {
 											<input
 												class="meta-check-input"
 												type="checkbox"
-												value="Index"
+												value="index"
 												id="index"
 												onChange={(event) => {
 													const currentData = { ...this.state.formData };
@@ -498,7 +500,7 @@ class Seo extends Component {
 											<input
 												class="meta-check-input"
 												type="checkbox"
-												value="No Follow"
+												value="nofollow"
 												id="nofollow"
 												onChange={(event) => {
 													const currentData = { ...this.state.formData };
@@ -522,7 +524,7 @@ class Seo extends Component {
 											<input
 												class="meta-check-input"
 												type="checkbox"
-												value="No Index"
+												value="noindex"
 												id="noindex"
 												onChange={(event) => {
 													const currentData = { ...this.state.formData };

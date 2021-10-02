@@ -48,7 +48,7 @@ export default class TextForm extends Component {
 						</Container>
 					);
 				})}
-				{!!this.robot && (
+				{!!this.props.robot.robot && (
 					<div>
 						<h3 style={{ marginLeft: "17px", marginTop: "30px" }}>Robot</h3>
 						<div
@@ -72,9 +72,9 @@ export default class TextForm extends Component {
 								<input
 									class="meta-check-input"
 									type="checkbox"
-									value="Follow"
+									value="follow"
 									id="follow"
-									checked={this.props.robot.robot.split(",").includes("Follow")}
+									checked={this.props.robot.robot.split(",").includes("follow")}
 									onChange={(element) => {
 										const newRobot = this.props.toggleRobot(
 											element.target.value,
@@ -100,9 +100,9 @@ export default class TextForm extends Component {
 								<input
 									class="meta-check-input"
 									type="checkbox"
-									value="Index"
+									value="index"
 									id="index"
-									checked={this.props.robot.robot.split(",").includes("Index")}
+									checked={this.props.robot.robot.split(",").includes("index")}
 									onChange={(element) => {
 										const newRobot = this.props.toggleRobot(
 											element.target.value,
@@ -128,11 +128,11 @@ export default class TextForm extends Component {
 								<input
 									class="meta-check-input"
 									type="checkbox"
-									value="No Follow"
+									value="nofollow"
 									id="nofollow"
 									checked={this.props.robot.robot
 										.split(",")
-										.includes("No Follow")}
+										.includes("nofollow")}
 									onChange={(element) => {
 										const newRobot = this.props.toggleRobot(
 											element.target.value,
@@ -158,11 +158,11 @@ export default class TextForm extends Component {
 								<input
 									class="meta-check-input"
 									type="checkbox"
-									value="No Index"
+									value="noindex"
 									id="noindex"
 									checked={this.props.robot.robot
 										.split(",")
-										.includes("No Index")}
+										.includes("noindex")}
 									onChange={(element) => {
 										const newRobot = this.props.toggleRobot(
 											element.target.value,
