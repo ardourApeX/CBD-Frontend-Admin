@@ -48,134 +48,138 @@ export default class TextForm extends Component {
 						</Container>
 					);
 				})}
-				<div>
-					<h3 style={{ marginLeft: "17px", marginTop: "30px" }}>Robot</h3>
-					<div
-						style={{
-							width: "100%",
-							display: "flex",
-							justifyContent: "space-between",
-							alignItems: "center",
-							padding: "0 20px",
-						}}
-						class="meta-check"
-					>
-						<div>
-							<label
-								style={{ marginRight: "10px" }}
-								class="meta-check-label"
-								for="follow"
-							>
-								Follow
-							</label>
-							<input
-								class="meta-check-input"
-								type="checkbox"
-								value="Follow"
-								id="follow"
-								checked={this.props.robot.robot.split(",").includes("Follow")}
-								onChange={(element) => {
-									const newRobot = this.props.toggleRobot(
-										element.target.value,
-										this.props.robot.robot
-									);
-									this.props.changeHandler(
-										"robot",
-										sectionName,
-										newRobot,
-										this.props.index
-									);
-								}}
-							/>
-						</div>
-						<div>
-							<label
-								style={{ marginRight: "10px" }}
-								class="meta-check-label"
-								for="index"
-							>
-								Index
-							</label>
-							<input
-								class="meta-check-input"
-								type="checkbox"
-								value="Index"
-								id="index"
-								checked={this.props.robot.robot.split(",").includes("Index")}
-								onChange={(element) => {
-									const newRobot = this.props.toggleRobot(
-										element.target.value,
-										this.props.robot.robot
-									);
-									this.props.changeHandler(
-										"robot",
-										sectionName,
-										newRobot,
-										this.props.index
-									);
-								}}
-							/>
-						</div>
-						<div>
-							<label
-								style={{ marginRight: "10px" }}
-								class="meta-check-label"
-								for="nofollow"
-							>
-								No Follow
-							</label>
-							<input
-								class="meta-check-input"
-								type="checkbox"
-								value="No Follow"
-								id="nofollow"
-								checked={this.props.robot.robot
-									.split(",")
-									.includes("No Follow")}
-								onChange={(element) => {
-									const newRobot = this.props.toggleRobot(
-										element.target.value,
-										this.props.robot.robot
-									);
-									this.props.changeHandler(
-										"robot",
-										sectionName,
-										newRobot,
-										this.props.index
-									);
-								}}
-							/>
-						</div>
-						<div>
-							<label
-								style={{ marginRight: "10px" }}
-								class="meta-check-label"
-								for="noindex"
-							>
-								No Index
-							</label>
-							<input
-								class="meta-check-input"
-								type="checkbox"
-								value="No Index"
-								id="noindex"
-								checked={this.props.robot.robot.split(",").includes("No Index")}
-								onChange={(element) => {
-									const newRobot = this.props.toggleRobot(
-										element.target.value,
-										this.props.robot.robot
-									);
-									this.props.changeHandler(
-										"robot",
-										sectionName,
-										newRobot,
-										this.props.index
-									);
-								}}
-							/>
+				{!!this.robot && (
+					<div>
+						<h3 style={{ marginLeft: "17px", marginTop: "30px" }}>Robot</h3>
+						<div
+							style={{
+								width: "100%",
+								display: "flex",
+								justifyContent: "space-between",
+								alignItems: "center",
+								padding: "0 20px",
+							}}
+							class="meta-check"
+						>
+							<div>
+								<label
+									style={{ marginRight: "10px" }}
+									class="meta-check-label"
+									for="follow"
+								>
+									Follow
+								</label>
+								<input
+									class="meta-check-input"
+									type="checkbox"
+									value="Follow"
+									id="follow"
+									checked={this.props.robot.robot.split(",").includes("Follow")}
+									onChange={(element) => {
+										const newRobot = this.props.toggleRobot(
+											element.target.value,
+											this.props.robot.robot
+										);
+										this.props.changeHandler(
+											"robot",
+											sectionName,
+											newRobot,
+											this.props.index
+										);
+									}}
+								/>
+							</div>
+							<div>
+								<label
+									style={{ marginRight: "10px" }}
+									class="meta-check-label"
+									for="index"
+								>
+									Index
+								</label>
+								<input
+									class="meta-check-input"
+									type="checkbox"
+									value="Index"
+									id="index"
+									checked={this.props.robot.robot.split(",").includes("Index")}
+									onChange={(element) => {
+										const newRobot = this.props.toggleRobot(
+											element.target.value,
+											this.props.robot.robot
+										);
+										this.props.changeHandler(
+											"robot",
+											sectionName,
+											newRobot,
+											this.props.index
+										);
+									}}
+								/>
+							</div>
+							<div>
+								<label
+									style={{ marginRight: "10px" }}
+									class="meta-check-label"
+									for="nofollow"
+								>
+									No Follow
+								</label>
+								<input
+									class="meta-check-input"
+									type="checkbox"
+									value="No Follow"
+									id="nofollow"
+									checked={this.props.robot.robot
+										.split(",")
+										.includes("No Follow")}
+									onChange={(element) => {
+										const newRobot = this.props.toggleRobot(
+											element.target.value,
+											this.props.robot.robot
+										);
+										this.props.changeHandler(
+											"robot",
+											sectionName,
+											newRobot,
+											this.props.index
+										);
+									}}
+								/>
+							</div>
+							<div>
+								<label
+									style={{ marginRight: "10px" }}
+									class="meta-check-label"
+									for="noindex"
+								>
+									No Index
+								</label>
+								<input
+									class="meta-check-input"
+									type="checkbox"
+									value="No Index"
+									id="noindex"
+									checked={this.props.robot.robot
+										.split(",")
+										.includes("No Index")}
+									onChange={(element) => {
+										const newRobot = this.props.toggleRobot(
+											element.target.value,
+											this.props.robot.robot
+										);
+										this.props.changeHandler(
+											"robot",
+											sectionName,
+											newRobot,
+											this.props.index
+										);
+									}}
+								/>
+							</div>
 						</div>
 					</div>
-				</div>
+				)}
 			</div>
 		);
 

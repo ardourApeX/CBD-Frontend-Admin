@@ -137,7 +137,7 @@ class Shop extends Component {
 								subHeading={SubHeading[index]}
 							/>
 							<hr />
-							{!!ImageOption[index] && ImageOption[index].length > 0 ? (
+							{ImageOption[index] && ImageOption[index].length > 0 ? (
 								<ImageForm
 									options={ImageOption[index]}
 									handleImageChange={this.handleImageChange}
