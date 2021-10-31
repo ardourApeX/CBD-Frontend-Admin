@@ -44,9 +44,13 @@ class Seo extends Component {
 	};
 
 	changeHandler = (name, section, data) => {
-		// console.log(name);
-		// console.log(section);
-		// console.log(data);
+		console.log("CHANGE HANDLER");
+		console.log(name);
+		console.log(section);
+		console.log(data);
+		//section -> SEO index number
+		//name -> subHeading
+		//data -> editor value for that particular subHeading
 		let curValue = this.props.seo;
 		curValue[section][name] = data;
 		this.setState(
@@ -58,9 +62,11 @@ class Seo extends Component {
 		console.log("changed");
 	};
 	updateHandler = (event, section) => {
-		// console.log("updateHandler", section);
+		console.log("updateHandler", section);
 		event.preventDefault();
 		this.setState({ loading: true });
+		console.log("UPDATE HANDLER ", section);
+
 		this.props
 			.update(this.state.data[section], section)
 			.then((result) => {
@@ -96,7 +102,6 @@ class Seo extends Component {
 		this.props
 			.get()
 			.then((result) => {
-				console.log("from index", result);
 				let newArray = new Array(this.props.seo.length).fill(
 					new Array(2).fill({
 						image: "",
@@ -104,7 +109,6 @@ class Seo extends Component {
 						imageName: "",
 					})
 				);
-				console.log(result);
 				cogoToast.success(result);
 				this.setState({
 					loading: false,
@@ -162,7 +166,6 @@ class Seo extends Component {
 			});
 	};
 	toggleRobot = (tagName, robotString) => {
-		console.log("Toggling Checkboxes from ROBOT");
 		const robotList = robotString.split(",");
 		if (robotList.includes(tagName)) {
 			return robotList.filter((item) => item !== tagName).join(",");
@@ -177,52 +180,57 @@ class Seo extends Component {
 		let data = this.state.data.map((elem, index) => {
 			console.log("Elem Value", elem);
 			return (
-				<Card key={index} onClick={this.clickHandler}>
-					<Card.Header>
-						<Accordion.Toggle
-							as={Button}
-							variant="link"
-							eventKey={`${index}`}
-							className="c-accordion"
-						>
-							<i className="fa fa-angle-down"></i>
-							{elem.title}
-						</Accordion.Toggle>
-					</Card.Header>
-					<Accordion.Collapse eventKey={`${index}`}>
-						<Card.Body>
-							<TextForm
-								field={{
-									titleContent: elem.titleContent,
-									description: elem.description,
-									keywords: elem.keywords,
-									og_type: elem.og_type,
-									og_title: elem.og_title,
-									og_description: elem.og_description,
-									og_image: elem.og_image,
-									og_url: elem.og_url,
-									og_siteName: elem.og_siteName,
-								}}
-								changeHandler={this.changeHandler}
-								sectionName={index}
-								subHeading={[
-									"Title",
-									"Description",
-									"Keywords",
-									"OG Type",
-									"OG Title",
-									"OG Description",
-									"OG Image",
-									"OG URL",
-									"OG Sitename",
-									"Robot",
-								]}
-								updateHandler={this.updateHandler}
-								deleteHandler={this.deleteHandler}
-							/>
-						</Card.Body>
-					</Accordion.Collapse>
-				</Card>
+				<div>
+					<Card key={index} onClick={this.clickHandler}>
+						<Card.Header>
+							<Accordion.Toggle
+								as={Button}
+								variant="link"
+								eventKey={`${index}`}
+								className="c-accordion"
+							>
+								<i className="fa fa-angle-down"></i>
+								{elem.title}
+							</Accordion.Toggle>
+						</Card.Header>
+						<Accordion.Collapse eventKey={`${index}`}>
+							<Card.Body>
+								<TextForm
+									field={{
+										titleContent: elem.titleContent,
+										description: elem.description,
+										keywords: elem.keywords,
+										og_type: elem.og_type,
+										og_title: elem.og_title,
+										og_description: elem.og_description,
+										og_image: elem.og_image,
+										og_url: elem.og_url,
+										og_siteName: elem.og_siteName,
+									}}
+									robot={{
+										robot: elem.robot,
+									}}
+									changeHandler={this.changeHandler}
+									sectionName={index}
+									subHeading={[
+										"Title",
+										"Description",
+										"Keywords",
+										"OG Type",
+										"OG Title",
+										"OG Description",
+										"OG Image",
+										"OG URL",
+										"OG Sitename",
+									]}
+									updateHandler={this.updateHandler}
+									deleteHandler={this.deleteHandler}
+									toggleRobot={this.toggleRobot}
+								/>
+							</Card.Body>
+						</Accordion.Collapse>
+					</Card>
+				</div>
 			);
 		});
 

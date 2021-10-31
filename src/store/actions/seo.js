@@ -2,7 +2,7 @@ import Axios from "../../utilities/Axios/Axios";
 import * as actionTypes from "./actions";
 import { ERROR_MESSAGE } from "./constant";
 export const update = (data, section) => {
-	console.log("update actioncreator", data, section);
+	// console.log("update actioncreator", data, section);
 	return (dispatch) => {
 		return Axios.post("/Seo/update", {
 			data,
@@ -50,7 +50,7 @@ export const get = () => {
 			.then((result) => {
 				console.log("ACTUAL DATA", result);
 
-				// ADDING SOME ADDITIONAL FIELDS
+				// ADDING SOME ADDITIONAL FIELDS TO EACH SEO
 				const mockData = result.data.data.map((item) => ({
 					...item,
 					og_type: "",
@@ -59,6 +59,7 @@ export const get = () => {
 					og_image: "",
 					og_url: "",
 					og_siteName: "",
+					robot: "Follow",
 				}));
 				dispatch({
 					type: actionTypes.GET_SEO,
